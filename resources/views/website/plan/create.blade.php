@@ -148,7 +148,7 @@
                         </div>
 
                         <!-- --------------------------------------------------------------------------------- -->
-                        <h5 contenteditable="true" id="standardsLabel">Standards</h5>&nbsp;<a class="ti-minus remove-btn-border remove-data" data-id="standard-1" data-status="only-minus"></a>
+                        <h5 contenteditable="true" id="standardsLabel">Standards</h5>&nbsp;<a class="ti-minus remove-btn-border remove-data" data-id="standard-1" data-status="only-minus" data-label="standardsLabel"></a>
                         {{Form::hidden('standard_data[1][status]','no',['class'=>'standard-1-status'])}}
                         <div class="standard-block mb-3 remove-block standard-1 standard-div">
                             <div class="row p-3">
@@ -173,7 +173,7 @@
                         </div>
                         <div style="width:100%;margin-top: 10px;"></div>
                         <!-- --------------------------------------------------------------------------------- -->
-                        <h5 contenteditable="true" id="entryLabel">Entry Activity/ Success Starter</h5>&nbsp;&nbsp;<a class="ti-minus remove-btn-border remove-data" data-id="entry-1" data-status="only-minus"> </a>
+                        <h5 contenteditable="true" id="entryLabel">Entry Activity/ Success Starter</h5>&nbsp;&nbsp;<a class="ti-minus remove-btn-border remove-data" data-id="entry-1" data-status="only-minus" data-label="entryLabel"> </a>
                         {{Form::hidden('entry_data[1][status]','no',['class'=>'entry-1-status'])}}
                         <div class="standard-block mb-3 entry-1 entry-div">
                             <div class="row pl-3 pr-3 pt-3">
@@ -207,7 +207,7 @@
                                 <div class="row">
                                     {{Form::hidden('notes_data[1][status]','no',['class'=>'notes-1-status'])}}
                                     <div class="col-lg-10">
-                                        <label for="notes" contenteditable="true" id="notesLabel">Notes</label>  &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="notes-1" data-status="only-minus"></a>
+                                        <label for="notes" contenteditable="true" id="notesLabel">Notes</label>  &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="notes-1" data-status="only-minus" data-label="notesLabel"></a>
                                         {{Form::select('notes_data[1][notes]',[],[], ['id'=>'notes','placeholder'=>'Notes', 'class' => 'grade_options notes notes-1'])}}
                                         <span class="form-error d-none notes-error">This field is required</span>
                                     </div>
@@ -233,7 +233,7 @@
                                 <div class="row">
                                     {{Form::hidden('vocabulary_data[1][status]','no',['class'=>'vocabulary-1-status'])}}
                                     <div class="col-lg-10">
-                                        <label for="vocabulary" contenteditable="true" id="vocabularyLabel">Vocabulary</label>  &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="vocabulary-1" data-status="only-minus"></a>
+                                        <label for="vocabulary" contenteditable="true" id="vocabularyLabel">Vocabulary</label>  &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="vocabulary-1" data-status="only-minus" data-label="vocabularyLabel"></a>
                                         {{-- <input type="text" name="vocabulary_data[1][vocabulary]" id="vocabulary" class="form-control" placeholder="Vocabulary"> --}}
                                         {{Form::select('vocabulary_data[1][vocabulary]',[],[], ['id'=>'vocabulary','placeholder'=>'Vocabulary', 'class' => 'grade_options vocabulary vocabulary-1'])}}
                                         <span class="form-error d-none vocabulary-error">This field is required</span>
@@ -260,7 +260,7 @@
                                 <div class="row">
                                     {{Form::hidden('concept_data[1][status]','no',['class'=>'concept-1-status'])}}
                                     <div class="col-lg-10">
-                                        <label for="concept" contenteditable="true" id="conceptLabel">Concept Demonstration</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="concept-1" data-status="only-minus"></a>
+                                        <label for="concept" contenteditable="true" id="conceptLabel">Concept Demonstration</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="concept-1" data-status="only-minus" data-label="conceptLabel"></a>
                                         {{-- <input type="text" name="concept_data[1][concept]" id="concept" class="form-control" placeholder="Concept Demonstration"> --}}
                                         {{Form::select('concept_data[1][concept]',[],[], ['id'=>'concept','placeholder'=>'Concept Demonstration', 'class' => 'grade_options concept concept-1'])}}
                                         <span class="form-error d-none concept-error">This field is required</span>
@@ -287,7 +287,7 @@
                                 <div class="row">
                                     {{Form::hidden('guided_data[1][status]','no',['class'=>'guided-1-status'])}}
                                     <div class="col-lg-10">
-                                        <label for="guided_practice" contenteditable="true" id="guidedLabel">Guided Practice</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="guided-1" data-status="only-minus"></a>
+                                        <label for="guided_practice" contenteditable="true" id="guidedLabel">Guided Practice</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="guided-1" data-status="only-minus" data-label="guidedLabel"></a>
                                         {{-- <input type="text" name="guided_data[1][guided_practice]" id="guided_practice" class="form-control" placeholder="Guided Practice"> --}}
                                         {{Form::select('guided_data[1][guided_practice]',[],[], ['id'=>'guided_practice','placeholder'=>'Guided Practice', 'class' => 'grade_options guided_practice guided-1'])}}
                                         <span class="form-error d-none guided-error">This field is required</span>
@@ -320,7 +320,7 @@
                                 <div class="row">
                                     {{Form::hidden('informal[1][status]','no',['class'=>'informal-1-status'])}}
                                     <div class="col-lg-10">
-                                        <label for="informal_assessment" contenteditable="true" id="informalLabel">Informal Assessment</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="informal-1" data-status="only-minus"></a>
+                                        <label for="informal_assessment" contenteditable="true" id="informalLabel">Informal Assessment</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="informal-1" data-status="only-minus" data-label="informalLabel"></a>
                                         {{Form::select('informal[1][informal_assessment]',[],[], ['id'=>'informal_assessment','placeholder'=>'Informal Assessment', 'class' => 'grade_options informal_assessment informal-1'])}}
                                         <span class="form-error d-none informal-error">This field is required</span>
                                     </div>
@@ -346,7 +346,7 @@
                                 <div class="row">
                                     {{Form::hidden('work[1][status]','no',['class'=>'work-1-status'])}}
                                     <div class="col-lg-10">
-                                        <label for="student_work" contenteditable="true" id="workLabel">Student Work</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="work-1" data-status="only-minus"></a>
+                                        <label for="student_work" contenteditable="true" id="workLabel">Student Work</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="work-1" data-status="only-minus" data-label="workLabel"></a>
                                         {{Form::select('work[1][student_work]',[],[], ['id'=>'student_work','placeholder'=>'Student Work', 'class' => 'grade_options student_work work-1'])}}
                                         <span class="form-error d-none student-work-error">This field is required</span>
                                     </div>
@@ -372,7 +372,7 @@
                                 <div class="row">
                                     {{Form::hidden('formal[1][status]','no',['class'=>'formal-1-status'])}}
                                     <div class="col-lg-10">
-                                        <label for="formal_assessment" contenteditable="true" id="formalLabel">Formal Assessment</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="formal-1" data-status="only-minus"></a>
+                                        <label for="formal_assessment" contenteditable="true" id="formalLabel">Formal Assessment</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="formal-1" data-status="only-minus" data-label="formalLabel"></a>
                                         {{Form::select('formal[1][formal_assessment]',[],[], ['id'=>'formal_assessment','placeholder'=>'Formal Assessment', 'class' => 'grade_options formal_assessment formal-1'])}}
                                         <span class="form-error d-none formal-error">This field is required</span>
                                     </div>
@@ -420,7 +420,7 @@
                         </div>
                         <div style="width:100%;margin-top: 10px;"></div>
                         <!-- ------------------------------------------------------------------------------------------------------ -->
-                        <h5 contenteditable="true" id="methodLabel">Differentiation</h5>&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="diff-1" data-status="only-minus"> </a>
+                        <h5 contenteditable="true" id="methodLabel">Differentiation</h5>&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="diff-1" data-status="only-minus" data-label="methodLabel"> </a>
                         {{Form::hidden('method_data[1][status]','no',['class'=>'diff-1-status'])}}
                         <div class="standard-block mb-3 diffs-div diff-1">
                             <div class="row pl-3 pr-3 pt-3">
@@ -1040,6 +1040,7 @@
         $(document).on('click', '.remove-data', function(e){
             var status = $(this).data('status');
             var dStatus = $(this).data('id');
+            var attr = $('#'+$(this).data('label')).attr('contenteditable');
             if($('.'+$(this).data('id')).hasClass('d-none')){
                 $('.'+dStatus+'-status').val('no');
                 if(status != 'main'){
@@ -1049,12 +1050,19 @@
                     $(this).addClass('ti-minus');
                     $(this).removeClass('ti-plus');
                 }
+                var checkAttr = $('#'+$(this).data('label'));
+                if (typeof checkAttr !== typeof undefined && checkAttr !== false) {
+                    $('#'+$(this).data('label')).attr('contenteditable','true');
+                }
             }else{
                 $('.'+dStatus+'-status').val('yes');
                 $('.'+$(this).data('id')).addClass('d-none');
                 if(status == 'only-minus' && typeof status != 'undefined'){
                     $(this).removeClass('ti-minus');
                     $(this).addClass('ti-plus');
+                }
+                if (typeof attr !== typeof undefined && attr !== false) {
+                    $('#'+$(this).data('label')).removeAttr('contenteditable');
                 }
             }
         });

@@ -158,8 +158,10 @@
                             $stiClass = !empty($stClass) ? 'ti-plus' : 'ti-minus';
                             $etClass = $plan['entry_activity']['entry_data'][1]['status'] == 'no' ? '' : 'd-none';
                             $etiClass = !empty($etClass) ? 'ti-plus' : 'ti-minus';
+                            $staContAttr = $stiClass == 'ti-minus' ? 'contenteditable="true"' : '';
+                            $etContAttr = $etiClass == 'ti-minus' ? 'contenteditable="true"' : '';
                         @endphp
-                        <h5 contenteditable="true" id="standardsLabel">@if (isset($plan['standards']['label'])) {{$plan['standards']['label']}} @else Standards @endif</h5>&nbsp; <a class="{{$stiClass .' remove-btn-border remove-data'}}" data-id="standard-1" data-status="only-minus"> </a>
+                        <h5 {!! $staContAttr !!} id="standardsLabel">@if (isset($plan['standards']['label'])) {{$plan['standards']['label']}} @else Standards @endif</h5>&nbsp; <a class="{{$stiClass .' remove-btn-border remove-data'}}" data-id="standard-1" data-status="only-minus" data-label="standardsLabel"> </a>
                         {{Form::hidden('standard_data[1][status]',$plan['standards']['standard_data'][1]['status'],['class'=>'standard-1-status'])}}
                         <div class="{{'standard-block mb-3 remove-block standard-1 standard-div '.$stClass}}">
                             @if(!empty($plan['standards']['standard_data']))
@@ -214,7 +216,7 @@
                         </div>
                         <div style="width:100%;margin-top: 10px;"></div>
                         <!-- --------------------------------------------------------------------------------- -->
-                        <h5 contenteditable="true" id="entryLabel">@if (isset($plan['entry_activity']['label'])) {{$plan['entry_activity']['label']}} @else Entry Activity/ Success Starter @endif</h5>&nbsp;&nbsp;<a class="{{$etiClass. ' remove-btn-border remove-data'}}" data-id="entry-1" data-status="only-minus"> </a>
+                        <h5 {!! $etiClass !!} id="entryLabel">@if (isset($plan['entry_activity']['label'])) {{$plan['entry_activity']['label']}} @else Entry Activity/ Success Starter @endif</h5>&nbsp;&nbsp;<a class="{{$etiClass. ' remove-btn-border remove-data'}}" data-id="entry-1" data-status="only-minus" data-label="entryLabel"> </a>
                         {{Form::hidden('entry_data[1][status]',$plan['entry_activity']['entry_data'][1]['status'],['class'=>'entry-1-status'])}}
                         <div class="{{'standard-block mb-3 entry-1 entry-div '.$etClass}}">
                             @if(!empty($plan['entry_activity']['entry_data']))
@@ -292,12 +294,16 @@
                                 $gCount = !empty($plan['guided_practice']['guided_data']) ? count($plan['guided_practice']['guided_data']) : 1;
                                 $ntClass = $plan['notes']['notes_data'][1]['status'] == 'no' ? '' : 'd-none';
                                 $ntiClass = !empty($ntClass) ? 'ti-plus' : 'ti-minus';
+                                $ntContAttr = $ntiClass == 'ti-minus' ? 'contenteditable="true"' : '';
                                 $vtClass = $plan['vocabulary']['vocabulary_data'][1]['status'] == 'no' ? '' : 'd-none';
                                 $vtiClass = !empty($vtClass) ? 'ti-plus' : 'ti-minus';
+                                $vtContAttr = $vtiClass == 'ti-minus' ? 'contenteditable="true"' : '';
                                 $countStatusClass = $plan['concept_demonstration']['concept_data'][1]['status'] == 'no' ? '' : 'd-none';
                                 $countIClass = !empty($countStatusClass) ? 'ti-plus' : 'ti-minus';
+                                $countContAttr = $countIClass == 'ti-minus' ? 'contenteditable="true"' : '';
                                 $guidedStatusClass = $plan['guided_practice']['guided_data'][1]['status'] == 'no' ? '' : 'd-none';
                                 $guidIClass = !empty($guidedStatusClass) ? 'ti-plus' : 'ti-minus';
+                                $guidContAttr = $guidIClass == 'ti-minus' ? 'contenteditable="true"' : '';
                             @endphp
                             {{Form::hidden('notes_data[1][status]',$plan['notes']['notes_data'][1]['status'],['class'=>'notes-1-status'])}}
                             @if(!empty($plan['notes']['notes_data']))
@@ -317,9 +323,9 @@
                                     <div class="{{'pl-3 pr-3 pt-3 '.$className}}">
                                         <div class="{{$notLabelClass.' row'}}">
                                             <div class="col-lg-10">
-                                                <label for="notes" class="{{$notLabelClass.' '.$notSecondClass}}" contenteditable="true" id="notesLabel">@if (isset($plan['notes']['label'])) {{$plan['notes']['label']}} @else Notes @endif</label>  &nbsp;&nbsp; 
+                                                <label for="notes" class="{{$notLabelClass.' '.$notSecondClass}}" {!! $ntContAttr!!} id="notesLabel">@if (isset($plan['notes']['label'])) {{$plan['notes']['label']}} @else Notes @endif</label>  &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$ntiClass. ' remove-btn-border remove-data'}}" data-id="notes-1" data-status="only-minus"></a>
+                                                    <a class="{{$ntiClass. ' remove-btn-border remove-data'}}" data-id="notes-1" data-status="only-minus" data-label="notesLabel"></a>
                                                 @endif
                                                 {{Form::select('notes_data['.$key.'][notes]',$eNotes,!empty($row['notes']) ? $row['notes'] : null, ['id'=>'notes','placeholder'=>'Notes', 'class' => 'grade_options notes notes-1 '.$ntClass])}}  
                                                 @if($key == 1)
@@ -398,9 +404,9 @@
                                     <div class="{{'pl-3 pr-3 '.$className}}">
                                         <div class="{{$vLabelClass.' row'}}">
                                             <div class="col-lg-10">
-                                                <label for="vocabulary" class="{{$vLabelClass.' '.$vSecondClass}}" contenteditable="true" id="vocabularyLabel">@if (isset($plan['vocabulary']['label'])) {{$plan['vocabulary']['label']}} @else Vocabulary @endif</label>  &nbsp;&nbsp; 
+                                                <label for="vocabulary" class="{{$vLabelClass.' '.$vSecondClass}}" {!! $vtContAttr !!} id="vocabularyLabel">@if (isset($plan['vocabulary']['label'])) {{$plan['vocabulary']['label']}} @else Vocabulary @endif</label>  &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$vtiClass .' remove-btn-border remove-data'}}" data-id="vocabulary-1" data-status="only-minus"></a>
+                                                    <a class="{{$vtiClass .' remove-btn-border remove-data'}}" data-id="vocabulary-1" data-status="only-minus" data-label="vocabularyLabel"></a>
                                                 @endif
                                                 {{-- {{Form::text('vocabulary_data['.$key.'][vocabulary]',!empty($row['vocabulary']) ? $row['vocabulary'] : null,['class' => 'form-control','id'=>"vocabulary",'placeholder'=>"Vocabulary"])}} --}}
                                                 {{Form::select('vocabulary_data['.$key.'][vocabulary]',$vocaData,!empty($row['vocabulary']) ? $row['vocabulary'] : null, ['id'=>'vocabulary','placeholder'=>'Vocabulary', 'class' => 'grade_options vocabulary vocabulary-1 '.$vtClass])}}  
@@ -481,9 +487,9 @@
                                     <div class="{{'pl-3 pr-3 '.$className}}">
                                         <div class="{{$conLabelClass.' row'}}">
                                             <div class="col-lg-10">
-                                                <label for="concept" class="{{$conLabelClass.' '.$conSecondClass}}" contenteditable="true" id="conceptLabel">@if (isset($plan['concept_demonstration']['label'])) {{$plan['concept_demonstration']['label']}} @else Concept Demonstration @endif </label> &nbsp;&nbsp; 
+                                                <label for="concept" class="{{$conLabelClass.' '.$conSecondClass}}" {!! $countContAttr !!} id="conceptLabel">@if (isset($plan['concept_demonstration']['label'])) {{$plan['concept_demonstration']['label']}} @else Concept Demonstration @endif </label> &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$countIClass .' remove-btn-border remove-data'}}" data-id="concept-1" data-status="only-minus"></a>
+                                                    <a class="{{$countIClass .' remove-btn-border remove-data'}}" data-id="concept-1" data-status="only-minus" data-label="conceptLabel"></a>
                                                 @endif
                                                 {{-- {{Form::text('concept_data['.$key.'][concept]',!empty($row['concept']) ? $row['concept'] : null,['class' => 'form-control','id'=>"concept",'placeholder'=>"Concept Demonstration"])}} --}}
                                                 {{Form::select('concept_data['.$key.'][concept]',$conData, !empty($row['concept']) ? $row['concept'] : null, ['id'=>'concept','placeholder'=>'Concept Demonstration', 'class' => 'grade_options concept concept-1 '.$countStatusClass])}}
@@ -564,9 +570,9 @@
                                     <div class="{{'pl-3 pr-3 '.$className}}">
                                         <div class="{{$guidLabelClass.' row'}}">
                                             <div class="col-lg-10">
-                                                <label for="guided_practice" class="{{$guidLabelClass.' '.$guidSecondClass}}" contenteditable="true" id="guidedLabel">@if (isset($plan['guided_practice']['label'])) {{$plan['guided_practice']['label']}} @else Guided Practice @endif </label> &nbsp;&nbsp;
+                                                <label for="guided_practice" class="{{$guidLabelClass.' '.$guidSecondClass}}" {!! $guidContAttr !!} id="guidedLabel">@if (isset($plan['guided_practice']['label'])) {{$plan['guided_practice']['label']}} @else Guided Practice @endif </label> &nbsp;&nbsp;
                                                 @if($key == 1)
-                                                    <a class="{{$guidIClass. ' remove-btn-border remove-data'}}" data-id="guided-1" data-status="only-minus"></a>
+                                                    <a class="{{$guidIClass. ' remove-btn-border remove-data'}}" data-id="guided-1" data-status="only-minus" data-label="guidedLabel"></a>
                                                 @endif
                                                 {{-- {{Form::text('guided_data['.$key.'][guided_practice]',!empty($row['guided_practice']) ? $row['guided_practice'] : null,['class' => 'form-control','id'=>"guided_practice",'placeholder'=>"Guided Practice"])}} --}}
                                                 {{Form::select('guided_data[1][guided_practice]', $guideData, !empty($row['guided_practice']) ? $row['guided_practice'] : null, ['id'=>'guided_practice','placeholder'=>'Guided Practice', 'class' => 'grade_options guided_practice guided-1 '.$guidedStatusClass])}}
@@ -636,10 +642,13 @@
                             // $imformalIClass = !empty($informlMainStatusClass) ? 'ti-plus' : 'ti-minus';
                             $swStatusClass = $plan['student_work']['student_work_data'][1]['status'] == 'no' ? '' : 'd-none';
                             $swIClass = !empty($swStatusClass) ? 'ti-plus' : 'ti-minus';
+                            $swContAttr = $swIClass == 'ti-minus' ? 'contenteditable="true"' : '';
                             $fStatusClass = $plan['formal_assessment']['formal_assessment_data'][1]['status'] == 'no' ? '' : 'd-none';
                             $fIClass = !empty($fStatusClass) ? 'ti-plus' : 'ti-minus';
+                            $fContAttr = $fIClass == 'ti-minus' ? 'contenteditable="true"' : '';
                             $dStatusClass = $plan['differentiation']['method_name'][1]['status'] == 'no' ? '' : 'd-none';
                             $dIClass = !empty($dStatusClass) ? 'ti-plus' : 'ti-minus';
+                            $dContAttr = $dIClass == 'ti-minus' ? 'contenteditable="true"' : '';
                             $rStatusClass = $plan['rubric']['rubric'][1]['status'] == 'no' ? '' : 'd-none';
                             $rIClass = !empty($rStatusClass) ? 'ti-plus' : 'ti-minus';
                             $adDateStatusClass = $plan['additional_resources']['additional_data'][1]['status'] == 'no' ? '' : 'd-none';
@@ -653,6 +662,7 @@
                                 $fCount = !empty($plan['formal_assessment']['formal_assessment_data']) ?count($plan['formal_assessment']['formal_assessment_data']) : 1;
                                 $informlStatusClass = $plan['informal_assessment']['informal_data'][1]['status'] == 'no' ? '' : 'd-none';
                                 $iformalIClass = !empty($informlStatusClass) ? 'ti-plus' : 'ti-minus';
+                                $iformaleContAttr = $iformalIClass == 'ti-minus' ? 'contenteditable="true"' : '';
                             @endphp
                             {{Form::hidden('informal[1][main_status]',$plan['informal_assessment']['informal_data'][1]['main_status'],['class'=>'assessment-1-status'])}}
                             {{Form::hidden('informal[1][status]',$plan['informal_assessment']['informal_data'][1]['status'],['class'=>'informal-1-status'])}}
@@ -673,9 +683,9 @@
                                     <div class="{{'px-3 pt-3 '.$className}}">
                                         <div class="{{$infoLabelClass. ' row'}}">
                                             <div class="col-lg-10">
-                                                <label for="informal_assessment" class="{{$infoLabelClass.' '.$infoSecondClass}}" contenteditable="true" id="informalLabel">@if (isset($plan['informal_assessment']['label'])) {{$plan['informal_assessment']['label']}} @else Informal Assessment @endif </label> &nbsp;&nbsp; 
+                                                <label for="informal_assessment" class="{{$infoLabelClass.' '.$infoSecondClass}}" {!! $iformaleContAttr !!} id="informalLabel">@if (isset($plan['informal_assessment']['label'])) {{$plan['informal_assessment']['label']}} @else Informal Assessment @endif </label> &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$iformalIClass. ' remove-btn-border remove-data'}}" data-id="informal-1" data-status="only-minus"></a>
+                                                    <a class="{{$iformalIClass. ' remove-btn-border remove-data'}}" data-id="informal-1" data-status="only-minus" data-label="informalLabel"></a>
                                                 @endif
                                                 {{Form::select('informal['.$key.'][informal_assessment]',$aInformal,!empty($row['informal_assessment']) ? $row['informal_assessment'] : null, ['id'=>'informal_assessment','placeholder'=>'Informal Assessmen', 'class' => 'grade_options informal_assessment informal-1 '.$informlStatusClass])}}
                                                 @if($key == 1)
@@ -754,9 +764,9 @@
                                     <div class="{{'px-3 '.$className}}">
                                         <div class="{{$stWorkLabelClass.' row'}}">
                                             <div class="col-lg-10">
-                                                <label for="student_work" class="{{$stSecondLabelClass.' '.$stWorkLabelClass}}" contenteditable="true" id="workLabel">@if (isset($plan['student_work']['label'])) {{$plan['student_work']['label']}} @else Student Work @endif </label> &nbsp;&nbsp; 
+                                                <label for="student_work" class="{{$stSecondLabelClass.' '.$stWorkLabelClass}}" {!! $swContAttr !!} id="workLabel">@if (isset($plan['student_work']['label'])) {{$plan['student_work']['label']}} @else Student Work @endif </label> &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$swIClass. ' remove-btn-border remove-data'}}" data-id="work-1" data-status="only-minus"></a>
+                                                    <a class="{{$swIClass. ' remove-btn-border remove-data'}}" data-id="work-1" data-status="only-minus" data-label="workLabel"></a>
                                                 @endif
                                                 {{Form::select('work['.$key.'][student_work]',$aWork,!empty($row['student_work']) ? $row['student_work'] : null, ['id'=>'student_work','placeholder'=>'Student Work', 'class' => 'grade_options student_work work-1 '.$swStatusClass])}}
                                                 @if($key == 1)
@@ -835,9 +845,9 @@
                                     <div class="{{'px-3 '.$className}}">
                                         <div class="{{$formalLabelClass .' row'}}">
                                             <div class="col-lg-10">
-                                                <label for="formal_assessment" class="{{$formalLabelClass.' '.$formalSecondLabelClass}}" contenteditable="true" id="formalLabel">@if (isset($plan['formal_assessment']['label'])) {{$plan['formal_assessment']['label']}} @else Formal Assessment @endif</label> &nbsp;&nbsp; 
+                                                <label for="formal_assessment" class="{{$formalLabelClass.' '.$formalSecondLabelClass}}" {!! $fContAttr !!} id="formalLabel">@if (isset($plan['formal_assessment']['label'])) {{$plan['formal_assessment']['label']}} @else Formal Assessment @endif</label> &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$fIClass.' remove-btn-border remove-data'}}" data-id="formal-1" data-status="only-minus"></a>
+                                                    <a class="{{$fIClass.' remove-btn-border remove-data'}}" data-id="formal-1" data-status="only-minus" data-label="formalLabel"></a>
                                                 @endif
                                                 {{Form::select('formal['.$key.'][formal_assessment]',$aFormal,!empty($row['formal_assessment']) ? $row['formal_assessment'] : null, ['id'=>'formal_assessment','placeholder'=>'Formal Assessmen', 'class' => 'grade_options formal_assessment formal-1 '.$fStatusClass])}}
                                                 @if($key == 1)
@@ -956,7 +966,7 @@
                         @endif
                         <div style="width:100%;margin-top: 10px;"></div>
                         <!-- ------------------------------------------------------------------------------------------------------ -->
-                        <h5 contenteditable="true" id="methodLabel">@if (isset($plan['differentiation']['label'])) {{$plan['differentiation']['label']}} @else Differentiation  @endif </h5>&nbsp; <a class="{{$dIClass.' remove-btn-border remove-data'}}" data-id="diff-1" data-status="only-minus"> </a>
+                        <h5 {!! $dContAttr !!} id="methodLabel">@if (isset($plan['differentiation']['label'])) {{$plan['differentiation']['label']}} @else Differentiation  @endif </h5>&nbsp; <a class="{{$dIClass.' remove-btn-border remove-data'}}" data-id="diff-1" data-status="only-minus" data-label="methodLabel"> </a>
                         {{Form::hidden('method_data[1][status]',$plan['differentiation']['method_name'][1]['status'],['class'=>'diff-1-status'])}}
                         @if(!empty($plan['differentiation']['method_name']))
                             <div class="{{'standard-block mb-3 diffs-div diff-1 '.$dStatusClass}}">
@@ -1633,6 +1643,7 @@
         $(document).on('click', '.remove-data', function(e){
             var status = $(this).data('status');
             var dStatus = $(this).data('id');
+            var attr = $('#'+$(this).data('label')).attr('contenteditable');
             if($('.'+$(this).data('id')).hasClass('d-none')){
                 $('.'+dStatus+'-status').val('no');
                 if(status != 'main'){
@@ -1642,12 +1653,19 @@
                     $(this).addClass('ti-minus');
                     $(this).removeClass('ti-plus');
                 }
+                var checkAttr = $('#'+$(this).data('label'));
+                if (typeof checkAttr !== typeof undefined && checkAttr !== false) {
+                    $('#'+$(this).data('label')).attr('contenteditable','true');
+                }
             }else{
                 $('.'+dStatus+'-status').val('yes');
                 $('.'+$(this).data('id')).addClass('d-none');
                 if(status == 'only-minus' && typeof status != 'undefined'){
                     $(this).removeClass('ti-minus');
                     $(this).addClass('ti-plus');
+                }
+                if (typeof attr !== typeof undefined && attr !== false) {
+                    $('#'+$(this).data('label')).removeAttr('contenteditable');
                 }
             }
         });
