@@ -1162,7 +1162,18 @@
     var selectedGrade = $("#grade option:selected").val();
     $(document).ready(function(){
         $('.dateJs').datepicker();
-
+        $(document).on('change','select.grade_options',function(){
+            storeForm(0,0,1);
+        });
+        $(document).on('keyup','.create_link',function(){
+            storeForm(0,0,1);
+        });
+        $(document).on('change','.dateJs',function(){
+            storeForm(0,0,1);
+        });
+        $(document).on('change','select.duration',function(){
+            storeForm(0,0,1);
+        });
         $("select#grade").change(function(){
             // $('.standard-data').remove();
             // $('.entry-data').remove();
@@ -1838,43 +1849,7 @@
                 }
             }
             var typeSubmit = $(this).val();
-            var formData = new FormData($(".lession-form")[0]);
-
-            var objectiveLabel = $('#objectiveLabel').text();
-            var standardsLabel = $('#standardsLabel').text();
-            var entryLabel = $('#entryLabel').text();
-            var notesLabel = $('#notesLabel').text();
-            var vocabularyLabel = $('#vocabularyLabel').text();
-            var conceptLabel = $('#conceptLabel').text();
-            var guidedLabel = $('#guidedLabel').text();
-            var informalLabel = $('#informalLabel').text();
-            var workLabel = $('#workLabel').text();
-            var formalLabel = $('#formalLabel').text();
-            var methodLabel = $('#methodLabel').text();
-            var mail = $('.send-email').val();
-
-            formData.append('objectiveLabel', objectiveLabel);
-            formData.append('standardsLabel', standardsLabel);
-            formData.append('objectiveLabel', objectiveLabel);
-            formData.append('entryLabel', entryLabel);
-            formData.append('notesLabel', notesLabel);
-            formData.append('vocabularyLabel', vocabularyLabel);
-            formData.append('conceptLabel', conceptLabel);
-            formData.append('guidedLabel', guidedLabel);
-            formData.append('informalLabel', informalLabel);
-            formData.append('workLabel', workLabel);
-            formData.append('formalLabel', formalLabel);
-            formData.append('methodLabel', methodLabel);
-            formData.append('email',mail);
-            if (dId == 5) {
-                formData.append('print_document', 1);
-            }
-            if (typeSubmit == 2) {
-                formData.append('print', 1);
-            } else {
-                formData.append('print', 0);
-            }
-            storeForm(formData);
+            storeForm(dId,typeSubmit,0);
         });
     });
 
@@ -2035,7 +2010,44 @@
     }
 
 
-    function storeForm(data) {
+    function storeForm(dId,typeSubmit,isDraft) {
+        var formData = new FormData($(".lession-form")[0]);
+
+        var objectiveLabel = $('#objectiveLabel').text();
+        var standardsLabel = $('#standardsLabel').text();
+        var entryLabel = $('#entryLabel').text();
+        var notesLabel = $('#notesLabel').text();
+        var vocabularyLabel = $('#vocabularyLabel').text();
+        var conceptLabel = $('#conceptLabel').text();
+        var guidedLabel = $('#guidedLabel').text();
+        var informalLabel = $('#informalLabel').text();
+        var workLabel = $('#workLabel').text();
+        var formalLabel = $('#formalLabel').text();
+        var methodLabel = $('#methodLabel').text();
+        var mail = $('.send-email').val();
+
+        formData.append('objectiveLabel', objectiveLabel);
+        formData.append('standardsLabel', standardsLabel);
+        formData.append('objectiveLabel', objectiveLabel);
+        formData.append('entryLabel', entryLabel);
+        formData.append('notesLabel', notesLabel);
+        formData.append('vocabularyLabel', vocabularyLabel);
+        formData.append('conceptLabel', conceptLabel);
+        formData.append('guidedLabel', guidedLabel);
+        formData.append('informalLabel', informalLabel);
+        formData.append('workLabel', workLabel);
+        formData.append('formalLabel', formalLabel);
+        formData.append('methodLabel', methodLabel);
+        formData.append('email',mail);
+        formData.append('is_draft',isDraft);
+        if (dId == 5) {
+            formData.append('print_document', 1);
+        }
+        if (typeSubmit == 2) {
+            formData.append('print', 1);
+        } else {
+            formData.append('print', 0);
+        }
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -2044,7 +2056,7 @@
             type:'POST',
             enctype: 'multipart/form-data',
             dataType:'json',
-            data:data,
+            data:formData,
             cache: false,
             contentType: false,
             processData: false,
@@ -2056,6 +2068,8 @@
                     newWin= window.open('', "_blank");
                     newWin.document.write(data.plan);
                     setTimeout(function(){ newWin.print(); }, 3000);
+                }else if(data.isDraft){
+                    return true;
                 } else {
                     window.location.href = '{{URL::to("plan")}}';
                     // window.open('{{URL::to("plan")}}', '_blank');

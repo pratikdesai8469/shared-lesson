@@ -184,7 +184,7 @@
                                 </div>
                                 <div class="col-lg-2">
                                     <label for="entry_duration">&nbsp;&nbsp;</label>
-                                    {{Form::select('entry_data[1][entry_duration]',$monthDays,[], ['id'=>'entry_duration','placeholder'=>'Duration', 'class' => 'form-control entry_duration'])}}
+                                    {{Form::select('entry_data[1][entry_duration]',$monthDays,[], ['id'=>'entry_duration','placeholder'=>'Duration', 'class' => 'form-control entry_duration duration'])}}
                                 </div>
                                 <div class="col-lg-5">
                                     <label for="entry_attch">Attach document</label>
@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="entry_link">Create a link</label>
-                                    <input type="text" name="entry_data[1][entry_link]" id="entry_link" class="form-control" placeholder="Create a link">
+                                    <input type="text" name="entry_data[1][entry_link]" id="entry_link" class="form-control create_link" placeholder="Create a link">
                                 </div>
                                 <div class="col-lg-1">
                                     <a class="text-primary d-inline-block mt-50 ti-plus add_entry_btn plus_btn"> </a>
@@ -213,7 +213,7 @@
                                     </div>
                                     <div class="col-lg-2 notes-1">
                                         <label for="notes_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select("notes_data[1][notes_duration]",$monthDays,[], ['id'=>'notes_duration','placeholder'=>'Duration', 'class' => 'form-control notes_duration'])}}
+                                        {{Form::select("notes_data[1][notes_duration]",$monthDays,[], ['id'=>'notes_duration','placeholder'=>'Duration', 'class' => 'form-control notes_duration duration'])}}
                                     </div>
                                     <div class="col-lg-5 notes-1">
                                         <label for="notes_attch">Attach document</label>
@@ -221,7 +221,7 @@
                                     </div>
                                     <div class="col-lg-6 notes-1">
                                         <label for="notes_link">Create a link</label>
-                                        <input type="text" name="notes_data[1][notes_link]" id="notes_link" class="form-control" placeholder="Create a link">
+                                        <input type="text" name="notes_data[1][notes_link]" id="notes_link" class="form-control create_link" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('notes_count', 1,['class' => 'notes-count-1 notes-count', "data-id" => 1])}}
                                     <div class="col-lg-1 notes-1">
@@ -240,7 +240,7 @@
                                     </div>
                                     <div class="col-lg-2 vocabulary-1">
                                         <label for="vocabulary_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select("vocabulary_data[1][vocabulary_duration]",$monthDays,[], ["id"=>"vocabulary_duration","placeholder"=>"Duration", "class" => "form-control vocabulary_duration"])}}
+                                        {{Form::select("vocabulary_data[1][vocabulary_duration]",$monthDays,[], ["id"=>"vocabulary_duration","placeholder"=>"Duration", "class" => "form-control vocabulary_duration duration"])}}
                                     </div>
                                     <div class="col-lg-5 vocabulary-1">
                                         <label for="vocabulary_attch">Attach document</label>
@@ -248,7 +248,7 @@
                                     </div>
                                     <div class="col-lg-6 vocabulary-1">
                                         <label for="vocabulary_link">Create a link</label>
-                                        <input type="text" name="vocabulary_data[1][vocabulary_link]" id="vocabulary_link" class="form-control" placeholder="Create a link">
+                                        <input type="text" name="vocabulary_data[1][vocabulary_link]" id="vocabulary_link" class="form-control create_link" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('vocabulary_count', 1,['class' => 'vocabulary-count-1 vocabulary-count', "data-id" => 1])}}
                                     <div class="col-lg-1 vocabulary-1">
@@ -267,7 +267,7 @@
                                     </div>
                                     <div class="col-lg-2 concept-1">
                                         <label for="concept_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select("concept_data[1][concept_duration]",$monthDays,[], ["id"=>"concept_duration","placeholder"=>"Duration", "class" => "form-control concept_duration"])}}
+                                        {{Form::select("concept_data[1][concept_duration]",$monthDays,[], ["id"=>"concept_duration","placeholder"=>"Duration", "class" => "form-control concept_duration duration"])}}
                                     </div>
                                     <div class="col-lg-5 concept-1">
                                         <label for="concept_attch">Attach document</label>
@@ -275,7 +275,7 @@
                                     </div>
                                     <div class="col-lg-6 concept-1">
                                         <label for="concept_link">Create a link</label>
-                                        <input type="text" name="concept_data[1][concept_link]" id="concept_link" class="form-control" placeholder="Create a link">
+                                        <input type="text" name="concept_data[1][concept_link]" id="concept_link" class="form-control create_link" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('concept_count', 1,['class' => 'concept-count-1 concept-count', "data-id" => 1])}}
                                     <div class="col-lg-1 concept-1">
@@ -294,7 +294,7 @@
                                     </div>
                                     <div class="col-lg-2 guided-1">
                                         <label for="guided_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select("guided_data[1][guided_duration]",$monthDays,[], ["id"=>"guided_duration","placeholder"=>"Duration", "class" => "form-control guided_duration"])}}
+                                        {{Form::select("guided_data[1][guided_duration]",$monthDays,[], ["id"=>"guided_duration","placeholder"=>"Duration", "class" => "form-control guided_duration duration"])}}
                                     </div>
                                     <div class="col-lg-5 guided-1">
                                         <label for="guided_attch">Attach document</label>
@@ -302,7 +302,7 @@
                                     </div>
                                     <div class="col-lg-6 guided-1">
                                         <label for="guided_link">Create a link</label>
-                                        <input type="text" name="guided_data[1][guided_link]" id="guided_link" class="form-control" placeholder="Create a link">
+                                        <input type="text" name="guided_data[1][guided_link]" id="guided_link" class="form-control create_link" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('guided_count', 1,['class' => 'guided-count-1 guided-count', "data-id" => 1])}}
                                     <div class="col-lg-1 guided-1">
@@ -326,7 +326,7 @@
                                     </div>
                                     <div class="col-lg-2 informal-1">
                                         <label for="informal_assessment_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select("informal[1][informal_assessment_duration]",$monthDays,[], ["id"=>"informal_assessment_duration","placeholder"=>"Duration", "class" => "form-control informal_assessment_duration"])}}
+                                        {{Form::select("informal[1][informal_assessment_duration]",$monthDays,[], ["id"=>"informal_assessment_duration","placeholder"=>"Duration", "class" => "form-control informal_assessment_duration duration"])}}
                                     </div>
                                     <div class="col-lg-5 informal-1">
                                         <label for="informal_assessment_attch">Attach document</label>
@@ -334,7 +334,7 @@
                                     </div>
                                     <div class="col-lg-6 informal-1">
                                         <label for="informal_assessment_link">Create a link</label>
-                                        <input type="text" name="informal[1][informal_assessment_link]" id="informal_assessment_link" class="form-control" placeholder="Create a link">
+                                        <input type="text" name="informal[1][informal_assessment_link]" id="informal_assessment_link" class="form-control create_link" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('informal_count', 1,['class' => 'informal-count-1 informal-count', "data-id" => 1])}}
                                     <div class="col-lg-1 informal-1">
@@ -352,7 +352,7 @@
                                     </div>
                                     <div class="col-lg-2 work-1">
                                         <label for="student_work_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select('work[1][student_work_duration]',$monthDays,[], ["id"=>"student_work_duration","placeholder"=>"Duration", "class" => "form-control student_work_duration"])}}
+                                        {{Form::select('work[1][student_work_duration]',$monthDays,[], ["id"=>"student_work_duration","placeholder"=>"Duration", "class" => "form-control student_work_duration duration"])}}
                                     </div>
                                     <div class="col-lg-5 work-1">
                                         <label for="student_work_attch">Attach document</label>
@@ -360,7 +360,7 @@
                                     </div>
                                     <div class="col-lg-6 work-1">
                                         <label for="student_work_link">Create a link</label>
-                                        <input type="text" name="work[1][student_work_link]" id="student_work_link" class="form-control" placeholder="Create a link">
+                                        <input type="text" name="work[1][student_work_link]" id="student_work_link" class="form-control create_link" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('work_count', 1,['class' => 'work-count-1 work-count', "data-id" => 1])}}
                                     <div class="col-lg-1 work-1">
@@ -378,7 +378,7 @@
                                     </div>
                                     <div class="col-lg-2 formal-1">
                                         <label for="formal_assessment_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select('formal[1][formal_assessment_duration]',$monthDays,[], ["id"=>"formal_assessment_duration","placeholder"=>"Duration", "class" => "form-control formal_assessment_duration"])}}
+                                        {{Form::select('formal[1][formal_assessment_duration]',$monthDays,[], ["id"=>"formal_assessment_duration","placeholder"=>"Duration", "class" => "form-control formal_assessment_duration duration"])}}
                                     </div>
                                     <div class="col-lg-5 formal-1">
                                         <label for="formal_assessment_attch">Attach document</label>
@@ -386,7 +386,7 @@
                                     </div>
                                     <div class="col-lg-6 formal-1">
                                         <label for="formal_assessment_link">Create a link</label>
-                                        <input type="text" name="formal[1][formal_assessment_link]" id="formal_assessment_link" class="form-control" placeholder="Create a link">
+                                        <input type="text" name="formal[1][formal_assessment_link]" id="formal_assessment_link" class="form-control create_link" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('formal_count', 1,['class' => 'formal-count-1 formal-count', "data-id" => 1])}}
                                     <div class="col-lg-1 formal-1">
@@ -590,6 +590,18 @@
             get_form_data(selectedGrade, gradeOptions);
         });
 
+        $(document).on('change','select.grade_options',function(){
+            storeForm(0,0,1);
+        });
+        $(document).on('keyup','.create_link',function(){
+            storeForm(0,0,1);
+        });
+        $(document).on('change','.dateJs',function(){
+            storeForm(0,0,1);
+        });
+        $(document).on('change','select.duration',function(){
+            storeForm(0,0,1);
+        });
         var wrapperStandard = $('.standard-div'); //Input field wrapper
         $('.add_button').click(function(){
             // var totalStData = $('.st-count').length;
@@ -734,7 +746,7 @@
                 '</div>'+
                 '<div class="col-lg-6">'+
                     '<label for="entry_link">Create a link</label>'+
-                    '<input type="text" name="entry_data['+finalData+'][entry_link]" id="entry_link" class="form-control" placeholder="Create a link" required>'+
+                    '<input type="text" name="entry_data['+finalData+'][entry_link]" id="entry_link" class="form-control create_link" placeholder="Create a link" required>'+
                 '</div>'+
                 '<div class="col-lg-1">'+
                     '<a class="text-primary d-inline-block mt-50 ti-close remove_button plus_btn"> </a>'+
@@ -795,7 +807,7 @@
                 '</div>'+
                 '<div class="col-lg-6">'+
                     '<label for="notes_link">Create a link</label>'+
-                    '<input type="text" name="notes_data['+finalData+'][notes_link]" id="notes_link" class="form-control" placeholder="Create a link" required>'+
+                    '<input type="text" name="notes_data['+finalData+'][notes_link]" id="notes_link" class="form-control create_link" placeholder="Create a link" required>'+
                 '</div>'+
                 '<input type="hidden" name="notes_count" class= "notes-count-'+finalData+' notes-count" data-id = '+finalData+'>'+
                 '<div class="col-lg-1">'+
@@ -831,7 +843,7 @@
                 '</div>'+
                 '<div class="col-lg-6">'+
                     '<label for="vocabulary_link">Create a link</label>'+
-                    '<input type="text" name="vocabulary_data['+finalData+'][vocabulary_link]" id="vocabulary_link" class="form-control" placeholder="Create a link" required>'+
+                    '<input type="text" name="vocabulary_data['+finalData+'][vocabulary_link]" id="vocabulary_link" class="form-control create_link" placeholder="Create a link" required>'+
                 '</div>'+
                 '<input type="hidden" name="vocabulary_count" class= "vocabulary-count-'+finalData+' vocabulary-count" data-id = '+finalData+'>'+
                 '<div class="col-lg-1">'+
@@ -867,7 +879,7 @@
                 '</div>'+
                 '<div class="col-lg-6">'+
                     '<label for="concept_link">Create a link</label>'+
-                    '<input type="text" name="concept_data['+finalData+'][concept_link]" id="concept_link" class="form-control" placeholder="Create a link" required>'+
+                    '<input type="text" name="concept_data['+finalData+'][concept_link]" id="concept_link" class="form-control create_link" placeholder="Create a link" required>'+
                 '</div>'+
                 '<input type="hidden" name="concept_count" class= "concept-count-'+finalData+' concept-count" data-id = '+finalData+'>'+
                 '<div class="col-lg-1">'+
@@ -903,7 +915,7 @@
                 '</div>'+
                 '<div class="col-lg-6">'+
                     '<label for="guided_link">Create a link</label>'+
-                    '<input type="text" name="guided_data['+finalData+'][guided_link]" id="guided_link" class="form-control" placeholder="Create a link" required>'+
+                    '<input type="text" name="guided_data['+finalData+'][guided_link]" id="guided_link" class="form-control create_link" placeholder="Create a link" required>'+
                 '</div>'+
                 '<input type="hidden" name="guided_count" class= "guided-count-'+finalData+' guided-count" data-id = '+finalData+'>'+
                 '<div class="col-lg-1">'+
@@ -1234,43 +1246,7 @@
                 }
             }
             var typeSubmit = $(this).val();
-            var formData = new FormData($(".lession-form")[0]);
-            var objectiveLabel = $('#objectiveLabel').text();
-            var standardsLabel = $('#standardsLabel').text();
-            var entryLabel = $('#entryLabel').text();
-            var notesLabel = $('#notesLabel').text();
-            var vocabularyLabel = $('#vocabularyLabel').text();
-            var conceptLabel = $('#conceptLabel').text();
-            var guidedLabel = $('#guidedLabel').text();
-            var informalLabel = $('#informalLabel').text();
-            var workLabel = $('#workLabel').text();
-            var formalLabel = $('#formalLabel').text();
-            var methodLabel = $('#methodLabel').text();
-            var mail = $('.send-email').val();
-
-            formData.append('objectiveLabel', objectiveLabel);
-            formData.append('standardsLabel', standardsLabel);
-            formData.append('objectiveLabel', objectiveLabel);
-            formData.append('entryLabel', entryLabel);
-            formData.append('notesLabel', notesLabel);
-            formData.append('vocabularyLabel', vocabularyLabel);
-            formData.append('conceptLabel', conceptLabel);
-            formData.append('guidedLabel', guidedLabel);
-            formData.append('informalLabel', informalLabel);
-            formData.append('workLabel', workLabel);
-            formData.append('formalLabel', formalLabel);
-            formData.append('methodLabel', methodLabel);
-            formData.append('email',mail);
-            
-            if (dId == 5) {
-                formData.append('print_document', 1);
-            }
-            if (typeSubmit == 2) {
-                formData.append('print', 1);
-            } else {
-                formData.append('print', 0);
-            }
-            storeForm(formData);
+            storeForm(dId,typeSubmit,0);
         });
     });
 
@@ -1289,7 +1265,7 @@
             '</div>'+
             '<div class="col-lg-6">'+
                 '<label for="informal_assessment_link">Create a link</label>'+
-                '<input type="text" name="informal['+finalData+'][informal_assessment_link]" id="informal_assessment_link" class="form-control" placeholder="Create a link" required>'+
+                '<input type="text" name="informal['+finalData+'][informal_assessment_link]" id="informal_assessment_link" class="form-control create_link" placeholder="Create a link" required>'+
             '</div>'+
             '<input type="hidden" name="informal_count" class= "informal-count-'+finalData+' informal-count" data-id = '+finalData+'>'+
             '<div class="col-lg-1">'+
@@ -1313,7 +1289,7 @@
             '</div>'+
             '<div class="col-lg-6">'+
                 '<label for="student_work_link">Create a link</label>'+
-                '<input type="text" name="work['+finalData+'][student_work_link]" id="student_work_link" class="form-control" placeholder="Create a link" required>'+
+                '<input type="text" name="work['+finalData+'][student_work_link]" id="student_work_link" class="form-control create_link" placeholder="Create a link" required>'+
             '</div>'+
             '<input type="hidden" name="work_count" class= "work-count-'+finalData+' work-count" data-id = '+finalData+'>'+
             '<div class="col-lg-1">'+
@@ -1337,7 +1313,7 @@
             '</div>'+
             '<div class="col-lg-6">'+
                 '<label for="formal_assessment_link">Create a link</label>'+
-                '<input type="text" name="formal['+finalData+'][formal_assessment_link]" id="formal_assessment_link" class="form-control" placeholder="Create a link" required>'+
+                '<input type="text" name="formal['+finalData+'][formal_assessment_link]" id="formal_assessment_link" class="form-control create_link" placeholder="Create a link" required>'+
             '</div>'+
             '<input type="hidden" name="formal_count" class= "formal-count-'+finalData+' formal-count" data-id = '+finalData+'>'+
             '<div class="col-lg-1">'+
@@ -1349,7 +1325,7 @@
     function getMonthData(duration_name, duration_id){
         var entryMinutes = {!! json_encode($monthDays) !!};
         var entryDuration= '';
-        entryDuration += '<select name="'+duration_name+'" id="'+duration_id+'" class="form-control" placeholder="Duration"  required>';
+        entryDuration += '<select name="'+duration_name+'" id="'+duration_id+'" class="form-control duration" placeholder="Duration"  required>';
         entryDuration +=  '<option value="">Duration</option>';
         $.each(entryMinutes, function(key, value) {
             entryDuration +=  '<option value="' + key + '">'+value+'</option>';
@@ -1418,16 +1394,55 @@
     }
 
 
-    function storeForm(data) {
+    function storeForm(dId,typeSubmit,isDraft) {
+        var formData = new FormData($(".lession-form")[0]);
+        var objectiveLabel = $('#objectiveLabel').text();
+        var standardsLabel = $('#standardsLabel').text();
+        var entryLabel = $('#entryLabel').text();
+        var notesLabel = $('#notesLabel').text();
+        var vocabularyLabel = $('#vocabularyLabel').text();
+        var conceptLabel = $('#conceptLabel').text();
+        var guidedLabel = $('#guidedLabel').text();
+        var informalLabel = $('#informalLabel').text();
+        var workLabel = $('#workLabel').text();
+        var formalLabel = $('#formalLabel').text();
+        var methodLabel = $('#methodLabel').text();
+        var mail = $('.send-email').val();
+
+        formData.append('objectiveLabel', objectiveLabel);
+        formData.append('standardsLabel', standardsLabel);
+        formData.append('objectiveLabel', objectiveLabel);
+        formData.append('entryLabel', entryLabel);
+        formData.append('notesLabel', notesLabel);
+        formData.append('vocabularyLabel', vocabularyLabel);
+        formData.append('conceptLabel', conceptLabel);
+        formData.append('guidedLabel', guidedLabel);
+        formData.append('informalLabel', informalLabel);
+        formData.append('workLabel', workLabel);
+        formData.append('formalLabel', formalLabel);
+        formData.append('methodLabel', methodLabel);
+        formData.append('email',mail);
+        formData.append('is_draft',isDraft);
+        
+        if(dId == 5) {
+            formData.append('print_document', 1);
+        }
+        if(typeSubmit == 2) {
+            formData.append('print', 1);
+        }else {
+            formData.append('print', 0);
+        }
+
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             url:'{{URL::to("add-plan-form")}}',
             type:'POST',
+            async: false,
             enctype: 'multipart/form-data',
             dataType:'json',
-            data:data,
+            data:formData,
             cache: false,
             contentType: false,
             processData: false,
@@ -1442,7 +1457,9 @@
                     setTimeout(function() {
                         newWin.print();
                     }, 3000);
-                } else {
+                }else if(data.isDraft){
+                    return true;
+                }else {
                     window.location.href = '{{URL::to("plan")}}';
                     // window.open('{{URL::to("plan")}}', '_blank');
 

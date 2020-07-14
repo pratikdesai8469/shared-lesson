@@ -77,6 +77,10 @@ class PlanController extends Controller
         $lessonData = $this->getSeperateData(2);
         $methodNameData = $this->getSeperateData(3);
         $methodDescData = $this->getSeperateData(4);
+        $draftLesson = $this->lesson->whereUserId(Auth::user()->id)->whereIsDraft(1)->first();
+        if($draftLesson){
+            return redirect('edit-plan-form/'.encrypt($draftLesson->id));
+        }
         return view('website.plan.create', compact('gradeData', 'monthDays','unitData','lessonData','methodNameData','methodDescData'));
     }
 
@@ -100,6 +104,7 @@ class PlanController extends Controller
             $lessionForm->grade = $request->grade;
             $lessionForm->class = $request->class;
             $lessionForm->unit = $request->unit;
+            $lessionForm->is_draft = $request->is_draft;
             $lessionForm->unit_topic = $request->unit_topic;
             $lessionForm->lesson = $request->lesson;
             if (!empty($request->objective_data)) {
@@ -235,7 +240,6 @@ class PlanController extends Controller
                 // $informalData['label'] = $request->informalLabel;
                 // $lessionForm->informal_assessment = json_encode($informalData);
             }
-            // dd($request->all());
             if (!empty($request->work)) {
                 $workData['student_work_data'] =  $this->reIndexArray($request->work);
                 foreach ($workData['student_work_data'] as $key => $row) {
@@ -260,7 +264,6 @@ class PlanController extends Controller
                 $lessionForm->student_work = json_encode($workData);
                 // dump(json_encode($workData));
             }
-            // dd("dgdfg");
             if (!empty($request->formal)) {
                 $formalData['formal_assessment_data'] =  $this->reIndexArray($request->formal);
                 foreach ($formalData['formal_assessment_data'] as $key => $row) {
@@ -337,13 +340,17 @@ class PlanController extends Controller
             }
             $lessionForm->user_id = $userId;
             $lessionForm->save();
+            
             session()->flash('success', "$methodType record successfully!");
             if ($request->print) {
+                $lessionForm->is_draft = 0;
+                $lessionForm->save();
                 $insertedId = $lessionForm->id;
                 return ['status' => 'true', 'last_id' => $insertedId, 'id' => $lessionForm->id];
             } else if ($request->print_document) {
-                
                 $data = $this->lesson->whereId($lessionForm->id)->first();
+                $data->is_draft = 0;
+                $data->save();
                 $plan = $data->toArray();
                 if ($plan) {
                     $plan['objective'] = json_decode($plan['objective'], true);
@@ -361,13 +368,17 @@ class PlanController extends Controller
                     $plan['homework'] = json_decode($plan['homework'], true);
                     $plan['additional_resources'] = json_decode($plan['additional_resources'], true);
                 }
-
                 return [
                     'status' => 'true',
                     'plan' =>  View::make('website.plan.print_document', ['plan' => $plan])->render(),
                     'print_document' => 1
                 ];
-            } else {
+            } else if($request->is_draft){
+                $insertedId = $lessionForm->id;
+                return ['status' => 'true','isDraft'=>true, 'id' => $lessionForm->id];
+            }else {
+                $lessionForm->is_draft = 0;
+                $lessionForm->save();
                 if ($request->email) {
                     $lessionForm['objective'] = json_decode($lessionForm['objective'], true);
                     $lessionForm['standards'] = json_decode($lessionForm['standards'], true);
@@ -384,7 +395,6 @@ class PlanController extends Controller
                     $lessionForm['homework'] = json_decode($lessionForm['homework'], true);
                     $lessionForm['additional_resources'] = json_decode($lessionForm['additional_resources'], true);
                     $email = $request->email;
-
                     $shareLink = null;
                     $userExists = User::whereEmail($email)->first();
                     $shareLink = URL::to('signup') . '/' . encrypt($lessionForm->id);
@@ -515,7 +525,7 @@ class PlanController extends Controller
     public function getList()
     {
         $userId = Auth::user()->id ?? null;
-        $plan = $this->lesson->whereUserId($userId)->orderBy('id','desc')->paginate(9);
+        $plan = $this->lesson->whereUserId($userId)->whereIsDraft(0)->orderBy('id','desc')->paginate(9);
         return view('website.plan.plan', compact('plan'));
     }
 
@@ -620,31 +630,34 @@ class PlanController extends Controller
             'home_data', 'additional_data'
         ];
         $gradeNewData  = [];
-        foreach ($gradeData as $key => $value) {
-            if (in_array($key, $arrayOptions)) {
-                foreach ($value as $key2 => $value2) {
-                    foreach ($value2 as $key3 => $value3) {
-                        if (in_array($key3, $insideOptions) && $value3) {
-                            $gradeNewData[$key3][] = $value3;
+        if($request->grade){
+            foreach ($gradeData as $key => $value) {
+                if (in_array($key, $arrayOptions)) {
+                    foreach ($value as $key2 => $value2) {
+                        foreach ($value2 as $key3 => $value3) {
+                            if (in_array($key3, $insideOptions) && $value3) {
+                                $gradeNewData[$key3][] = $value3;
+                            }
                         }
                     }
+                } else {
+                    $this->gradeField::updateOrCreate(
+                        ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value],
+                        ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value]
+                    );
                 }
-            } else {
-                $this->gradeField::updateOrCreate(
-                    ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value],
-                    ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value]
-                );
+            }
+            foreach ($gradeNewData as $key => $value) {
+                $value = array_unique($value);
+                foreach ($value as $key1 => $value1) {
+                    $this->gradeField::updateOrCreate(
+                        ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value1],
+                        ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value1]
+                    );
+                }
             }
         }
-        foreach ($gradeNewData as $key => $value) {
-            $value = array_unique($value);
-            foreach ($value as $key1 => $value1) {
-                $this->gradeField::updateOrCreate(
-                    ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value1],
-                    ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value1]
-                );
-            }
-        }
+       
     }
 
     public function getSeperateData($type){
@@ -672,8 +685,12 @@ class PlanController extends Controller
                 $this->checkSeperateData(3,$row);
             }
         }
-        $checkSData = $this->checkSeperateData(1,$request->unit);
-        $checkSData = $this->checkSeperateData(2,$request->lesson);
+        if($request->unit){
+            $checkSData = $this->checkSeperateData(1,$request->unit);
+        }
+        if($request->lesson){
+            $checkSData = $this->checkSeperateData(2,$request->lesson);
+        }
     } 
 
     public function checkSeperateData($type,$name){
