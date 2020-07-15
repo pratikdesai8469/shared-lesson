@@ -97,7 +97,7 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="pdl-500  heading-que">Lesson #</div>
-                    <div class="pdl-500 heading-ans">{{$plan['lesson']}}</div>
+                    <div class="pdl-500 heading-ans">{{$plan['lesson']}} {{$plan['is_copy'] == 1 ? '- Copy' : ''}}</div>
                 </div>
             </div>
 

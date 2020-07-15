@@ -65,6 +65,7 @@ Route::get('edit-plan-form/{id}', 'Website\PlanController@edit')->name('edit-pla
 Route::post('update-plan-form', 'Website\PlanController@update')->name('update-plan-form');
 Route::get('/plan', 'Website\PlanController@getList')->name('plan');
 Route::get('/form-details/{id}', 'Website\PlanController@getById');
+Route::get('form-copy/{id}', 'Website\PlanController@formCopy');
 // import sheet demo
 Route::get('import-grade-field', 'Website\PlanController@importGradeField');
 Route::get('create-database', 'Website\PlanController@createDatabase');

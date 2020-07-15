@@ -106,7 +106,7 @@
                             <li class="py-3 border-bottom">
                                 <div class="row">
                                     <div class="col-lg-3">Lession:</div>
-                                    <div class="col-lg-9">{{$plan['lesson']}}</div>
+                                    <div class="col-lg-9">{{$plan['lesson']}} {{$plan['is_copy'] == 1 ? '- Copy' : ''}}</div>
                                 </div>
                             </li>
                             <li class="py-3 border-bottom">

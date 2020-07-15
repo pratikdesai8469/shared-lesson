@@ -61,7 +61,6 @@
         </div>
     </div>
 </section>
-
 <!-- contact -->
 <section class="section">
     <div class="container">
@@ -1159,20 +1158,29 @@
     $('.grade_options').selectize({
         create: true,
     });
+    var isDraftStatus = "{{$plan->is_draft}}";
     var selectedGrade = $("#grade option:selected").val();
     $(document).ready(function(){
         $('.dateJs').datepicker();
         $(document).on('change','select.grade_options',function(){
-            storeForm(0,0,1);
+            if(isDraftStatus == 1){
+                storeForm(0,0,1);
+            }
         });
         $(document).on('keyup','.create_link',function(){
-            storeForm(0,0,1);
+            if(isDraftStatus == 1){
+                storeForm(0,0,1);
+            }
         });
         $(document).on('change','.dateJs',function(){
-            storeForm(0,0,1);
+            if(isDraftStatus == 1){
+                storeForm(0,0,1);
+            }
         });
         $(document).on('change','select.duration',function(){
-            storeForm(0,0,1);
+            if(isDraftStatus == 1){
+                storeForm(0,0,1);
+            }
         });
         $("select#grade").change(function(){
             // $('.standard-data').remove();
@@ -2040,12 +2048,12 @@
         formData.append('methodLabel', methodLabel);
         formData.append('email',mail);
         formData.append('is_draft',isDraft);
-        if (dId == 5) {
+        if(dId == 5) {
             formData.append('print_document', 1);
         }
-        if (typeSubmit == 2) {
+        if(typeSubmit == 2) {
             formData.append('print', 1);
-        } else {
+        }else {
             formData.append('print', 0);
         }
         $.ajax({

@@ -829,4 +829,42 @@ class PlanController extends Controller
         Session::flash('success','Your sheet successfully uploaded.');
         return back();
     }
+
+    public function formCopy($planId){
+        try{
+            $planId = decrypt($planId);
+            $plan = $this->lesson->find($planId);
+            $copyPlan = $this->lesson;
+            $copyPlan->user_id = Auth::user()->id;
+            $copyPlan->is_draft = 0;
+            $copyPlan->is_copy = 1;
+            $copyPlan->teacher_authors = $plan->teacher_authors;
+            $copyPlan->date = $plan->date;
+            $copyPlan->subject = $plan->subject;
+            $copyPlan->grade = $plan->grade;
+            $copyPlan->class = $plan->class;
+            $copyPlan->unit = $plan->unit;
+            $copyPlan->unit_topic = $plan->unit_topic;
+            $copyPlan->lesson = $plan->lesson;
+            $copyPlan->objective = $plan->objective;
+            $copyPlan->standards = $plan->standards;
+            $copyPlan->entry_activity = $plan->entry_activity;
+            $copyPlan->notes = $plan->notes;
+            $copyPlan->vocabulary = $plan->vocabulary;
+            $copyPlan->concept_demonstration = $plan->concept_demonstration;
+            $copyPlan->guided_practice = $plan->guided_practice;
+            $copyPlan->informal_assessment = $plan->informal_assessment;
+            $copyPlan->student_work = $plan->student_work;
+            $copyPlan->formal_assessment = $plan->formal_assessment;
+            $copyPlan->rubric = $plan->rubric;
+            $copyPlan->differentiation = $plan->differentiation;
+            $copyPlan->homework = $plan->homework;
+            $copyPlan->additional_resources = $plan->additional_resources;
+            $copyPlan->save();
+            Session::flash('success','Your plan successfully copied.');
+            return back();
+        }catch(Exception $e){
+            return back();
+        }
+    }
 }
