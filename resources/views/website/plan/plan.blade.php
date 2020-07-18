@@ -29,7 +29,12 @@
         z-index: 1;
         transition: .2s ease;
     }
-
+    .btn-secondary:hover{
+        background:black !important;
+    }
+    .text-white{
+        color: white !important;
+    }
 </style>
 @endsection
 
@@ -76,12 +81,15 @@
                     @endphp
                             <!-- service item -->
                         <div class="col-lg-4 col-sm-6 mb-5">
-                            <div class="card text-center">
+                            <div class="card text-center" style="{{'background:'.$item->color}}">
                                 <div class="card-body p-0">
+                                    @php
+                                        $textColor = $item->color ? 'text-white' : '';
+                                    @endphp
                                     {{-- <a class="text-primary ti-trash d-flex flex-row-reverse pt-1 pr-1"> </a> --}}
-                                    <h4 class="card-title pt-3">Lesson: {{$item->lesson ? $item->lesson: null  }} {{$item->is_copy == 1 ? '- Copy' : ''}}</h4>
+                                    <h4 class="{{'card-title pt-3 '.$textColor}}">Lesson: {{$item->lesson ? $item->lesson: null  }} {{$item->is_copy == 1 ? '- Copy' : ''}}</h4>
                                     @if ($objective)
-                                        <p class="card-text mx-2 mb-0"><b>Objective :</b> {{$objective  }}</p>
+                                        <p class="{{'card-text mx-2 mb-0 '.$textColor}}"><b>Objective :</b> {{$objective  }}</p>
                                     @endif
                                     <a href="{{url('/form-details')}}/{{encrypt($item->id)}}" class="btn btn-custom btn-secondary translateY-25"><span class="icon-custom  ti-eye "></span></a>
                                     <a href="{{url('/pdf')}}/{{$item->id}}" target="_blank" class="btn btn-custom btn-secondary translateY-25"><span class="icon-custom ti-printer "></span></a>

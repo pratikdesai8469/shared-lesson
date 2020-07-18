@@ -11,6 +11,7 @@ use App\Models\UserExcelImport;
 use App\Models\ExcelImport;
 use App\Models\Lesson;
 use App\Models\MetaSeo;
+use App\Models\Color;
 use App\Models\MethodDatabase;
 use Carbon\Carbon;
 use App\User;
@@ -61,6 +62,7 @@ class PlanController extends Controller
         $this->middleware('auth');
         $this->gradeField = new GradeField();
         $this->lesson = new Lesson();
+        $this->Color = new Color();
     }
 
     public function create()
@@ -78,10 +80,12 @@ class PlanController extends Controller
         $methodNameData = $this->getSeperateData(3);
         $methodDescData = $this->getSeperateData(4);
         $draftLesson = $this->lesson->whereUserId(Auth::user()->id)->whereIsDraft(1)->first();
+        $color = $this->Color->select('id','code', \DB::raw("CONCAT(name,' - ',code) AS color"))->pluck('color', 'code')->toArray();
+        $firstColor = array_key_first($color);
         if($draftLesson){
             return redirect('edit-plan-form/'.encrypt($draftLesson->id));
         }
-        return view('website.plan.create', compact('gradeData', 'monthDays','unitData','lessonData','methodNameData','methodDescData'));
+        return view('website.plan.create', compact('gradeData', 'monthDays','unitData','lessonData','methodNameData','methodDescData','color','firstColor'));
     }
 
     public function store(Request $request)
@@ -104,6 +108,7 @@ class PlanController extends Controller
             $lessionForm->grade = $request->grade;
             $lessionForm->class = $request->class;
             $lessionForm->unit = $request->unit;
+            $lessionForm->color = $request->color;
             $lessionForm->is_draft = $request->is_draft;
             $lessionForm->unit_topic = $request->unit_topic;
             $lessionForm->lesson = $request->lesson;
@@ -495,7 +500,8 @@ class PlanController extends Controller
         $addiResource = $this->getGradeData($plan->grade, 25);
         $addiDesc = $this->getGradeData($plan->grade, 26);
         $classData = $this->getGradeData($plan->grade, 27);
-
+        $color = $this->Color->select('id','code', \DB::raw("CONCAT(name,' - ',code) AS color"))->pluck('color', 'code')->toArray();
+        $firstColor = array_key_first($color);
         if ($plan) {
             $plan['date'] =  Carbon::parse($plan['date'])->format('m/d/Y');
             $plan['objective'] = json_decode($plan['objective'], true);
@@ -518,7 +524,7 @@ class PlanController extends Controller
             'sName', 'sNumber', 'sDescription', 'eActivity', 'eNotes', 'aInformal', 'aWork', 'aFormal',
             'methodData', 'methodGroup', 'tAuthor', 'unitD', 'lessonD', 'objData', 'vocaData',  'conData',
             'guideData', 'rubricData', 'methodDescData', 'adminiData', 'hWork', 'hDescData',
-            'addiResource', 'addiDesc','classData'
+            'addiResource', 'addiDesc','classData','color','firstColor'
         ));
     }
 
@@ -848,23 +854,199 @@ class PlanController extends Controller
             $copyPlan->lesson = $plan->lesson;
             $copyPlan->objective = $plan->objective;
             $copyPlan->standards = $plan->standards;
-            $copyPlan->entry_activity = $plan->entry_activity;
-            $copyPlan->notes = $plan->notes;
-            $copyPlan->vocabulary = $plan->vocabulary;
-            $copyPlan->concept_demonstration = $plan->concept_demonstration;
-            $copyPlan->guided_practice = $plan->guided_practice;
-            $copyPlan->informal_assessment = $plan->informal_assessment;
-            $copyPlan->student_work = $plan->student_work;
-            $copyPlan->formal_assessment = $plan->formal_assessment;
-            $copyPlan->rubric = $plan->rubric;
+            // entryData
+            $oldEntryData = json_decode($plan->entry_activity,true);
+            $entryData = $oldEntryData;
+            if(!empty($oldEntryData['entry_data'])){
+                foreach($oldEntryData['entry_data'] as $key=>$row){
+                    $entryData['entry_data'][$key] = $row;
+                    if(!empty($row['entry_attch'])){
+                        $imageName = $this->getStringBetween($row['entry_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['entry_attch']);
+                        $this->docCopy($row['entry_attch'],$newPath);
+                        $entryData['entry_data'][$key]['entry_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->entry_activity = json_encode($entryData);
+            // notesData
+            $oldNotesData = json_decode($plan->notes,true);
+            $notesData = $oldNotesData;
+            if(!empty($oldNotesData['notes_data'])){
+                foreach($oldNotesData['notes_data'] as $key=>$row){
+                    $notesData['notes_data'][$key] = $row;
+                    if(!empty($row['notes_attch'])){
+                        $imageName = $this->getStringBetween($row['notes_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['notes_attch']);
+                        $this->docCopy($row['notes_attch'],$newPath);
+                        $notesData['notes_data'][$key]['notes_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->notes = json_encode($notesData);
+
+            // vocabularyData
+            $oldVocData = json_decode($plan->vocabulary,true);
+            $vocData = $oldVocData;
+            if(!empty($oldVocData['vocabulary_data'])){
+                foreach($oldVocData['vocabulary_data'] as $key=>$row){
+                    $vocData['vocabulary_data'][$key] = $row;
+                    if(!empty($row['vocabulary_attch'])){
+                        $imageName = $this->getStringBetween($row['vocabulary_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['vocabulary_attch']);
+                        $this->docCopy($row['vocabulary_attch'],$newPath);
+                        $vocData['vocabulary_data'][$key]['vocabulary_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->vocabulary = json_encode($vocData);
+
+            // concept_demonstration
+            $oldCDData = json_decode($plan->concept_demonstration,true);
+            $cdData = $oldCDData;
+            if(!empty($oldCDData['concept_data'])){
+                foreach($oldCDData['concept_data'] as $key=>$row){
+                    $cdData['concept_data'][$key] = $row;
+                    if(!empty($row['concept_attch'])){
+                        $imageName = $this->getStringBetween($row['concept_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['concept_attch']);
+                        $this->docCopy($row['concept_attch'],$newPath);
+                        $cdData['concept_data'][$key]['concept_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->concept_demonstration = json_encode($cdData);
+            
+            // guided_practice
+            $oldGDData = json_decode($plan->guided_practice,true);
+            $gdData = $oldGDData;
+            if(!empty($oldGDData['guided_data'])){
+                foreach($oldGDData['guided_data'] as $key=>$row){
+                    $gdData['guided_data'][$key] = $row;
+                    if(!empty($row['guided_attch'])){
+                        $imageName = $this->getStringBetween($row['guided_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['guided_attch']);
+                        $this->docCopy($row['guided_attch'],$newPath);
+                        $gdData['guided_data'][$key]['guided_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->guided_practice = json_encode($gdData);
+
+            // informal_assessment
+            $oldInformalData = json_decode($plan->informal_assessment,true);
+            $informalData = $oldInformalData;
+            if(!empty($oldInformalData['informal_data'])){
+                foreach($oldInformalData['informal_data'] as $key=>$row){
+                    $informalData['informal_data'][$key] = $row;
+                    if(!empty($row['informal_assessment_attch'])){
+                        $imageName = $this->getStringBetween($row['informal_assessment_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['informal_assessment_attch']);
+                        $this->docCopy($row['informal_assessment_attch'],$newPath);
+                        $informalData['informal_data'][$key]['informal_assessment_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->informal_assessment = json_encode($informalData);
+
+            // student_work
+            $oldStData = json_decode($plan->student_work,true);
+            $stData = $oldStData;
+            if(!empty($oldStData['student_work_data'])){
+                foreach($oldStData['student_work_data'] as $key=>$row){
+                    $stData['student_work_data'][$key] = $row;
+                    if(!empty($row['student_work_attch'])){
+                        $imageName = $this->getStringBetween($row['student_work_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['student_work_attch']);
+                        $this->docCopy($row['student_work_attch'],$newPath);
+                        $stData['student_work_data'][$key]['student_work_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->student_work = json_encode($stData);
+
+            // formal_assessment
+            $oldFormalAssementData = json_decode($plan->formal_assessment,true);
+            $fiData = $oldFormalAssementData;
+            if(!empty($oldFormalAssementData['formal_assessment_data'])){
+                foreach($oldFormalAssementData['formal_assessment_data'] as $key=>$row){
+                    $fiData['formal_assessment_data'][$key] = $row;
+                    if(!empty($row['formal_assessment_attch'])){
+                        $imageName = $this->getStringBetween($row['formal_assessment_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['formal_assessment_attch']);
+                        $this->docCopy($row['formal_assessment_attch'],$newPath);
+                        $fiData['formal_assessment_data'][$key]['formal_assessment_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->formal_assessment = json_encode($fiData);
+
+            // rubric
+            $oldRubricData = json_decode($plan->rubric,true);
+            $rubData = $oldRubricData;
+            if(!empty($oldRubricData['rubric'])){
+                foreach($oldRubricData['rubric'] as $key=>$row){
+                    $rubData['rubric'][$key] = $row;
+                    if(!empty($row['rubric_attch'])){
+                        $imageName = $this->getStringBetween($row['rubric_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['rubric_attch']);
+                        $this->docCopy($row['rubric_attch'],$newPath);
+                        $rubData['rubric'][$key]['rubric_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->rubric = json_encode($rubData);
+
             $copyPlan->differentiation = $plan->differentiation;
-            $copyPlan->homework = $plan->homework;
-            $copyPlan->additional_resources = $plan->additional_resources;
+
+            // homework
+            $oldHomeWorkData = json_decode($plan->homework,true);
+            $homeData = $oldHomeWorkData;
+            if(!empty($oldHomeWorkData['home_data'])){
+                foreach($oldHomeWorkData['home_data'] as $key=>$row){
+                    $homeData['home_data'][$key] = $row;
+                    if(!empty($row['homework_attch'])){
+                        $imageName = $this->getStringBetween($row['homework_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['homework_attch']);
+                        $this->docCopy($row['homework_attch'],$newPath);
+                        $homeData['home_data'][$key]['homework_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->homework = json_encode($homeData);
+            
+            // additional_resources
+            $oldAdditionalData = json_decode($plan->additional_resources,true);
+            $additionalData = $oldAdditionalData;
+            if(!empty($oldAdditionalData['additional_data'])){
+                foreach($oldAdditionalData['additional_data'] as $key=>$row){
+                    $additionalData['additional_data'][$key] = $row;
+                    if(!empty($row['additional_attch'])){
+                        $imageName = $this->getStringBetween($row['additional_attch'],'upload/','.');
+                        $newPath = str_replace($imageName,$imageName.'_copy',$row['additional_attch']);
+                        $this->docCopy($row['additional_attch'],$newPath);
+                        $additionalData['additional_data'][$key]['additional_attch'] = $newPath;
+                    }
+                }
+            }
+            $copyPlan->additional_resources = json_encode($additionalData);
             $copyPlan->save();
             Session::flash('success','Your plan successfully copied.');
             return back();
         }catch(Exception $e){
             return back();
         }
+    }
+
+    private function docCopy($mainPath,$copyPath){
+        if(file_exists($mainPath)){
+            \File::copy($mainPath,$copyPath);
+        }
+        return true;
+    }
+
+    private function getStringBetween($str,$from,$to){
+        $sub = substr($str, strpos($str,$from)+strlen($from),strlen($str));
+        return substr($sub,0,strpos($sub,$to));
     }
 }

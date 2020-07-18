@@ -9,4 +9,8 @@ class Lesson extends BaseModel
 {
     protected $table = 'lesson';
     protected $hidden = ['created_at', 'updated_at'];
+
+    public function getColor(){
+        return $this->belongsTo('App\Models\Color','color_id','id');
+    }
 }

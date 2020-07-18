@@ -3,7 +3,6 @@
 @section('css')
 
 <style>
-
     .plus_btn {
         margin-top: 35px;
         border: 1px solid red;
@@ -41,6 +40,12 @@
     .send{
         padding: 10px !important;
         color: white !important;
+    }
+    .color-box{
+        border: 1px solid #ddd2d2;
+        height: 37px;
+        max-width: 40px;
+        margin-top: 30px;
     }
 </style>
 @endsection
@@ -100,13 +105,20 @@
                         </div>
                         {{ csrf_field() }}
                         {{Form::hidden('plan_id','',['class'=>'plan-id'])}}
-                        <div class="col-lg-8">
+                        <div class="col-lg-12">
                             <label for="teacher_authors">Teacher Authors</label>
                             {{-- <input type="text" name="teacher_authors" id="teacher_authors" class="form-control" placeholder="Teacher Authors" required> --}}
                             {{Form::select('teacher_authors',[],[],['id'=>'teacher_authors','placeholder'=>'Select teacher authors', 'class' => 'grade_options teacher_authors'])}}
                             <span class="form-error d-none teacher-error">This field is required</span>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-5">
+                            <label for="color_label">Color</label>
+                            {{Form::select('color',$color, [], ['id'=>'color_label','class'=>'color'])}}
+                        </div>
+                        <div class="col-md-1">
+                            <div class="color-box" style="{{'border-color:'.$firstColor.';background:'.$firstColor}}"></div>
+                        </div>
+                        <div class="col-lg-6">
                             <label for="s_date">Date</label>
                             <input type="text" name="s_date" id="s_date" class="form-control dateJs" placeholder="Date" required autocomplete="off">
                             <span class="form-error d-none date-error">This field is required</span>
@@ -559,6 +571,7 @@
         create: true,
         sortField: 'text'
     });
+    $('.color').selectize();
 
     $('.grade_options').selectize({
         create: true,
@@ -592,6 +605,14 @@
 
         $(document).on('change','select.grade_options',function(){
             storeForm(0,0,1);
+        });
+        $(document).on('change','select.color',function(){
+            var colorCode = $(this).val();
+            if(colorCode != '' && typeof colorCode != 'undefined'){
+                $('.color-box').css({"background":colorCode,'border-color':colorCode});
+            }else{
+                $('.color-box').css({"background":"white",'border-color':"#e5e5e5"});
+            }
         });
         $(document).on('keyup','.create_link',function(){
             storeForm(0,0,1);
