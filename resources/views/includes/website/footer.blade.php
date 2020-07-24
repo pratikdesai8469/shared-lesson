@@ -34,6 +34,7 @@
                                 </a>
                             </li>
                         </ul>
+                        <p class="text-white mt-4">SharedLessons, 75 South ..Broadway, White Plains, New York, 10601</p>
                     </div>
                 </div>
                 <!-- footer links -->
