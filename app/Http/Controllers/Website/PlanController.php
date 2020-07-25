@@ -11,7 +11,6 @@ use App\Models\UserExcelImport;
 use App\Models\ExcelImport;
 use App\Models\Lesson;
 use App\Models\MetaSeo;
-use App\Models\Color;
 use App\Models\MethodDatabase;
 use Carbon\Carbon;
 use App\User;
@@ -62,7 +61,6 @@ class PlanController extends Controller
         $this->middleware('auth');
         $this->gradeField = new GradeField();
         $this->lesson = new Lesson();
-        $this->Color = new Color();
     }
 
     public function create()
@@ -79,13 +77,7 @@ class PlanController extends Controller
         $lessonData = $this->getSeperateData(2);
         $methodNameData = $this->getSeperateData(3);
         $methodDescData = $this->getSeperateData(4);
-        $draftLesson = $this->lesson->whereUserId(Auth::user()->id)->whereIsDraft(1)->first();
-        $color = $this->Color->select('id','code', \DB::raw("CONCAT(name,' - ',code) AS color"))->pluck('color', 'code')->toArray();
-        $firstColor = array_key_first($color);
-        if($draftLesson){
-            return redirect('edit-plan-form/'.encrypt($draftLesson->id));
-        }
-        return view('website.plan.create', compact('gradeData', 'monthDays','unitData','lessonData','methodNameData','methodDescData','color','firstColor'));
+        return view('website.plan.create', compact('gradeData', 'monthDays','unitData','lessonData','methodNameData','methodDescData'));
     }
 
     public function store(Request $request)
@@ -108,8 +100,6 @@ class PlanController extends Controller
             $lessionForm->grade = $request->grade;
             $lessionForm->class = $request->class;
             $lessionForm->unit = $request->unit;
-            $lessionForm->color = $request->color;
-            $lessionForm->is_draft = $request->is_draft;
             $lessionForm->unit_topic = $request->unit_topic;
             $lessionForm->lesson = $request->lesson;
             if (!empty($request->objective_data)) {
@@ -139,6 +129,12 @@ class PlanController extends Controller
                             $entryData['entry_data'][$key]['entry_attch'] = 'public/website/images/upload/' . $name;
                         }
                     }
+
+                    if(isset($row['entry_attach_drive']) && !empty($googleDriveData = $row['entry_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $entryData['entry_data'][$key]['entry_attch'] = $fileName;
+                    }
                 }
                 $lessionForm->entry_activity = json_encode($entryData);
             }
@@ -159,6 +155,13 @@ class PlanController extends Controller
                             $nData['notes_data'][$key]['notes_attch'] = 'public/website/images/upload/' . $name;
                         }
                     }
+
+                    //Notes google drive upload
+                    if(isset($row['notes_attach_drive']) && !empty($googleDriveData = $row['notes_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $nData['notes_data'][$key]['notes_attch'] = $fileName;
+                    }
                 }
                 $lessionForm->notes = json_encode($nData);
             }
@@ -177,6 +180,13 @@ class PlanController extends Controller
                             $name = $this->uploadImage($row['vocabulary_attch'], 'public/website/images/upload');
                             $vData['vocabulary_data'][$key]['vocabulary_attch'] = 'public/website/images/upload/' . $name;
                         }
+                    }
+
+                    //Vocabulary google drive upload
+                    if(isset($row['vocabulary_attach_drive']) && !empty($googleDriveData = $row['vocabulary_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $vData['vocabulary_data'][$key]['vocabulary_attch'] = $fileName;
                     }
                 }
                 $vData['label'] = $request->vocabularyLabel;
@@ -198,6 +208,13 @@ class PlanController extends Controller
                             $cData['concept_data'][$key]['concept_attch'] = 'public/website/images/upload/' . $name;
                         }
                     }
+
+                    //Concept google drive upload
+                    if(isset($row['concept_attach_drive']) && !empty($googleDriveData = $row['concept_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $cData['concept_data'][$key]['concept_attch'] = $fileName;
+                    }
                 }
                 $cData['label'] = $request->conceptLabel;
                 $lessionForm->concept_demonstration = json_encode($cData);
@@ -217,6 +234,13 @@ class PlanController extends Controller
                             $name = $this->uploadImage($row['guided_attch'], 'public/website/images/upload');
                             $gData['guided_data'][$key]['guided_attch'] = 'public/website/images/upload/' . $name;
                         }
+                    }
+
+                    //Guide google drive upload
+                    if(isset($row['guided_attach_drive']) && !empty($googleDriveData = $row['guided_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $gData['guided_data'][$key]['guided_attch'] = $fileName;
                     }
                 }
                 $gData['label'] = $request->guidedLabel;
@@ -238,6 +262,13 @@ class PlanController extends Controller
                             $informalData['informal_data'][$key]['informal_assessment_attch'] = 'public/website/images/upload/' . $name;
                         }
                     }
+
+                    //Informal assesment google drive upload
+                    if(isset($row['informal_attach_drive']) && !empty($googleDriveData = $row['informal_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $informalData['informal_data'][$key]['informal_assessment_attch'] = $fileName;
+                    }
                 }
                 $informalData['label'] = $request->informalLabel;
                 $lessionForm->informal_assessment = json_encode($informalData);
@@ -245,6 +276,7 @@ class PlanController extends Controller
                 // $informalData['label'] = $request->informalLabel;
                 // $lessionForm->informal_assessment = json_encode($informalData);
             }
+            // dd($request->all());
             if (!empty($request->work)) {
                 $workData['student_work_data'] =  $this->reIndexArray($request->work);
                 foreach ($workData['student_work_data'] as $key => $row) {
@@ -264,11 +296,19 @@ class PlanController extends Controller
                             $workData['student_work_data'][$key]['student_work_attch'] = 'public/website/images/upload/' . $name;
                         }
                     }
+
+                    //Student work google drive upload
+                    if(isset($row['student_work_attach_drive']) && !empty($googleDriveData = $row['student_work_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $workData['student_work_data'][$key]['student_work_attch'] = $fileName;
+                    }
                 }
                 $workData['label'] = $request->workLabel;
                 $lessionForm->student_work = json_encode($workData);
                 // dump(json_encode($workData));
             }
+            // dd("dgdfg");
             if (!empty($request->formal)) {
                 $formalData['formal_assessment_data'] =  $this->reIndexArray($request->formal);
                 foreach ($formalData['formal_assessment_data'] as $key => $row) {
@@ -284,6 +324,13 @@ class PlanController extends Controller
                             $name = $this->uploadImage($row['formal_assessment_attch'], 'public/website/images/upload');
                             $formalData['formal_assessment_data'][$key]['formal_assessment_attch'] = 'public/website/images/upload/' . $name;
                         }
+                    }
+
+                    //Formal assesment google drive upload
+                    if(isset($row['formal_attach_drive']) && !empty($googleDriveData = $row['formal_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $formalData['formal_assessment_data'][$key]['formal_assessment_attch'] = $fileName;
                     }
                 }
                 $formalData['label'] = $request->formalLabel;
@@ -310,6 +357,13 @@ class PlanController extends Controller
                             $rubricData['rubric'][$key]['rubric_attch'] = 'public/website/images/upload/' . $name;
                         }
                     }
+
+                    //Rubric google drive upload
+                    if(isset($row['rubric_data_attach_drive']) && !empty($googleDriveData = $row['rubric_data_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $rubricData['rubric'][$key]['rubric_attch'] = $fileName;
+                    }
                 }
                 $lessionForm->rubric = json_encode($rubricData);
             }
@@ -324,6 +378,13 @@ class PlanController extends Controller
                             $name = $this->uploadImage($row['homework_attch'], 'public/website/images/upload');
                             $homeData['home_data'][$key]['homework_attch'] = 'public/website/images/upload/' . $name;
                         }
+                    }
+
+                    //Home data google drive upload
+                    if(isset($row['home_data_attach_drive']) && !empty($googleDriveData = $row['home_data_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $homeData['home_data'][$key]['homework_attch'] = $fileName;
                     }
                 }
                 $lessionForm->homework = json_encode($homeData);
@@ -340,22 +401,25 @@ class PlanController extends Controller
                             $addData['additional_data'][$key]['additional_attch'] = 'public/website/images/upload/' . $name;
                         }
                     }
+
+                    //Additional data google drive upload
+                    if(isset($row['additional_data_attach_drive']) && !empty($googleDriveData = $row['additional_data_attach_drive'])){
+                        $googleDriveData = json_decode($googleDriveData, 1);
+                        $fileName = $this->uploadDriveFile($googleDriveData['oAuthToken'], $googleDriveData['fileId'], $googleDriveData['name']);
+                        $addData['additional_data'][$key]['additional_attch'] = $fileName;
+                    }
                 }
                 $lessionForm->additional_resources = json_encode($addData);
             }
             $lessionForm->user_id = $userId;
             $lessionForm->save();
-            
             session()->flash('success', "$methodType record successfully!");
             if ($request->print) {
-                $lessionForm->is_draft = 0;
-                $lessionForm->save();
                 $insertedId = $lessionForm->id;
                 return ['status' => 'true', 'last_id' => $insertedId, 'id' => $lessionForm->id];
             } else if ($request->print_document) {
+                
                 $data = $this->lesson->whereId($lessionForm->id)->first();
-                $data->is_draft = 0;
-                $data->save();
                 $plan = $data->toArray();
                 if ($plan) {
                     $plan['objective'] = json_decode($plan['objective'], true);
@@ -373,17 +437,13 @@ class PlanController extends Controller
                     $plan['homework'] = json_decode($plan['homework'], true);
                     $plan['additional_resources'] = json_decode($plan['additional_resources'], true);
                 }
+
                 return [
                     'status' => 'true',
                     'plan' =>  View::make('website.plan.print_document', ['plan' => $plan])->render(),
                     'print_document' => 1
                 ];
-            } else if($request->is_draft){
-                $insertedId = $lessionForm->id;
-                return ['status' => 'true','isDraft'=>true, 'id' => $lessionForm->id];
-            }else {
-                $lessionForm->is_draft = 0;
-                $lessionForm->save();
+            } else {
                 if ($request->email) {
                     $lessionForm['objective'] = json_decode($lessionForm['objective'], true);
                     $lessionForm['standards'] = json_decode($lessionForm['standards'], true);
@@ -400,6 +460,7 @@ class PlanController extends Controller
                     $lessionForm['homework'] = json_decode($lessionForm['homework'], true);
                     $lessionForm['additional_resources'] = json_decode($lessionForm['additional_resources'], true);
                     $email = $request->email;
+
                     $shareLink = null;
                     $userExists = User::whereEmail($email)->first();
                     $shareLink = URL::to('signup') . '/' . encrypt($lessionForm->id);
@@ -425,7 +486,30 @@ class PlanController extends Controller
         }
     }
 
+    //Read file from google drive and upload
+    private function uploadDriveFile($oAuthToken, $fileId, $fileName){
+        $getUrl = 'https://www.googleapis.com/drive/v2/files/' . $fileId . '?alt=media';
+        $authHeader = 'Authorization: Bearer ' . $oAuthToken;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $getUrl);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array($authHeader));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        $data = curl_exec($ch);
+        $error = curl_error($ch);
+        curl_close($ch);
 
+        //Create dir if not exist and upload the file
+        $path = "public/website/images/upload/";
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+        $fileName = $uniqid."-".$fileName;
+        $fileDestination = $path.$fileName;
+        file_put_contents($fileDestination, $data);
+        return $fileDestination;
+    }
     public function shareLesson(Request $request)
     {
         if ($request->email && $request->id) {
@@ -500,8 +584,7 @@ class PlanController extends Controller
         $addiResource = $this->getGradeData($plan->grade, 25);
         $addiDesc = $this->getGradeData($plan->grade, 26);
         $classData = $this->getGradeData($plan->grade, 27);
-        $color = $this->Color->select('id','code', \DB::raw("CONCAT(name,' - ',code) AS color"))->pluck('color', 'code')->toArray();
-        $firstColor = array_key_first($color);
+
         if ($plan) {
             $plan['date'] =  Carbon::parse($plan['date'])->format('m/d/Y');
             $plan['objective'] = json_decode($plan['objective'], true);
@@ -524,14 +607,14 @@ class PlanController extends Controller
             'sName', 'sNumber', 'sDescription', 'eActivity', 'eNotes', 'aInformal', 'aWork', 'aFormal',
             'methodData', 'methodGroup', 'tAuthor', 'unitD', 'lessonD', 'objData', 'vocaData',  'conData',
             'guideData', 'rubricData', 'methodDescData', 'adminiData', 'hWork', 'hDescData',
-            'addiResource', 'addiDesc','classData','color','firstColor'
+            'addiResource', 'addiDesc','classData'
         ));
     }
 
     public function getList()
     {
         $userId = Auth::user()->id ?? null;
-        $plan = $this->lesson->whereUserId($userId)->whereIsDraft(0)->orderBy('id','desc')->paginate(9);
+        $plan = $this->lesson->whereUserId($userId)->orderBy('id','desc')->paginate(9);
         return view('website.plan.plan', compact('plan'));
     }
 
@@ -597,7 +680,7 @@ class PlanController extends Controller
     private function reIndexArray($field)
     {
         if (!empty($field) && !empty(array_filter($field))) {
-            $data = array_combine(range(1, count($field)), array_values($field));
+            $data =array_combine (range(1, count($field)), array_values($field));
             return $data;
         }
         return $field;
@@ -636,34 +719,31 @@ class PlanController extends Controller
             'home_data', 'additional_data'
         ];
         $gradeNewData  = [];
-        if($request->grade){
-            foreach ($gradeData as $key => $value) {
-                if (in_array($key, $arrayOptions)) {
-                    foreach ($value as $key2 => $value2) {
-                        foreach ($value2 as $key3 => $value3) {
-                            if (in_array($key3, $insideOptions) && $value3) {
-                                $gradeNewData[$key3][] = $value3;
-                            }
+        foreach ($gradeData as $key => $value) {
+            if (in_array($key, $arrayOptions)) {
+                foreach ($value as $key2 => $value2) {
+                    foreach ($value2 as $key3 => $value3) {
+                        if (in_array($key3, $insideOptions) && $value3) {
+                            $gradeNewData[$key3][] = $value3;
                         }
                     }
-                } else {
-                    $this->gradeField::updateOrCreate(
-                        ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value],
-                        ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value]
-                    );
                 }
-            }
-            foreach ($gradeNewData as $key => $value) {
-                $value = array_unique($value);
-                foreach ($value as $key1 => $value1) {
-                    $this->gradeField::updateOrCreate(
-                        ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value1],
-                        ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value1]
-                    );
-                }
+            } else {
+                $this->gradeField::updateOrCreate(
+                    ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value],
+                    ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value]
+                );
             }
         }
-       
+        foreach ($gradeNewData as $key => $value) {
+            $value = array_unique($value);
+            foreach ($value as $key1 => $value1) {
+                $this->gradeField::updateOrCreate(
+                    ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value1],
+                    ['grade' => $request->grade, 'type' =>  $this->types[$key], 'name' => $value1]
+                );
+            }
+        }
     }
 
     public function getSeperateData($type){
@@ -691,12 +771,8 @@ class PlanController extends Controller
                 $this->checkSeperateData(3,$row);
             }
         }
-        if($request->unit){
-            $checkSData = $this->checkSeperateData(1,$request->unit);
-        }
-        if($request->lesson){
-            $checkSData = $this->checkSeperateData(2,$request->lesson);
-        }
+        $checkSData = $this->checkSeperateData(1,$request->unit);
+        $checkSData = $this->checkSeperateData(2,$request->lesson);
     } 
 
     public function checkSeperateData($type,$name){
@@ -834,219 +910,5 @@ class PlanController extends Controller
         \Excel::import($import, $request->upload);
         Session::flash('success','Your sheet successfully uploaded.');
         return back();
-    }
-
-    public function formCopy($planId){
-        try{
-            $planId = decrypt($planId);
-            $plan = $this->lesson->find($planId);
-            $copyPlan = $this->lesson;
-            $copyPlan->user_id = Auth::user()->id;
-            $copyPlan->is_draft = 0;
-            $copyPlan->is_copy = 1;
-            $copyPlan->teacher_authors = $plan->teacher_authors;
-            $copyPlan->date = $plan->date;
-            $copyPlan->subject = $plan->subject;
-            $copyPlan->grade = $plan->grade;
-            $copyPlan->class = $plan->class;
-            $copyPlan->unit = $plan->unit;
-            $copyPlan->unit_topic = $plan->unit_topic;
-            $copyPlan->lesson = $plan->lesson;
-            $copyPlan->objective = $plan->objective;
-            $copyPlan->standards = $plan->standards;
-            // entryData
-            $oldEntryData = json_decode($plan->entry_activity,true);
-            $entryData = $oldEntryData;
-            if(!empty($oldEntryData['entry_data'])){
-                foreach($oldEntryData['entry_data'] as $key=>$row){
-                    $entryData['entry_data'][$key] = $row;
-                    if(!empty($row['entry_attch'])){
-                        $imageName = $this->getStringBetween($row['entry_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['entry_attch']);
-                        $this->docCopy($row['entry_attch'],$newPath);
-                        $entryData['entry_data'][$key]['entry_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->entry_activity = json_encode($entryData);
-            // notesData
-            $oldNotesData = json_decode($plan->notes,true);
-            $notesData = $oldNotesData;
-            if(!empty($oldNotesData['notes_data'])){
-                foreach($oldNotesData['notes_data'] as $key=>$row){
-                    $notesData['notes_data'][$key] = $row;
-                    if(!empty($row['notes_attch'])){
-                        $imageName = $this->getStringBetween($row['notes_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['notes_attch']);
-                        $this->docCopy($row['notes_attch'],$newPath);
-                        $notesData['notes_data'][$key]['notes_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->notes = json_encode($notesData);
-
-            // vocabularyData
-            $oldVocData = json_decode($plan->vocabulary,true);
-            $vocData = $oldVocData;
-            if(!empty($oldVocData['vocabulary_data'])){
-                foreach($oldVocData['vocabulary_data'] as $key=>$row){
-                    $vocData['vocabulary_data'][$key] = $row;
-                    if(!empty($row['vocabulary_attch'])){
-                        $imageName = $this->getStringBetween($row['vocabulary_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['vocabulary_attch']);
-                        $this->docCopy($row['vocabulary_attch'],$newPath);
-                        $vocData['vocabulary_data'][$key]['vocabulary_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->vocabulary = json_encode($vocData);
-
-            // concept_demonstration
-            $oldCDData = json_decode($plan->concept_demonstration,true);
-            $cdData = $oldCDData;
-            if(!empty($oldCDData['concept_data'])){
-                foreach($oldCDData['concept_data'] as $key=>$row){
-                    $cdData['concept_data'][$key] = $row;
-                    if(!empty($row['concept_attch'])){
-                        $imageName = $this->getStringBetween($row['concept_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['concept_attch']);
-                        $this->docCopy($row['concept_attch'],$newPath);
-                        $cdData['concept_data'][$key]['concept_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->concept_demonstration = json_encode($cdData);
-            
-            // guided_practice
-            $oldGDData = json_decode($plan->guided_practice,true);
-            $gdData = $oldGDData;
-            if(!empty($oldGDData['guided_data'])){
-                foreach($oldGDData['guided_data'] as $key=>$row){
-                    $gdData['guided_data'][$key] = $row;
-                    if(!empty($row['guided_attch'])){
-                        $imageName = $this->getStringBetween($row['guided_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['guided_attch']);
-                        $this->docCopy($row['guided_attch'],$newPath);
-                        $gdData['guided_data'][$key]['guided_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->guided_practice = json_encode($gdData);
-
-            // informal_assessment
-            $oldInformalData = json_decode($plan->informal_assessment,true);
-            $informalData = $oldInformalData;
-            if(!empty($oldInformalData['informal_data'])){
-                foreach($oldInformalData['informal_data'] as $key=>$row){
-                    $informalData['informal_data'][$key] = $row;
-                    if(!empty($row['informal_assessment_attch'])){
-                        $imageName = $this->getStringBetween($row['informal_assessment_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['informal_assessment_attch']);
-                        $this->docCopy($row['informal_assessment_attch'],$newPath);
-                        $informalData['informal_data'][$key]['informal_assessment_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->informal_assessment = json_encode($informalData);
-
-            // student_work
-            $oldStData = json_decode($plan->student_work,true);
-            $stData = $oldStData;
-            if(!empty($oldStData['student_work_data'])){
-                foreach($oldStData['student_work_data'] as $key=>$row){
-                    $stData['student_work_data'][$key] = $row;
-                    if(!empty($row['student_work_attch'])){
-                        $imageName = $this->getStringBetween($row['student_work_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['student_work_attch']);
-                        $this->docCopy($row['student_work_attch'],$newPath);
-                        $stData['student_work_data'][$key]['student_work_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->student_work = json_encode($stData);
-
-            // formal_assessment
-            $oldFormalAssementData = json_decode($plan->formal_assessment,true);
-            $fiData = $oldFormalAssementData;
-            if(!empty($oldFormalAssementData['formal_assessment_data'])){
-                foreach($oldFormalAssementData['formal_assessment_data'] as $key=>$row){
-                    $fiData['formal_assessment_data'][$key] = $row;
-                    if(!empty($row['formal_assessment_attch'])){
-                        $imageName = $this->getStringBetween($row['formal_assessment_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['formal_assessment_attch']);
-                        $this->docCopy($row['formal_assessment_attch'],$newPath);
-                        $fiData['formal_assessment_data'][$key]['formal_assessment_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->formal_assessment = json_encode($fiData);
-
-            // rubric
-            $oldRubricData = json_decode($plan->rubric,true);
-            $rubData = $oldRubricData;
-            if(!empty($oldRubricData['rubric'])){
-                foreach($oldRubricData['rubric'] as $key=>$row){
-                    $rubData['rubric'][$key] = $row;
-                    if(!empty($row['rubric_attch'])){
-                        $imageName = $this->getStringBetween($row['rubric_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['rubric_attch']);
-                        $this->docCopy($row['rubric_attch'],$newPath);
-                        $rubData['rubric'][$key]['rubric_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->rubric = json_encode($rubData);
-
-            $copyPlan->differentiation = $plan->differentiation;
-
-            // homework
-            $oldHomeWorkData = json_decode($plan->homework,true);
-            $homeData = $oldHomeWorkData;
-            if(!empty($oldHomeWorkData['home_data'])){
-                foreach($oldHomeWorkData['home_data'] as $key=>$row){
-                    $homeData['home_data'][$key] = $row;
-                    if(!empty($row['homework_attch'])){
-                        $imageName = $this->getStringBetween($row['homework_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['homework_attch']);
-                        $this->docCopy($row['homework_attch'],$newPath);
-                        $homeData['home_data'][$key]['homework_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->homework = json_encode($homeData);
-            
-            // additional_resources
-            $oldAdditionalData = json_decode($plan->additional_resources,true);
-            $additionalData = $oldAdditionalData;
-            if(!empty($oldAdditionalData['additional_data'])){
-                foreach($oldAdditionalData['additional_data'] as $key=>$row){
-                    $additionalData['additional_data'][$key] = $row;
-                    if(!empty($row['additional_attch'])){
-                        $imageName = $this->getStringBetween($row['additional_attch'],'upload/','.');
-                        $newPath = str_replace($imageName,$imageName.'_copy',$row['additional_attch']);
-                        $this->docCopy($row['additional_attch'],$newPath);
-                        $additionalData['additional_data'][$key]['additional_attch'] = $newPath;
-                    }
-                }
-            }
-            $copyPlan->additional_resources = json_encode($additionalData);
-            $copyPlan->save();
-            Session::flash('success','Your plan successfully copied.');
-            return back();
-        }catch(Exception $e){
-            return back();
-        }
-    }
-
-    private function docCopy($mainPath,$copyPath){
-        if(file_exists($mainPath)){
-            \File::copy($mainPath,$copyPath);
-        }
-        return true;
-    }
-
-    private function getStringBetween($str,$from,$to){
-        $sub = substr($str, strpos($str,$from)+strlen($from),strlen($str));
-        return substr($sub,0,strpos($sub,$to));
     }
 }

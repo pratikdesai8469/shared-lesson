@@ -7,7 +7,7 @@
                 <div class="col-lg-12">
                     <ul class="list-inline float-left text-lg-right text-center">
                         <li class="list-inline-item">
-                            <a href="tel:18665377526">Call Us at:
+                            <a href="tel:18665377526">Call Us At:
                                 <span class="ml-2 contact-number">18665377526</span>
                             </a>
                         </li>

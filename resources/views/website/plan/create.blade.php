@@ -3,6 +3,7 @@
 @section('css')
 
 <style>
+
     .plus_btn {
         margin-top: 35px;
         border: 1px solid red;
@@ -41,12 +42,6 @@
         padding: 10px !important;
         color: white !important;
     }
-    .color-box{
-        border: 1px solid #ddd2d2;
-        height: 37px;
-        max-width: 40px;
-        margin-top: 30px;
-    }
 </style>
 @endsection
 @section('content')
@@ -76,13 +71,13 @@
                 <div class="p-5 rounded box-shadow">
                     {{-- <form  class="row"> --}}
                     @if ($message = Session::get('success'))
-                        <div class="alert alert-success alert-block">
-                            <button type="button" class="close" data-dismiss="alert">×</button>	
-                            <strong>{{ $message }}</strong>
-                        </div>
+                    <div class="alert alert-success alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button>	
+                        <strong>{{ $message }}</strong>
+                    </div>
                     @endif
                     @if ($message = Session::get('error'))
-                        <div class="alert alert-danger alert-block">
+                    <div class="alert alert-danger alert-block">
                             <button type="button" class="close" data-dismiss="alert">×</button>	
                             <strong>{{ $message }}</strong>
                         </div>
@@ -105,20 +100,13 @@
                         </div>
                         {{ csrf_field() }}
                         {{Form::hidden('plan_id','',['class'=>'plan-id'])}}
-                        <div class="col-lg-12">
+                        <div class="col-lg-8">
                             <label for="teacher_authors">Teacher Authors</label>
                             {{-- <input type="text" name="teacher_authors" id="teacher_authors" class="form-control" placeholder="Teacher Authors" required> --}}
                             {{Form::select('teacher_authors',[],[],['id'=>'teacher_authors','placeholder'=>'Select teacher authors', 'class' => 'grade_options teacher_authors'])}}
                             <span class="form-error d-none teacher-error">This field is required</span>
                         </div>
-                        <div class="col-lg-5">
-                            <label for="color_label">Color</label>
-                            {{Form::select('color',$color, [], ['id'=>'color_label','class'=>'color'])}}
-                        </div>
-                        <div class="col-md-1">
-                            <div class="color-box" style="{{'border-color:'.$firstColor.';background:'.$firstColor}}"></div>
-                        </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <label for="s_date">Date</label>
                             <input type="text" name="s_date" id="s_date" class="form-control dateJs" placeholder="Date" required autocomplete="off">
                             <span class="form-error d-none date-error">This field is required</span>
@@ -145,7 +133,7 @@
                             <span class="form-error d-none unit-topic-error">This field is required</span>
                         </div>
 
-                        <div class="standard-block mt-4 mb-5 objective-div">
+                        <div class="standard-block mb-5 objective-div">
                             <div class="row pl-3 pr-3 pt-3">
                                 <div class="col-lg-11">
                                     <label for="objective" contenteditable="true" id="objectiveLabel">Learning Target / Objective</label>
@@ -159,10 +147,10 @@
                             </div>
                         </div>
 
+
                         <!-- --------------------------------------------------------------------------------- -->
-                        <h5 contenteditable="true" id="standardsLabel">Standards</h5>&nbsp;<a class="ti-minus remove-btn-border remove-data" data-id="standard-1" data-status="only-minus" data-label="standardsLabel"></a>
-                        {{Form::hidden('standard_data[1][status]','no',['class'=>'standard-1-status'])}}
-                        <div class="standard-block mb-3 remove-block standard-1 standard-div">
+                        <h5 class="standard-1" contenteditable="true" id="standardsLabel">Standards</h5>&nbsp; <a class="ti-minus remove-btn-border remove-data standard-1" data-id="standard-1"> </a>
+                        <div class="standard-block mb-5 remove-block standard-1 standard-div">
                             <div class="row p-3">
                                 <div class="col-lg-5">
                                     <label for="standard_name">Standard #</label>
@@ -178,33 +166,42 @@
                                     {{Form::select('standard_data[1][standard_description]',[],[], ['id'=>'standard_description','placeholder'=>'Standard description', 'class' => 'grade_options standard_description'])}}
                                 </div>
                                 <div class="col-lg-1">
-                                    <a class="text-primary d-inline-block mt-50 ti-plus add_button plus_btn"></a>
+                                    <a class="text-primary d-inline-block mt-50 ti-plus add_button plus_btn"> </a>
                                 </div>
                                 {{Form::hidden('s_count', 1,['class' => 's-count-1 st-count', "data-id" => 1])}}
                             </div>
                         </div>
-                        <div style="width:100%;margin-top: 10px;"></div>
                         <!-- --------------------------------------------------------------------------------- -->
-                        <h5 contenteditable="true" id="entryLabel">Entry Activity/ Success Starter</h5>&nbsp;&nbsp;<a class="ti-minus remove-btn-border remove-data" data-id="entry-1" data-status="only-minus" data-label="entryLabel"> </a>
-                        {{Form::hidden('entry_data[1][status]','no',['class'=>'entry-1-status'])}}
-                        <div class="standard-block mb-3 entry-1 entry-div">
+                            
+                        <div class="standard-block mb-5 entry-1 entry-div">
                             <div class="row pl-3 pr-3 pt-3">
                                 <div class="col-lg-10">
-                                    <label for="entry_activity">&nbsp;&nbsp;</label>
+                                    <label for="entry_activity" contenteditable="true" id="entryLabel">Entry Activity/ Success Starter</label>&nbsp;&nbsp;<a class="ti-minus remove-btn-border remove-data entry-1" data-id="entry-1"> </a>
                                     {{Form::select('entry_data[1][entry_activity]',[],[], ['id'=>'entry_activity','placeholder'=>'Entry Activity', 'class' => 'grade_options entry_activity'])}}
                                     <span class="form-error d-none entry-error">This field is required</span>
                                 </div>
                                 <div class="col-lg-2">
                                     <label for="entry_duration">&nbsp;&nbsp;</label>
-                                    {{Form::select('entry_data[1][entry_duration]',$monthDays,[], ['id'=>'entry_duration','placeholder'=>'Duration', 'class' => 'form-control entry_duration duration'])}}
+                                    {{Form::select('entry_data[1][entry_duration]',$monthDays,[], ['id'=>'entry_duration','placeholder'=>'Duration', 'class' => 'form-control  entry_duration'])}}
                                 </div>
-                                <div class="col-lg-5">
-                                    <label for="entry_attch">Attach document</label>
-                                    <input type="file" name="entry_data[1][entry_attch]" id="entry_attch" class="form-control-file" placeholder="Attach document">
+                                <div class="col-lg-3">
+                                    <div class="dropdown text-center mt-3">
+                                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Attach document
+                                        </a>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item from_local" href="#">From Local</a>
+                                            <input type="file" name="entry_data[1][entry_attch]" id="entry_attch" class="form-control-file d-none" placeholder="Attach document">
+                                            <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                            {{Form::hidden("entry_data[1][entry_attach_drive]")}}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-lg-6">
+                                
+                                <div class="col-lg-8">
                                     <label for="entry_link">Create a link</label>
-                                    <input type="text" name="entry_data[1][entry_link]" id="entry_link" class="form-control create_link" placeholder="Create a link">
+                                    <input type="text" name="entry_data[1][entry_link]" id="entry_link" class="form-control" placeholder="Create a link">
                                 </div>
                                 <div class="col-lg-1">
                                     <a class="text-primary d-inline-block mt-50 ti-plus add_entry_btn plus_btn"> </a>
@@ -212,217 +209,286 @@
                                 {{Form::hidden('entry_count', 1,['class' => 'entry-count-1 entry-count', "data-id" => 1])}}
                             </div>
                         </div>
-                        <div style="width:100%;margin-top: 10px;"></div>
+
                         <h5>Mini Lesson</h5> 
-                        <div class="standard-block mb-3">
+                        <div class="standard-block mb-5">
                             <div class="pl-3 pr-3 pt-3 notes-div">
-                                <div class="row">
-                                    {{Form::hidden('notes_data[1][status]','no',['class'=>'notes-1-status'])}}
+                                <div class="row notes-1">
                                     <div class="col-lg-10">
-                                        <label for="notes" contenteditable="true" id="notesLabel">Notes</label>  &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="notes-1" data-status="only-minus" data-label="notesLabel"></a>
-                                        {{Form::select('notes_data[1][notes]',[],[], ['id'=>'notes','placeholder'=>'Notes', 'class' => 'grade_options notes notes-1'])}}
+                                        <label for="notes" contenteditable="true" id="notesLabel">Notes</label>  &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data notes-1" data-id="notes-1"></a>
+                                        {{Form::select('notes_data[1][notes]',[],[], ['id'=>'notes','placeholder'=>'Notes', 'class' => 'grade_options notes'])}}
                                         <span class="form-error d-none notes-error">This field is required</span>
                                     </div>
-                                    <div class="col-lg-2 notes-1">
+                                    <div class="col-lg-2">
                                         <label for="notes_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select("notes_data[1][notes_duration]",$monthDays,[], ['id'=>'notes_duration','placeholder'=>'Duration', 'class' => 'form-control notes_duration duration'])}}
+                                        {{Form::select("notes_data[1][notes_duration]",$monthDays,[], ['id'=>'notes_duration','placeholder'=>'Duration', 'class' => 'form-control notes_duration'])}}
                                     </div>
-                                    <div class="col-lg-5 notes-1">
-                                        <label for="notes_attch">Attach document</label>
-                                        <input type="file" name="notes_data[1][notes_attch]" id="notes_attch" class="form-control-file" placeholder="Attach document">
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="notes_data[1][notes_attch]" id="notes_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("notes_data[1][notes_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 notes-1">
+                                    <div class="col-lg-8">
                                         <label for="notes_link">Create a link</label>
-                                        <input type="text" name="notes_data[1][notes_link]" id="notes_link" class="form-control create_link" placeholder="Create a link">
+                                        <input type="text" name="notes_data[1][notes_link]" id="notes_link" class="form-control" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('notes_count', 1,['class' => 'notes-count-1 notes-count', "data-id" => 1])}}
-                                    <div class="col-lg-1 notes-1">
+                                    <div class="col-lg-1">
                                         <a class="text-primary d-inline-block mt-50 ti-plus add_notes_btn plus_btn"> </a>
                                     </div>
                                 </div>
                             </div>
                             <div class="pl-3 pr-3 vocabulary-div">
-                                <div class="row">
-                                    {{Form::hidden('vocabulary_data[1][status]','no',['class'=>'vocabulary-1-status'])}}
+                                <div class="row vocabulary-1">
                                     <div class="col-lg-10">
-                                        <label for="vocabulary" contenteditable="true" id="vocabularyLabel">Vocabulary</label>  &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="vocabulary-1" data-status="only-minus" data-label="vocabularyLabel"></a>
+                                        <label for="vocabulary" contenteditable="true" id="vocabularyLabel">Vocabulary</label>  &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="vocabulary-1"></a>
                                         {{-- <input type="text" name="vocabulary_data[1][vocabulary]" id="vocabulary" class="form-control" placeholder="Vocabulary"> --}}
-                                        {{Form::select('vocabulary_data[1][vocabulary]',[],[], ['id'=>'vocabulary','placeholder'=>'Vocabulary', 'class' => 'grade_options vocabulary vocabulary-1'])}}
+                                        {{Form::select('vocabulary_data[1][vocabulary]',[],[], ['id'=>'vocabulary','placeholder'=>'Vocabulary', 'class' => 'grade_options vocabulary'])}}
                                         <span class="form-error d-none vocabulary-error">This field is required</span>
                                     </div>
-                                    <div class="col-lg-2 vocabulary-1">
+                                    <div class="col-lg-2">
                                         <label for="vocabulary_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select("vocabulary_data[1][vocabulary_duration]",$monthDays,[], ["id"=>"vocabulary_duration","placeholder"=>"Duration", "class" => "form-control vocabulary_duration duration"])}}
+                                        {{Form::select("vocabulary_data[1][vocabulary_duration]",$monthDays,[], ["id"=>"vocabulary_duration","placeholder"=>"Duration", "class" => "form-control vocabulary_duration"])}}
                                     </div>
-                                    <div class="col-lg-5 vocabulary-1">
-                                        <label for="vocabulary_attch">Attach document</label>
-                                        <input type="file" name="vocabulary_data[1][vocabulary_attch]" id="vocabulary_attch" class="form-control-file" placeholder="Attach document">
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="vocabulary_data[1][vocabulary_attch]" id="vocabulary_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("vocabulary_data[1][vocabulary_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 vocabulary-1">
+                                    <div class="col-lg-8">
                                         <label for="vocabulary_link">Create a link</label>
-                                        <input type="text" name="vocabulary_data[1][vocabulary_link]" id="vocabulary_link" class="form-control create_link" placeholder="Create a link">
+                                        <input type="text" name="vocabulary_data[1][vocabulary_link]" id="vocabulary_link" class="form-control" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('vocabulary_count', 1,['class' => 'vocabulary-count-1 vocabulary-count', "data-id" => 1])}}
-                                    <div class="col-lg-1 vocabulary-1">
+                                    <div class="col-lg-1">
                                         <a class="text-primary d-inline-block mt-50 ti-plus add_vocabulary_btn plus_btn"> </a>
                                     </div>
                                 </div>
                             </div>
                             <div class="pl-3 pr-3 concept-div">
-                                <div class="row">
-                                    {{Form::hidden('concept_data[1][status]','no',['class'=>'concept-1-status'])}}
+                                <div class="row concept-1">
                                     <div class="col-lg-10">
-                                        <label for="concept" contenteditable="true" id="conceptLabel">Concept Demonstration</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="concept-1" data-status="only-minus" data-label="conceptLabel"></a>
+                                        <label for="concept" contenteditable="true" id="conceptLabel">Concept Demonstration</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="concept-1"></a>
                                         {{-- <input type="text" name="concept_data[1][concept]" id="concept" class="form-control" placeholder="Concept Demonstration"> --}}
-                                        {{Form::select('concept_data[1][concept]',[],[], ['id'=>'concept','placeholder'=>'Concept Demonstration', 'class' => 'grade_options concept concept-1'])}}
+                                        {{Form::select('concept_data[1][concept]',[],[], ['id'=>'concept','placeholder'=>'Concept Demonstration', 'class' => 'grade_options concept'])}}
                                         <span class="form-error d-none concept-error">This field is required</span>
                                     </div>
-                                    <div class="col-lg-2 concept-1">
+                                    <div class="col-lg-2">
                                         <label for="concept_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select("concept_data[1][concept_duration]",$monthDays,[], ["id"=>"concept_duration","placeholder"=>"Duration", "class" => "form-control concept_duration duration"])}}
+                                        {{Form::select("concept_data[1][concept_duration]",$monthDays,[], ["id"=>"concept_duration","placeholder"=>"Duration", "class" => "form-control concept_duration"])}}
                                     </div>
-                                    <div class="col-lg-5 concept-1">
-                                        <label for="concept_attch">Attach document</label>
-                                        <input type="file" name="concept_data[1][concept_attch]" id="concept_attch" class="form-control-file" placeholder="Attach document">
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="concept_data[1][concept_attch]" id="concept_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("concept_data[1][concept_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 concept-1">
+                                    <div class="col-lg-8">
                                         <label for="concept_link">Create a link</label>
-                                        <input type="text" name="concept_data[1][concept_link]" id="concept_link" class="form-control create_link" placeholder="Create a link">
+                                        <input type="text" name="concept_data[1][concept_link]" id="concept_link" class="form-control" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('concept_count', 1,['class' => 'concept-count-1 concept-count', "data-id" => 1])}}
-                                    <div class="col-lg-1 concept-1">
+                                    <div class="col-lg-1">
                                         <a class="text-primary d-inline-block mt-50 ti-plus add_concept_btn plus_btn"> </a>
                                     </div>
                                 </div>
                             </div>
                             <div class="pl-3 pr-3 guided-div">
-                                <div class="row">
-                                    {{Form::hidden('guided_data[1][status]','no',['class'=>'guided-1-status'])}}
+                                <div class="row guided-1">
                                     <div class="col-lg-10">
-                                        <label for="guided_practice" contenteditable="true" id="guidedLabel">Guided Practice</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="guided-1" data-status="only-minus" data-label="guidedLabel"></a>
+                                        <label for="guided_practice" contenteditable="true" id="guidedLabel">Guided Practice</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="guided-1"></a>
                                         {{-- <input type="text" name="guided_data[1][guided_practice]" id="guided_practice" class="form-control" placeholder="Guided Practice"> --}}
-                                        {{Form::select('guided_data[1][guided_practice]',[],[], ['id'=>'guided_practice','placeholder'=>'Guided Practice', 'class' => 'grade_options guided_practice guided-1'])}}
+                                        {{Form::select('guided_data[1][guided_practice]',[],[], ['id'=>'guided_practice','placeholder'=>'Guided Practice', 'class' => 'grade_options guided_practice'])}}
                                         <span class="form-error d-none guided-error">This field is required</span>
                                     </div>
-                                    <div class="col-lg-2 guided-1">
+                                    <div class="col-lg-2">
                                         <label for="guided_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select("guided_data[1][guided_duration]",$monthDays,[], ["id"=>"guided_duration","placeholder"=>"Duration", "class" => "form-control guided_duration duration"])}}
+                                        {{Form::select("guided_data[1][guided_duration]",$monthDays,[], ["id"=>"guided_duration","placeholder"=>"Duration", "class" => "form-control guided_duration"])}}
                                     </div>
-                                    <div class="col-lg-5 guided-1">
-                                        <label for="guided_attch">Attach document</label>
-                                        <input type="file" name="guided_data[1][guided_attch]" id="guided_attch" class="form-control-file" placeholder="Attach document">
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="guided_data[1][guided_attch]" id="guided_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("guided_data[1][guided_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 guided-1">
+                                    <div class="col-lg-8">
                                         <label for="guided_link">Create a link</label>
-                                        <input type="text" name="guided_data[1][guided_link]" id="guided_link" class="form-control create_link" placeholder="Create a link">
+                                        <input type="text" name="guided_data[1][guided_link]" id="guided_link" class="form-control" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('guided_count', 1,['class' => 'guided-count-1 guided-count', "data-id" => 1])}}
-                                    <div class="col-lg-1 guided-1">
+                                    <div class="col-lg-1">
                                         <a class="text-primary d-inline-block mt-50 ti-plus add_guided_btn plus_btn"> </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div style="width:100%;margin-top: 10px;"></div>
-                        <h5>Assessments</h5> &nbsp;&nbsp; <a class="ti-plus remove-btn-border add-assessments-block" data-id="assessment-1"></a>&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="assessment-1" data-status="main"> </a>
-                        {{Form::hidden('informal[1][main_status]','no',['class'=>'assessment-1-status'])}}
-                        <div class="standard-block mb-3 assessment-1">
+
+                        <h5 class="assessment-1">Assessments</h5> &nbsp;&nbsp; <a class="ti-plus remove-btn-border add-assessments-block assessment-1"></a>&nbsp; <a class="ti-minus remove-btn-border remove-data assessment-1" data-id="assessment-1"> </a>
+                        <div class="standard-block mb-5 assessment-1">
                             <div class="px-3 pt-3 informal-div">
-                                <div class="row">
-                                    {{Form::hidden('informal[1][status]','no',['class'=>'informal-1-status'])}}
+                                <div class="row informal-1">
                                     <div class="col-lg-10">
-                                        <label for="informal_assessment" contenteditable="true" id="informalLabel">Informal Assessment</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="informal-1" data-status="only-minus" data-label="informalLabel"></a>
-                                        {{Form::select('informal[1][informal_assessment]',[],[], ['id'=>'informal_assessment','placeholder'=>'Informal Assessment', 'class' => 'grade_options informal_assessment informal-1'])}}
+                                        <label for="informal_assessment" contenteditable="true" id="informalLabel">Informal Assessment</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="informal-1"></a>
+                                        {{Form::select('informal[1][informal_assessment]',[],[], ['id'=>'informal_assessment','placeholder'=>'Informal Assessment', 'class' => 'grade_options informal_assessment'])}}
                                         <span class="form-error d-none informal-error">This field is required</span>
                                     </div>
-                                    <div class="col-lg-2 informal-1">
+                                    <div class="col-lg-2">
                                         <label for="informal_assessment_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select("informal[1][informal_assessment_duration]",$monthDays,[], ["id"=>"informal_assessment_duration","placeholder"=>"Duration", "class" => "form-control informal_assessment_duration duration"])}}
+                                        {{Form::select("informal[1][informal_assessment_duration]",$monthDays,[], ["id"=>"informal_assessment_duration","placeholder"=>"Duration", "class" => "form-control informal_assessment_duration"])}}
                                     </div>
-                                    <div class="col-lg-5 informal-1">
-                                        <label for="informal_assessment_attch">Attach document</label>
-                                        <input type="file" name="informal[1][informal_assessment_attch]" id="informal_assessment_attch" class="form-control-file" placeholder="Attach document">
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="informal[1][informal_assessment_attch]" id="informal_assessment_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("informal[1][informal_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 informal-1">
+                                    <div class="col-lg-8">
                                         <label for="informal_assessment_link">Create a link</label>
-                                        <input type="text" name="informal[1][informal_assessment_link]" id="informal_assessment_link" class="form-control create_link" placeholder="Create a link">
+                                        <input type="text" name="informal[1][informal_assessment_link]" id="informal_assessment_link" class="form-control" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('informal_count', 1,['class' => 'informal-count-1 informal-count', "data-id" => 1])}}
-                                    <div class="col-lg-1 informal-1">
+                                    <div class="col-lg-1">
                                         <a class="text-primary d-inline-block mt-50 ti-plus add_informal_btn plus_btn"> </a>
                                     </div>
                                 </div>
                             </div>
                             <div class="px-3 work-div">
-                                <div class="row">
-                                    {{Form::hidden('work[1][status]','no',['class'=>'work-1-status'])}}
+                                <div class="row work-1">
                                     <div class="col-lg-10">
-                                        <label for="student_work" contenteditable="true" id="workLabel">Student Work</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="work-1" data-status="only-minus" data-label="workLabel"></a>
-                                        {{Form::select('work[1][student_work]',[],[], ['id'=>'student_work','placeholder'=>'Student Work', 'class' => 'grade_options student_work work-1'])}}
+                                        <label for="student_work" contenteditable="true" id="workLabel">Student Work</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="work-1"></a>
+                                        {{Form::select('work[1][student_work]',[],[], ['id'=>'student_work','placeholder'=>'Student Work', 'class' => 'grade_options student_work'])}}
                                         <span class="form-error d-none student-work-error">This field is required</span>
                                     </div>
-                                    <div class="col-lg-2 work-1">
+                                    <div class="col-lg-2">
                                         <label for="student_work_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select('work[1][student_work_duration]',$monthDays,[], ["id"=>"student_work_duration","placeholder"=>"Duration", "class" => "form-control student_work_duration duration"])}}
+                                        {{Form::select('work[1][student_work_duration]',$monthDays,[], ["id"=>"student_work_duration","placeholder"=>"Duration", "class" => "form-control student_work_duration"])}}
                                     </div>
-                                    <div class="col-lg-5 work-1">
-                                        <label for="student_work_attch">Attach document</label>
-                                        <input type="file" name="work[1][student_work_attch]" id="student_work_attch" class="form-control-file" placeholder="Attach document">
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="work[1][student_work_attch]" id="student_work_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("work[1][student_work_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 work-1">
+                                    <div class="col-lg-8">
                                         <label for="student_work_link">Create a link</label>
-                                        <input type="text" name="work[1][student_work_link]" id="student_work_link" class="form-control create_link" placeholder="Create a link">
+                                        <input type="text" name="work[1][student_work_link]" id="student_work_link" class="form-control" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('work_count', 1,['class' => 'work-count-1 work-count', "data-id" => 1])}}
-                                    <div class="col-lg-1 work-1">
+                                    <div class="col-lg-1">
                                         <a class="text-primary d-inline-block mt-50 ti-plus add_work_btn plus_btn"> </a>
                                     </div>
                                 </div>
                             </div>
                             <div class="px-3 formal-div">
-                                <div class="row">
-                                    {{Form::hidden('formal[1][status]','no',['class'=>'formal-1-status'])}}
+                                <div class="row formal-1">
                                     <div class="col-lg-10">
-                                        <label for="formal_assessment" contenteditable="true" id="formalLabel">Formal Assessment</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="formal-1" data-status="only-minus" data-label="formalLabel"></a>
-                                        {{Form::select('formal[1][formal_assessment]',[],[], ['id'=>'formal_assessment','placeholder'=>'Formal Assessment', 'class' => 'grade_options formal_assessment formal-1'])}}
+                                        <label for="formal_assessment" contenteditable="true" id="formalLabel">Formal Assessment</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="formal-1"></a>
+                                        {{Form::select('formal[1][formal_assessment]',[],[], ['id'=>'formal_assessment','placeholder'=>'Formal Assessment', 'class' => 'grade_options formal_assessment'])}}
                                         <span class="form-error d-none formal-error">This field is required</span>
                                     </div>
-                                    <div class="col-lg-2 formal-1">
+                                    <div class="col-lg-2">
                                         <label for="formal_assessment_duration">&nbsp;&nbsp;</label>
-                                        {{Form::select('formal[1][formal_assessment_duration]',$monthDays,[], ["id"=>"formal_assessment_duration","placeholder"=>"Duration", "class" => "form-control formal_assessment_duration duration"])}}
+                                        {{Form::select('formal[1][formal_assessment_duration]',$monthDays,[], ["id"=>"formal_assessment_duration","placeholder"=>"Duration", "class" => "form-control formal_assessment_duration"])}}
                                     </div>
-                                    <div class="col-lg-5 formal-1">
-                                        <label for="formal_assessment_attch">Attach document</label>
-                                        <input type="file" name="formal[1][formal_assessment_attch]" id="formal_assessment_attch" class="form-control-file" placeholder="Attach document">
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="formal[1][formal_assessment_attch]" id="formal_assessment_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("formal[1][formal_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 formal-1">
+                                    <div class="col-lg-8">
                                         <label for="formal_assessment_link">Create a link</label>
-                                        <input type="text" name="formal[1][formal_assessment_link]" id="formal_assessment_link" class="form-control create_link" placeholder="Create a link">
+                                        <input type="text" name="formal[1][formal_assessment_link]" id="formal_assessment_link" class="form-control" placeholder="Create a link">
                                     </div>
                                     {{Form::hidden('formal_count', 1,['class' => 'formal-count-1 formal-count', "data-id" => 1])}}
-                                    <div class="col-lg-1 formal-1">
+                                    <div class="col-lg-1">
                                         <a class="text-primary d-inline-block mt-50 ti-plus add_formal_btn plus_btn"> </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div style="width:100%;margin-top: 10px;"></div>
+                        
                         <!-- Rubric -->
-                        <h5>Rubric</h5> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="rubric-1" data-status="only-minus"></a>
-                        {{Form::hidden('rubric_data[1][status]','no',['class'=>'rubric-1-status'])}}
-                        <div class="standard-block mb-3 rubric-div rubric-1">
+                        <div class="standard-block mb-5 rubric-div rubric-1">
                             <div class="row pl-3 pt-3">
                                 <div class="col-lg-8">
-                                    <label for="rubric">&nbsp;&nbsp;</label>
-                                    {{-- <a class="ti-minus remove-btn-border remove-data" data-id="rubric-1"></a> --}}
+                                    <label for="rubric">Rubric</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="rubric-1"></a>
                                     {{-- <input type="text" name="rubric_data[1][rubric]" id="rubric" class="form-control" placeholder="Rubric"> --}}
                                     {{Form::select('rubric_data[1][rubric]',[],[], ['id'=>'rubric','placeholder'=>'Rubric', 'class' => 'grade_options rubric'])}}
                                     <span class="form-error d-none rubric-error">This field is required</span>
                                 </div>
                                 <div class="col-lg-3">
-                                    <label for="rubric_attch">Attach document</label>
-                                    <input type="file" name="rubric_data[1][rubric_attch]" id="rubric_attch" class="form-control-file" placeholder="Attach document">
+                                    <div class="dropdown text-center mt-3 mb-3">
+                                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Attach document
+                                        </a>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item from_local" href="#">From Local</a>
+                                            <input type="file" name="rubric_data[1][rubric_attch]" id="rubric_attch" class="form-control-file d-none" placeholder="Attach document">
+                                            <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                            {{Form::hidden("rubric_data[1][rubric_data_attach_drive]")}}
+                                        </div>
+                                    </div>
                                 </div>
                                 {{Form::hidden('rubric_count', 1,['class' => 'rubric-count-1 rubric-count', "data-id" => 1])}}
                                 <div class="col-lg-1">
@@ -430,11 +496,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="width:100%;margin-top: 10px;"></div>
+
                         <!-- ------------------------------------------------------------------------------------------------------ -->
-                        <h5 contenteditable="true" id="methodLabel">Differentiation</h5>&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="diff-1" data-status="only-minus" data-label="methodLabel"> </a>
-                        {{Form::hidden('method_data[1][status]','no',['class'=>'diff-1-status'])}}
-                        <div class="standard-block mb-3 diffs-div diff-1">
+                        <h5 class="diff-1" contenteditable="true" id="methodLabel">Differentiation</h5>&nbsp; <a class="ti-minus remove-btn-border remove-data diff-1" data-id="diff-1"> </a>
+                        <div class="standard-block mb-5 diffs-div diff-1">
                             <div class="row pl-3 pr-3 pt-3">
                                 <div class="col-lg-2">
                                     <label for="method_name">Method name</label>
@@ -463,9 +528,9 @@
                             </div>
                         </div>
                         <!-- ------------------------------------------------------------------------------------------------------ -->                
-                        <div style="width:100%;margin-top: 10px;"></div>
+                        
                         <h5>Homework</h5>
-                        <div class="standard-block mb-3">
+                        <div class="standard-block mb-5">
                             <div class="row p-3">
                                 <div class="row col-lg-12 pl-3">
                                     <div class="col-lg-3">
@@ -474,18 +539,29 @@
                                         {{Form::select('home_data[1][homework]',[],[],['id'=>'homework','placeholder'=>'Homework', 'class' => 'grade_options homework'])}}
                                         <span class="form-error d-none homework-error">This field is required</span>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <label for="homework_description">&nbsp;&nbsp;</label>
                                         {{-- <input type="text" name="home_data[1][homework_description]" id="homework_description" class="form-control" placeholder="Description"> --}}
                                         {{Form::select('home_data[1][homework_description]',[],[],['id'=>'homework_description','placeholder'=>'Description', 'class' => 'grade_options homework_description'])}}
                                     </div>
-                                    <div class="col-lg-2">
-                                        <label for="homework_attch">Attach document</label>
-                                        <input type="file" name="home_data[1][homework_attch]" id="homework_attch" class="form-control-file" placeholder="Attach document">
+                                    
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="home_data[1][homework_attch]" id="homework_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("home_data[1][home_data_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-lg-2">
                                         <label for="homework_due_date">&nbsp;&nbsp;</label>
-                                        <input type="text" name="home_data[1][homework_due_date]" id="homework_due_date" class="form-control dateJs" autocomplete="off" placeholder="Due date">
+                                        <input type="text" name="home_data[1][homework_due_date]" id="homework_due_date" class="form-control dateJs" placeholder="Due date">
                                         {{Form::hidden('homework_count', 1,['class' => 'homework-count-1 homework-count', "data-id" => 1])}}
                                     </div>
                                     <div class="col-lg-1">
@@ -504,22 +580,31 @@
                                         {{Form::select('additional_data[1][additional_resources]',[],[],['id'=>'additional_resources','placeholder'=>'Additional Resources', 'class' => 'grade_options additional_resources'])}}
                                         <span class="form-error d-none additional-error">This field is required</span>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <label for="additional_description">&nbsp;&nbsp;</label>
                                         {{-- <input type="text" name="additional_data[1][additional_description]" id="additional_description" class="form-control" placeholder="Description"> --}}
                                         {{Form::select('additional_data[1][additional_description]',[],[],['id'=>'additional_description','placeholder'=>'Additional Description', 'class' => 'grade_options additional_description'])}}
                                     </div>
-                                    <div class="col-lg-2">
-                                        <label for="additional_attch">Attach document</label>
-                                        <input type="file" name="additional_data[1][additional_attch]" id="additional_attch" class="form-control-file" placeholder="Attach document">
+                                    
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="additional_data[1][additional_attch]" id="additional_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("additional_data[1][additional_data_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
-                                    {{Form::hidden('additional_data[1][status]','no',['class'=>'add-due-date-1-status'])}}
                                     <div class="col-lg-2  add-due-date-1">
                                         <label for="additional_duration">&nbsp;&nbsp;</label>
-                                        <input type="text" name="additional_data[1][additional_duration]" id="additional_duration" class="form-control dateJs" autocomplete="off" placeholder="Due date">
+                                        <input type="text" name="additional_data[1][additional_duration]" id="additional_duration" class="form-control dateJs" placeholder="Due date">
                                     </div>
-                                    <div class="col-lg-1">
-                                        <a class="text-primary d-inline-block mt-50 ti-minus plus_btn remove-data" data-id="add-due-date-1" data-status="only-minus"> </a>
+                                    <div class="col-lg-1 add-due-date-1">
+                                        <a class="text-primary d-inline-block mt-50 ti-minus plus_btn remove-data" data-id="add-due-date-1""> </a>
                                     </div>
                                 </div>    
                             </div>
@@ -571,14 +656,20 @@
         create: true,
         sortField: 'text'
     });
-    $('.color').selectize();
 
     $('.grade_options').selectize({
         create: true,
     });
     var selectedGrade = '';
+    var driveFileIndex = '';
     $(document).ready(function(){
         $('.dateJs').datepicker();
+
+        $(document).on('click', '.from_local', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $(this).next('input[type="file"]').trigger('click');
+        });
 
         $("select#grade").change(function(){
             // $('.standard-data').remove();
@@ -603,26 +694,14 @@
             get_form_data(selectedGrade, gradeOptions);
         });
 
-        $(document).on('change','select.grade_options',function(){
-            storeForm(0,0,1);
+        //Google drive button click
+        $(document).on('click', '.upd_entry_attach_drive', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            driveFileIndex = $(this).next('input').attr('name');
+            onApiLoad();
         });
-        $(document).on('change','select.color',function(){
-            var colorCode = $(this).val();
-            if(colorCode != '' && typeof colorCode != 'undefined'){
-                $('.color-box').css({"background":colorCode,'border-color':colorCode});
-            }else{
-                $('.color-box').css({"background":"white",'border-color':"#e5e5e5"});
-            }
-        });
-        $(document).on('keyup','.create_link',function(){
-            storeForm(0,0,1);
-        });
-        $(document).on('change','.dateJs',function(){
-            storeForm(0,0,1);
-        });
-        $(document).on('change','select.duration',function(){
-            storeForm(0,0,1);
-        });
+
         var wrapperStandard = $('.standard-div'); //Input field wrapper
         $('.add_button').click(function(){
             // var totalStData = $('.st-count').length;
@@ -729,10 +808,20 @@
                     '<label for="rubric">&nbsp;&nbsp;</label>'+
                     '<select name="rubric_data['+finalData+'][rubric]" id="rubric-'+finalData+'" class= "rb-'+finalData+' rubric rubric-'+finalData+'" placeholder="Rubric" required></select>'+
                 '</div>'+
-                '<div class="col-lg-3">'+
-                    '<label for="rubric_attch">&nbsp;&nbsp;</label>'+
-                    '<input type="file" name="rubric_data['+finalData+'][rubric_attch]" id="rubric_attch" class=" form-control-file" placeholder="Attach document" required>'+
-                '</div>'+
+                `<div class="col-lg-3">
+                    <div class="dropdown text-center mt-3 mb-3">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Attach document
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item from_local" href="#">From Local</a>
+                            <input type="file" name="rubric_data[${finalData}][rubric_attch]" id="rubric_attch" class="form-control-file d-none" placeholder="Attach document">
+                            <a class="dropdown-item upd_entry_attach_drive" href="#">From Drive</a>
+                            <input name="rubric_data[${finalData}][rubric_data_attach_drive]" type="hidden">
+                        </div>
+                    </div>
+                </div>`+
                 '<div class="col-lg-1">'+
                     '<a class="text-primary d-inline-block mt-50 ti-close remove_button plus_btn"> </a>'+
                 '</div>'+
@@ -761,13 +850,22 @@
                 '<div class="col-lg-2">'+
                     '<label for="entry_duration">&nbsp;&nbsp;</label>' + getMonthData(duration_name, duration_id) +
                 '</div>'+
-                '<div class="col-lg-5">'+
-                    '<label for="entry_attch">Attach document</label>'+
-                    '<input type="file" name="entry_data['+finalData+'][entry_attch]" id="entry_attch" class="form-control-file" placeholder="Attach document" required>'+
+                '<div class="col-lg-3">'+
+                    '<div class="dropdown text-center mt-3">'+
+                        '<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
+                            'Attach document'+
+                        '</a>'+
+                        '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(25px, 53px, 0px);">'+
+                            '<a class="dropdown-item from_local" href="#">From Local</a>'+
+                            `<input type="file" name="entry_data[${finalData}][entry_attch]" id="entry_attch" class="form-control-file d-none" placeholder="Attach document">`+
+                            '<a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>'+
+                            `<input name="entry_data[${finalData}][entry_attach_drive]" type="hidden">`+
+                        '</div>'+
+                    '</div>'+
                 '</div>'+
-                '<div class="col-lg-6">'+
+                '<div class="col-lg-8">'+
                     '<label for="entry_link">Create a link</label>'+
-                    '<input type="text" name="entry_data['+finalData+'][entry_link]" id="entry_link" class="form-control create_link" placeholder="Create a link" required>'+
+                    '<input type="text" name="entry_data['+finalData+'][entry_link]" id="entry_link" class="form-control" placeholder="Create a link" required>'+
                 '</div>'+
                 '<div class="col-lg-1">'+
                     '<a class="text-primary d-inline-block mt-50 ti-close remove_button plus_btn"> </a>'+
@@ -822,13 +920,23 @@
                 '<div class="col-lg-2">'+
                     '<label for="notes_duration">&nbsp;&nbsp;</label>'+ getMonthData(duration_name, duration_id) +
                 '</div>'+
-                '<div class="col-lg-5">'+
-                    '<label for="notes_attch">Attach document</label>'+
-                    '<input type="file" name="notes_data['+finalData+'][notes_attch]" id="notes_attch" class="form-control-file" placeholder="Attach document" required>'+
+               '<div class="col-lg-3">'+
+                    '<div class="dropdown text-center mt-3">'+
+                        '<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
+                            'Attach document'+
+                        '</a>'+
+
+                        '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" x-placement="bottom-start" >'+
+                            '<a class="dropdown-item from_local" href="#">From Local</a>'+
+                            `<input type="file" name="notes_data[${finalData}][notes_attch]" id="notes_attch" class="form-control-file d-none" placeholder="Attach document">`+
+                            '<a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>'+
+                            `<input name="entry_data[${finalData}][notes_attach_drive]" type="hidden">`+
+                        '</div>'+
+                    '</div>'+
                 '</div>'+
-                '<div class="col-lg-6">'+
+                '<div class="col-lg-8">'+
                     '<label for="notes_link">Create a link</label>'+
-                    '<input type="text" name="notes_data['+finalData+'][notes_link]" id="notes_link" class="form-control create_link" placeholder="Create a link" required>'+
+                    '<input type="text" name="notes_data['+finalData+'][notes_link]" id="notes_link" class="form-control" placeholder="Create a link" required>'+
                 '</div>'+
                 '<input type="hidden" name="notes_count" class= "notes-count-'+finalData+' notes-count" data-id = '+finalData+'>'+
                 '<div class="col-lg-1">'+
@@ -858,13 +966,23 @@
                 '<div class="col-lg-2">'+
                     '<label for="vocabulary_duration">&nbsp;&nbsp;</label>'+  getMonthData(duration_name, duration_id) +
                 '</div>'+
-                '<div class="col-lg-5">'+
-                    '<label for="vocabulary_attch">Attach document</label>'+ 
-                    '<input type="file" name="vocabulary_data['+finalData+'][vocabulary_attch]" id="vocabulary_attch" class="form-control-file" placeholder="Attach document" required>'+
-                '</div>'+
-                '<div class="col-lg-6">'+
+                `<div class="col-lg-3">
+                    <div class="dropdown text-center mt-3">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Attach document
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" x-placement="bottom-start" >
+                            <a class="dropdown-item from_local" href="#">From Local</a>
+                            <input type="file" name="vocabulary_data[${finalData}][vocabulary_attch]" id="vocabulary_attch" class="form-control-file d-none" placeholder="Attach document">
+                            <a class="dropdown-item upd_entry_attach_drive" href="#">From Drive</a>
+                            <input name="vocabulary_data[${finalData}][vocabulary_attach_drive]" type="hidden">
+                        </div>
+                    </div>
+                </div>`+
+                '<div class="col-lg-8">'+
                     '<label for="vocabulary_link">Create a link</label>'+
-                    '<input type="text" name="vocabulary_data['+finalData+'][vocabulary_link]" id="vocabulary_link" class="form-control create_link" placeholder="Create a link" required>'+
+                    '<input type="text" name="vocabulary_data['+finalData+'][vocabulary_link]" id="vocabulary_link" class="form-control" placeholder="Create a link" required>'+
                 '</div>'+
                 '<input type="hidden" name="vocabulary_count" class= "vocabulary-count-'+finalData+' vocabulary-count" data-id = '+finalData+'>'+
                 '<div class="col-lg-1">'+
@@ -894,13 +1012,23 @@
                 '<div class="col-lg-2">'+
                     '<label for="concept_duration">&nbsp;&nbsp;</label>'+ getMonthData(duration_name, duration_id) +
                 '</div>'+
-                '<div class="col-lg-5">'+
-                    '<label for="concept_attch">Attach document</label>'+
-                    '<input type="file" name="concept_data['+finalData+'][concept_attch]" id="concept_attch" class="form-control-file" placeholder="Attach document" required>'+
-                '</div>'+
-                '<div class="col-lg-6">'+
+                `<div class="col-lg-3">
+                    <div class="dropdown text-center mt-3">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Attach document
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" x-placement="bottom-start" style="position: absolute; transform: translate3d(4px, 53px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item from_local" href="#">From Local</a>
+                            <input type="file" name="concept_data[${finalData}][concept_attch]" id="concept_attch" class="form-control-file d-none" placeholder="Attach document">
+                            <a class="dropdown-item upd_entry_attach_drive" href="#">From Drive</a>
+                            <input name="concept_data[${finalData}][concept_attach_drive]" type="hidden">
+                        </div>
+                    </div>
+                </div>`+
+                '<div class="col-lg-8">'+
                     '<label for="concept_link">Create a link</label>'+
-                    '<input type="text" name="concept_data['+finalData+'][concept_link]" id="concept_link" class="form-control create_link" placeholder="Create a link" required>'+
+                    '<input type="text" name="concept_data['+finalData+'][concept_link]" id="concept_link" class="form-control" placeholder="Create a link" required>'+
                 '</div>'+
                 '<input type="hidden" name="concept_count" class= "concept-count-'+finalData+' concept-count" data-id = '+finalData+'>'+
                 '<div class="col-lg-1">'+
@@ -930,13 +1058,23 @@
                 '<div class="col-lg-2">'+
                     '<label for="guided_duration">&nbsp;&nbsp;</label>'+ getMonthData(duration_name, duration_id) +
                 '</div>'+
-                '<div class="col-lg-5">'+
-                    '<label for="guided_attch">Attach document</label>'+
-                    '<input type="file" name="guided_data['+finalData+'][guided_attch]" id="guided_attch" class="form-control-file" placeholder="Attach document" required>'+
-                '</div>'+
-                '<div class="col-lg-6">'+
+                `<div class="col-lg-3">
+                    <div class="dropdown text-center mt-3">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Attach document
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item from_local" href="#">From Local</a>
+                            <input type="file" name="guided_data[${finalData}][guided_attch]" id="guided_attch" class="form-control-file d-none" placeholder="Attach document">
+                            <a class="dropdown-item upd_entry_attach_drive" href="#">From Drive</a>
+                            <input name="guided_data[${finalData}][guided_attach_drive]" type="hidden">
+                        </div>
+                    </div>
+                </div>`+
+                '<div class="col-lg-8">'+
                     '<label for="guided_link">Create a link</label>'+
-                    '<input type="text" name="guided_data['+finalData+'][guided_link]" id="guided_link" class="form-control create_link" placeholder="Create a link" required>'+
+                    '<input type="text" name="guided_data['+finalData+'][guided_link]" id="guided_link" class="form-control" placeholder="Create a link" required>'+
                 '</div>'+
                 '<input type="hidden" name="guided_count" class= "guided-count-'+finalData+' guided-count" data-id = '+finalData+'>'+
                 '<div class="col-lg-1">'+
@@ -999,12 +1137,6 @@
 
 
         $('.add-assessments-block').click(function(){
-            var dataId = $(this).data('id');
-            if($('.'+dataId).hasClass('d-none')){
-                $('.'+dataId+'-status').val('no');
-                $('.'+dataId).removeClass('d-none');
-                return true;
-            }
             var lastInformalCount = $('.informal-count').last().data('id');
             var finalData1 = lastInformalCount + 1;
             var durationData1 = getMonthData('informal['+finalData1+'][informal_assessment_duration]', 'informal_assessment_duration'+finalData1);
@@ -1060,7 +1192,7 @@
             var homeDueDateHTML =
             '<div class="col-lg-2">'+
                 '<label for="homework_due_date">&nbsp;&nbsp;</label>'+
-                '<input type="text" name="home_data['+finalData+'][homework_due_date]" id="homework_due_date'+finalData+'" class="form-control dateJs" autocomplete="off" placeholder="Due date" required>'+
+                '<input type="text" name="home_data['+finalData+'][homework_due_date]" id="homework_due_date'+finalData+'" class="form-control dateJs" placeholder="Due date" required>'+
                 '<input type="hidden" name="homework_count" class= "homework-count-'+finalData+' homework-count" data-id = '+finalData+'>'+
             '</div>';
             $(wrapperHomeDue).append(homeDueDateHTML);
@@ -1071,33 +1203,7 @@
 
         //Remove section
         $(document).on('click', '.remove-data', function(e){
-            var status = $(this).data('status');
-            var dStatus = $(this).data('id');
-            var attr = $('#'+$(this).data('label')).attr('contenteditable');
-            if($('.'+$(this).data('id')).hasClass('d-none')){
-                $('.'+dStatus+'-status').val('no');
-                if(status != 'main'){
-                    $('.'+$(this).data('id')).removeClass('d-none');
-                }
-                if(status == 'only-minus' && typeof status != 'undefined'){
-                    $(this).addClass('ti-minus');
-                    $(this).removeClass('ti-plus');
-                }
-                var checkAttr = $('#'+$(this).data('label'));
-                if (typeof checkAttr !== typeof undefined && checkAttr !== false) {
-                    $('#'+$(this).data('label')).attr('contenteditable','true');
-                }
-            }else{
-                $('.'+dStatus+'-status').val('yes');
-                $('.'+$(this).data('id')).addClass('d-none');
-                if(status == 'only-minus' && typeof status != 'undefined'){
-                    $(this).removeClass('ti-minus');
-                    $(this).addClass('ti-plus');
-                }
-                if (typeof attr !== typeof undefined && attr !== false) {
-                    $('#'+$(this).data('label')).removeAttr('contenteditable');
-                }
-            }
+            $('.'+$(this).data('id')).remove();
         });
 
         //Once remove button is clicked
@@ -1167,70 +1273,58 @@
                 status = 1;
             }
             var standard_name = $('#standard_name').val();
-            var standard_status = $('.standard-1-status').val();
-            if(standard_name == '' && standard_status == 'no'){
+            if(standard_name == ''){
                 $('.standard-error').removeClass('d-none');
                 status = 1;
             }
             var entry_activity = $('#entry_activity').val();
-            var entry_activity_status = $('.entry-1-status').val();
-            if(entry_activity == '' && entry_activity_status == 'no'){
+            if(entry_activity == ''){
                 $('.entry-error').removeClass('d-none');
                 status = 1;
             }
 
             var notes = $('#notes').val();
-            var notes_status = $('.notes-1-status').val();
-            if(notes == '' && notes_status == 'no'){
+            if(notes == ''){
                 $('.notes-error').removeClass('d-none');
                 status = 1;
             }
             var vocabulary = $('#vocabulary').val();
-            var vocabulary_status = $('.vocabulary-1-status').val();
-            if(vocabulary == '' && vocabulary_status == 'no'){
+            if(vocabulary == ''){
                 $('.vocabulary-error').removeClass('d-none');
                 status = 1;
             }
             var concept = $('#concept').val();
-            var concept_status = $('.concept-1-status').val();
-            if(concept == '' && concept_status == 'no'){
+            if(concept == ''){
                 $('.concept-error').removeClass('d-none');
                 status = 1;
             }
             var guided = $('#guided_practice').val();
-            var guided_status = $('.guided-1-status').val();
-            if(guided == '' && guided_status == 'no'){
+            if(guided == ''){
                 $('.guided-error').removeClass('d-none');
                 status = 1;
             }
             var informal = $('#informal_assessment').val();
-            var main_informal = $('.assessment-1-status').val();
-            var informal_status = $('.informal-1-status').val();
-            if(informal == '' && informal_status == 'no' && main_informal == 'no'){
+            if(informal == ''){
                 $('.informal-error').removeClass('d-none');
                 status = 1;
             }
             var std_work = $('#student_work').val();
-            var student_status = $('.work-1-status').val();
-            if(std_work == '' && student_status == 'no' && main_informal == 'no'){
+            if(std_work == ''){
                 $('.student-work-error').removeClass('d-none');
                 status = 1;
             }
             var formal = $('#formal_assessment').val();
-            var formal_status = $('.formal-1-status').val();
-            if(formal == '' && formal_status == 'no' && main_informal == 'no'){
+            if(formal == ''){
                 $('.formal-error').removeClass('d-none');
                 status = 1;
             }
             var rubric = $('#rubric').val();
-            var rubric_status = $('.rubric-1-status').val();
-            if(rubric == '' && rubric_status == 'no'){
+            if(rubric == ''){
                 $('.rubric-error').removeClass('d-none');
                 status = 1;
             }
             var method_name = $('#method_value').val();
-            var method_status = $('.diff-1-status').val();
-            if(method_name == '' && method_status == 'no'){
+            if(method_name == ''){
                 $('.method-name-error').removeClass('d-none');
                 status = 1;
             }
@@ -1267,7 +1361,43 @@
                 }
             }
             var typeSubmit = $(this).val();
-            storeForm(dId,typeSubmit,0);
+            var formData = new FormData($(".lession-form")[0]);
+            var objectiveLabel = $('#objectiveLabel').text();
+            var standardsLabel = $('#standardsLabel').text();
+            var entryLabel = $('#entryLabel').text();
+            var notesLabel = $('#notesLabel').text();
+            var vocabularyLabel = $('#vocabularyLabel').text();
+            var conceptLabel = $('#conceptLabel').text();
+            var guidedLabel = $('#guidedLabel').text();
+            var informalLabel = $('#informalLabel').text();
+            var workLabel = $('#workLabel').text();
+            var formalLabel = $('#formalLabel').text();
+            var methodLabel = $('#methodLabel').text();
+            var mail = $('.send-email').val();
+
+            formData.append('objectiveLabel', objectiveLabel);
+            formData.append('standardsLabel', standardsLabel);
+            formData.append('objectiveLabel', objectiveLabel);
+            formData.append('entryLabel', entryLabel);
+            formData.append('notesLabel', notesLabel);
+            formData.append('vocabularyLabel', vocabularyLabel);
+            formData.append('conceptLabel', conceptLabel);
+            formData.append('guidedLabel', guidedLabel);
+            formData.append('informalLabel', informalLabel);
+            formData.append('workLabel', workLabel);
+            formData.append('formalLabel', formalLabel);
+            formData.append('methodLabel', methodLabel);
+            formData.append('email',mail);
+            
+            if (dId == 5) {
+                formData.append('print_document', 1);
+            }
+            if (typeSubmit == 2) {
+                formData.append('print', 1);
+            } else {
+                formData.append('print', 0);
+            }
+            storeForm(formData);
         });
     });
 
@@ -1280,13 +1410,23 @@
             '<div class="col-lg-2">'+
                 '<label for="informal_assessment_duration">&nbsp;&nbsp;</label>'+ durationData +
             '</div>'+
-            '<div class="col-lg-5">'+
-                '<label for="informal_assessment_attch">Attach document</label>'+
-                '<input type="file" name="informal['+finalData+'][informal_assessment_attch]" id="informal_assessment_attch" class="form-control-file" placeholder="Attach document" required>'+
-            '</div>'+
-            '<div class="col-lg-6">'+
+            `<div class="col-lg-3">
+                <div class="dropdown text-center mt-3">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Attach document
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item from_local" href="#">From Local</a>
+                        <input type="file" name="informal[${finalData}][informal_assessment_attch]" id="informal_assessment_attch" class="form-control-file d-none" placeholder="Attach document">
+                        <a class="dropdown-item upd_entry_attach_drive" href="#">From Drive</a>
+                        <input name="informal[${finalData}][informal_attach_drive]" type="hidden">
+                    </div>
+                </div>
+            </div>`+
+            '<div class="col-lg-8">'+
                 '<label for="informal_assessment_link">Create a link</label>'+
-                '<input type="text" name="informal['+finalData+'][informal_assessment_link]" id="informal_assessment_link" class="form-control create_link" placeholder="Create a link" required>'+
+                '<input type="text" name="informal['+finalData+'][informal_assessment_link]" id="informal_assessment_link" class="form-control" placeholder="Create a link" required>'+
             '</div>'+
             '<input type="hidden" name="informal_count" class= "informal-count-'+finalData+' informal-count" data-id = '+finalData+'>'+
             '<div class="col-lg-1">'+
@@ -1304,13 +1444,23 @@
             '<div class="col-lg-2">'+
                 '<label for="student_work_duration">&nbsp;&nbsp;</label>'+ durationData +
             '</div>'+
-            '<div class="col-lg-5">'+
-                '<label for="student_work_attch">Attach document</label>'+
-                '<input type="file" name="work['+finalData+'][student_work_attch]" id="student_work_attch" class="form-control-file" placeholder="Attach document" required>'+
-            '</div>'+
-            '<div class="col-lg-6">'+
+            `<div class="col-lg-3">
+                <div class="dropdown text-center mt-3">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Attach document
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item from_local" href="#">From Local</a>
+                        <input type="file" name="work[${finalData}][student_work_attch]" id="student_work_attch" class="form-control-file d-none" placeholder="Attach document">
+                        <a class="dropdown-item upd_entry_attach_drive" href="#">From Drive</a>
+                        <input name="work[${finalData}][student_work_attach_drive]" type="hidden">
+                    </div>
+                </div>
+            </div>`+
+            '<div class="col-lg-8">'+
                 '<label for="student_work_link">Create a link</label>'+
-                '<input type="text" name="work['+finalData+'][student_work_link]" id="student_work_link" class="form-control create_link" placeholder="Create a link" required>'+
+                '<input type="text" name="work['+finalData+'][student_work_link]" id="student_work_link" class="form-control" placeholder="Create a link" required>'+
             '</div>'+
             '<input type="hidden" name="work_count" class= "work-count-'+finalData+' work-count" data-id = '+finalData+'>'+
             '<div class="col-lg-1">'+
@@ -1328,13 +1478,23 @@
             '<div class="col-lg-2">'+
                 '<label for="formal_assessment_duration">&nbsp;&nbsp;</label>'+ durationData +
             '</div>'+
-            '<div class="col-lg-5">'+
-                '<label for="formal_assessment_attch">Attach document</label>'+
-                '<input type="file" name="formal['+finalData+'][formal_assessment_attch]" id="formal_assessment_attch" class="form-control-file" placeholder="Attach document" required>'+
-            '</div>'+
-            '<div class="col-lg-6">'+
+            `<div class="col-lg-3">
+                <div class="dropdown text-center mt-3">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Attach document
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item from_local" href="#">From Local</a>
+                        <input type="file" name="formal[${finalData}][formal_assessment_attch]" id="formal_assessment_attch" class="form-control-file d-none" placeholder="Attach document">
+                        <a class="dropdown-item upd_entry_attach_drive" href="#">From Drive</a>
+                        <input name="formal[${finalData}][formal_attach_drive]" type="hidden">
+                    </div>
+                </div>
+            </div>`+
+            '<div class="col-lg-8">'+
                 '<label for="formal_assessment_link">Create a link</label>'+
-                '<input type="text" name="formal['+finalData+'][formal_assessment_link]" id="formal_assessment_link" class="form-control create_link" placeholder="Create a link" required>'+
+                '<input type="text" name="formal['+finalData+'][formal_assessment_link]" id="formal_assessment_link" class="form-control" placeholder="Create a link" required>'+
             '</div>'+
             '<input type="hidden" name="formal_count" class= "formal-count-'+finalData+' formal-count" data-id = '+finalData+'>'+
             '<div class="col-lg-1">'+
@@ -1346,7 +1506,7 @@
     function getMonthData(duration_name, duration_id){
         var entryMinutes = {!! json_encode($monthDays) !!};
         var entryDuration= '';
-        entryDuration += '<select name="'+duration_name+'" id="'+duration_id+'" class="form-control duration" placeholder="Duration"  required>';
+        entryDuration += '<select name="'+duration_name+'" id="'+duration_id+'" class="form-control" placeholder="Duration"  required>';
         entryDuration +=  '<option value="">Duration</option>';
         $.each(entryMinutes, function(key, value) {
             entryDuration +=  '<option value="' + key + '">'+value+'</option>';
@@ -1415,55 +1575,16 @@
     }
 
 
-    function storeForm(dId,typeSubmit,isDraft) {
-        var formData = new FormData($(".lession-form")[0]);
-        var objectiveLabel = $('#objectiveLabel').text();
-        var standardsLabel = $('#standardsLabel').text();
-        var entryLabel = $('#entryLabel').text();
-        var notesLabel = $('#notesLabel').text();
-        var vocabularyLabel = $('#vocabularyLabel').text();
-        var conceptLabel = $('#conceptLabel').text();
-        var guidedLabel = $('#guidedLabel').text();
-        var informalLabel = $('#informalLabel').text();
-        var workLabel = $('#workLabel').text();
-        var formalLabel = $('#formalLabel').text();
-        var methodLabel = $('#methodLabel').text();
-        var mail = $('.send-email').val();
-
-        formData.append('objectiveLabel', objectiveLabel);
-        formData.append('standardsLabel', standardsLabel);
-        formData.append('objectiveLabel', objectiveLabel);
-        formData.append('entryLabel', entryLabel);
-        formData.append('notesLabel', notesLabel);
-        formData.append('vocabularyLabel', vocabularyLabel);
-        formData.append('conceptLabel', conceptLabel);
-        formData.append('guidedLabel', guidedLabel);
-        formData.append('informalLabel', informalLabel);
-        formData.append('workLabel', workLabel);
-        formData.append('formalLabel', formalLabel);
-        formData.append('methodLabel', methodLabel);
-        formData.append('email',mail);
-        formData.append('is_draft',isDraft);
-        
-        if(dId == 5) {
-            formData.append('print_document', 1);
-        }
-        if(typeSubmit == 2) {
-            formData.append('print', 1);
-        }else {
-            formData.append('print', 0);
-        }
-
+    function storeForm(data) {
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             url:'{{URL::to("add-plan-form")}}',
             type:'POST',
-            async: false,
             enctype: 'multipart/form-data',
             dataType:'json',
-            data:formData,
+            data:data,
             cache: false,
             contentType: false,
             processData: false,
@@ -1478,9 +1599,7 @@
                     setTimeout(function() {
                         newWin.print();
                     }, 3000);
-                }else if(data.isDraft){
-                    return true;
-                }else {
+                } else {
                     window.location.href = '{{URL::to("plan")}}';
                     // window.open('{{URL::to("plan")}}', '_blank');
 
@@ -1491,8 +1610,12 @@
         });
     }
 
-
-    
 </script>
+
+{{-- Google drive scripts --}}
+<script type="text/javascript" src="{{asset('public/js/google-file-upload.js')}}"></script>
+<script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+
+
 @endsection
 

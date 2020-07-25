@@ -3,6 +3,7 @@
 @section('css')
 
 <style>
+
     .plus_btn {
         margin-top: 35px;
         border: 1px solid red;
@@ -40,12 +41,6 @@
         padding: 10px !important;
         color: white !important;
     }
-    .color-box{
-        border: 1px solid #ddd2d2;
-        height: 37px;
-        max-width: 40px;
-        margin-top: 30px;
-    }
 </style>
 @endsection
 @section('content')
@@ -66,6 +61,7 @@
         </div>
     </div>
 </section>
+
 <!-- contact -->
 <section class="section">
     <div class="container">
@@ -102,24 +98,14 @@
                             <span class="form-error d-none lesson-error">This field is required</span>
                         </div>
                         {{csrf_field()}}
-                        <div class="col-lg-12">
+                        <div class="col-lg-8">
                             <label for="teacher_authors">Teacher Authors</label>
                             {{-- <input type="text" name="teacher_authors" id="teacher_authors" class="form-control" value="{{$plan['teacher_authors']}}" placeholder="Teacher Authors" required> --}}
                             {{Form::select('teacher_authors',$tAuthor, !empty($plan->teacher_authors) ? $plan->teacher_authors : null,['id'=>'teacher_authors','placeholder'=>'Select teacher authors', 'class' => 'grade_options teacher_authors'])}}
                             <span class="form-error d-none teacher-error">This field is required</span>
                             <input type="hidden" name="plan_id" value="{{$plan['id']}}">
                         </div>
-                        <div class="col-lg-5">
-                            <label for="color_label">Color</label>
-                            {{Form::select('color',$color, $plan['color'], ['id'=>'color_label','class'=>'color'])}}
-                        </div>
-                        <div class="col-md-1">
-                            @php
-                                $boxColor = !empty($plan['color']) ? $plan['color'] : $firstColor; 
-                            @endphp
-                            <div class="color-box" style="{{'border-color:'.$boxColor.';background:'.$boxColor}}"></div>
-                        </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <label for="s_date">Date</label>
                             <input type="text" name="s_date" id="s_date" class="form-control dateJs"  value="{{$plan['date']}}"  placeholder="Date" required autocomplete="off">
                             <span class="form-error d-none date-error">This field is required</span>
@@ -145,7 +131,7 @@
                             {{Form::select('unit_topic',$unitData,!empty($plan->unit_topic) ? $plan->unit_topic : null,['id'=>'unit_topic','placeholder'=>'Select unit topic', 'class' => 'grade_options unit_topic'])}}
                             <span class="form-error d-none unit-topic-error">This field is required</span>
                         </div>
-                        <div class="standard-block mt-4 mb-5 objective-div">
+                        <div class="standard-block mb-5 objective-div">
                             @if(!empty($plan->objective))
                                 @foreach($plan->objective['objective'] as $key=>$row)
                                     <div class="row pl-3 pr-3 pt-3">
@@ -167,17 +153,8 @@
                         </div>
 
                         <!-- --------------------------------------------------------------------------------- -->
-                        @php
-                            $stClass = $plan['standards']['standard_data'][1]['status'] == 'no' ? '' : 'd-none';
-                            $stiClass = !empty($stClass) ? 'ti-plus' : 'ti-minus';
-                            $etClass = $plan['entry_activity']['entry_data'][1]['status'] == 'no' ? '' : 'd-none';
-                            $etiClass = !empty($etClass) ? 'ti-plus' : 'ti-minus';
-                            $staContAttr = $stiClass == 'ti-minus' ? 'contenteditable="true"' : '';
-                            $etContAttr = $etiClass == 'ti-minus' ? 'contenteditable="true"' : '';
-                        @endphp
-                        <h5 {!! $staContAttr !!} id="standardsLabel">@if (isset($plan['standards']['label'])) {{$plan['standards']['label']}} @else Standards @endif</h5>&nbsp; <a class="{{$stiClass .' remove-btn-border remove-data'}}" data-id="standard-1" data-status="only-minus" data-label="standardsLabel"> </a>
-                        {{Form::hidden('standard_data[1][status]',$plan['standards']['standard_data'][1]['status'],['class'=>'standard-1-status'])}}
-                        <div class="{{'standard-block mb-3 remove-block standard-1 standard-div '.$stClass}}">
+                        <h5 class="standard-1" contenteditable="true" id="standardsLabel">@if (isset($plan['standards']['label'])) {{$plan['standards']['label']}} @else Standards @endif</h5>&nbsp; <a class="ti-minus remove-btn-border remove-data standard-1" data-id="standard-1"> </a>
+                        <div class="standard-block mb-5 remove-block standard-1 standard-div">
                             @if(!empty($plan['standards']['standard_data']))
                                 @foreach($plan['standards']['standard_data'] as $key=>$row)
                                     <div class="row p-3">
@@ -228,19 +205,16 @@
                             </div>
                             @endif
                         </div>
-                        <div style="width:100%;margin-top: 10px;"></div>
                         <!-- --------------------------------------------------------------------------------- -->
-                        <h5 {!! $etiClass !!} id="entryLabel">@if (isset($plan['entry_activity']['label'])) {{$plan['entry_activity']['label']}} @else Entry Activity/ Success Starter @endif</h5>&nbsp;&nbsp;<a class="{{$etiClass. ' remove-btn-border remove-data'}}" data-id="entry-1" data-status="only-minus" data-label="entryLabel"> </a>
-                        {{Form::hidden('entry_data[1][status]',$plan['entry_activity']['entry_data'][1]['status'],['class'=>'entry-1-status'])}}
-                        <div class="{{'standard-block mb-3 entry-1 entry-div '.$etClass}}">
+                        <div class="standard-block mb-5 entry-1 entry-div">
                             @if(!empty($plan['entry_activity']['entry_data']))
                                 @foreach($plan['entry_activity']['entry_data'] as $key=>$row)
                                     <div class="row pl-3 pr-3 pt-3">
                                         <div class="col-lg-10">
-                                            <label for="entry_activity">&nbsp;&nbsp;</label>
-                                            {{-- @if($key == 1)
+                                            <label for="entry_activity" contenteditable="true" id="entryLabel">@if (isset($plan['entry_activity']['label'])) {{$plan['entry_activity']['label']}} @else Entry Activity/ Success Starter @endif</label>&nbsp;&nbsp;
+                                            @if($key == 1)
                                                 <a class="ti-minus remove-btn-border remove-data entry-1" data-id="entry-1"> </a>
-                                            @endif --}}
+                                            @endif
                                             {{Form::select('entry_data['.$key.'][entry_activity]',$eActivity,!empty($row['entry_activity']) ? $row['entry_activity'] : null, ['id'=>'entry_activity','placeholder'=>'Entry Activity', 'class' => 'grade_options entry_activity'])}}
                                             @if($key == 1)
                                                 <span class="form-error d-none entry-error">This field is required</span>
@@ -250,15 +224,27 @@
                                             <label for="entry_duration">&nbsp;&nbsp;</label>
                                             {{Form::select('entry_data['.$key.'][entry_duration]',$monthDays,!empty($row['entry_duration']) ? $row['entry_duration'] : null, ['id'=>'entry_duration','placeholder'=>'Duration', 'class' => 'form-control  '])}}
                                         </div>
-                                        <div class="col-lg-5">
-                                            <label for="entry_attch">Attach document</label>
-                                            <input type="file" name="entry_data[{{$key}}][entry_attch]" id="entry_attch" class="form-control-file" placeholder="Attach document">
-                                            @if (!empty($row['entry_attch']))
-                                                <a href="{{ url($row['entry_attch']) }}" target="_blank">See Attach</a>
-                                                <input type="hidden" name="{{'entry_data['.$key.'][entry_attch]'}}" value="1">
-                                             @endif 
+                                        
+                                        <div class="col-lg-3">
+                                            <div class="dropdown text-center mt-3">
+                                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Attach document
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                    <a class="dropdown-item from_local" href="#">From Local</a>
+                                                    <input type="file" name="entry_data[{{$key}}][entry_attch]" id="entry_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                    <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                    {{Form::hidden("entry_data[$key][entry_attach_drive]")}}
+                                                </div>
+                                            </div>
+                                            <div class="text-center attach_doc">
+                                                @if (!empty($row['entry_attch']))
+                                                    <a href="{{ url($row['entry_attch']) }}" target="_blank" download>See Attach</a>
+                                                    <input type="hidden" name="{{'entry_data['.$key.'][entry_attch]'}}" value="1">
+                                                @endif 
+                                            </div>
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-8">
                                             <label for="entry_link">Create a link</label>
                                             {{Form::text('entry_data['.$key.'][entry_link]',!empty($row['entry_link']) ? $row['entry_link'] : null,['class' => 'form-control','id'=>"entry_link",'placeholder'=>"Create a link"])}}
                                         </div>
@@ -283,11 +269,21 @@
                                         <label for="entry_duration">&nbsp;&nbsp;</label>
                                         {{Form::select('entry_data[1][entry_duration]',$monthDays,[], ['id'=>'entry_duration','placeholder'=>'Duration', 'class' => 'form-control  entry_duration'])}}
                                     </div>
-                                    <div class="col-lg-5">
-                                        <label for="entry_attch">Attach document</label>
-                                        <input type="file" name="entry_data[1][entry_attch]" id="entry_attch" class="form-control-file" placeholder="Attach document">
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="entry_data[1][entry_attch]" id="entry_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("entry_data[1][entry_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-8">
                                         <label for="entry_link">Create a link</label>
                                         <input type="text" name="entry_data[1][entry_link]" id="entry_link" class="form-control" placeholder="Create a link">
                                     </div>
@@ -298,28 +294,15 @@
                                 </div>
                             @endif
                         </div>
-                        <div style="width:100%;margin-top: 10px;"></div>
+
                         <h5>Mini Lesson</h5> 
-                        <div class="standard-block mb-3">
+                        <div class="standard-block mb-5">
                             @php
                                 $notesCount = !empty($plan['notes']['notes_data']) ? count($plan['notes']['notes_data']) : 1;
                                 $vCount = !empty($plan['vocabulary']['vocabulary_data']) ? count($plan['vocabulary']['vocabulary_data']) : 1;
                                 $conCount = !empty($plan['concept_demonstration']['concept_data']) ? count($plan['concept_demonstration']['concept_data']) : 1;
                                 $gCount = !empty($plan['guided_practice']['guided_data']) ? count($plan['guided_practice']['guided_data']) : 1;
-                                $ntClass = $plan['notes']['notes_data'][1]['status'] == 'no' ? '' : 'd-none';
-                                $ntiClass = !empty($ntClass) ? 'ti-plus' : 'ti-minus';
-                                $ntContAttr = $ntiClass == 'ti-minus' ? 'contenteditable="true"' : '';
-                                $vtClass = $plan['vocabulary']['vocabulary_data'][1]['status'] == 'no' ? '' : 'd-none';
-                                $vtiClass = !empty($vtClass) ? 'ti-plus' : 'ti-minus';
-                                $vtContAttr = $vtiClass == 'ti-minus' ? 'contenteditable="true"' : '';
-                                $countStatusClass = $plan['concept_demonstration']['concept_data'][1]['status'] == 'no' ? '' : 'd-none';
-                                $countIClass = !empty($countStatusClass) ? 'ti-plus' : 'ti-minus';
-                                $countContAttr = $countIClass == 'ti-minus' ? 'contenteditable="true"' : '';
-                                $guidedStatusClass = $plan['guided_practice']['guided_data'][1]['status'] == 'no' ? '' : 'd-none';
-                                $guidIClass = !empty($guidedStatusClass) ? 'ti-plus' : 'ti-minus';
-                                $guidContAttr = $guidIClass == 'ti-minus' ? 'contenteditable="true"' : '';
                             @endphp
-                            {{Form::hidden('notes_data[1][status]',$plan['notes']['notes_data'][1]['status'],['class'=>'notes-1-status'])}}
                             @if(!empty($plan['notes']['notes_data']))
                                 @foreach($plan['notes']['notes_data'] as $key=>$row)
                                     @php
@@ -327,43 +310,50 @@
                                         if($notesCount == $key){
                                             $className = 'notes-div';
                                         }
-                                        $notLabelClass = '';
-                                        $notSecondClass = '';
-                                        if($key != 1){
-                                            $notLabelClass = 'notes-1' ;
-                                            $notSecondClass = $ntClass;
-                                        }
                                     @endphp
                                     <div class="{{'pl-3 pr-3 pt-3 '.$className}}">
-                                        <div class="{{$notLabelClass.' row'}}">
+                                        <div class="row notes-1">
                                             <div class="col-lg-10">
-                                                <label for="notes" class="{{$notLabelClass.' '.$notSecondClass}}" {!! $ntContAttr!!} id="notesLabel">@if (isset($plan['notes']['label'])) {{$plan['notes']['label']}} @else Notes @endif</label>  &nbsp;&nbsp; 
+                                                <label for="notes" contenteditable="true" id="notesLabel">@if (isset($plan['notes']['label'])) {{$plan['notes']['label']}} @else Notes @endif</label>  &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$ntiClass. ' remove-btn-border remove-data'}}" data-id="notes-1" data-status="only-minus" data-label="notesLabel"></a>
+                                                    <a class="ti-minus remove-btn-border remove-data notes-1" data-id="notes-1"></a>
                                                 @endif
-                                                {{Form::select('notes_data['.$key.'][notes]',$eNotes,!empty($row['notes']) ? $row['notes'] : null, ['id'=>'notes','placeholder'=>'Notes', 'class' => 'grade_options notes notes-1 '.$ntClass])}}  
+                                                {{Form::select('notes_data['.$key.'][notes]',$eNotes,!empty($row['notes']) ? $row['notes'] : null, ['id'=>'notes','placeholder'=>'Notes', 'class' => 'grade_options notes'])}}  
                                                 @if($key == 1)
                                                     <span class="form-error d-none notes-error">This field is required</span>
                                                 @endif
                                             </div>
-                                            <div class="{{'col-lg-2 notes-1 '.$ntClass}}">
+                                            <div class="col-lg-2">
                                                 <label for="notes_duration">&nbsp;&nbsp;</label>
                                                 {{Form::select("notes_data[".$key."][notes_duration]",$monthDays,!empty($row['notes_duration']) ? $row['notes_duration'] : null, ['id'=>'notes_duration','placeholder'=>'Duration', 'class' => 'form-control notes_duration'])}}
                                             </div>
-                                            <div class="{{'col-lg-5 notes-1 '.$ntClass}}">
-                                                <label for="notes_attch">Attach document</label>
-                                                <input type="file" name="{{'notes_data['.$key.'][notes_attch]'}}" id="notes_attch" class="form-control-file" placeholder="Attach document">
-                                                @if (!empty($row['notes_attch']))
-                                                    <a href="{{ url($row['notes_attch']) }}" target="_blank">See Attach</a>
-                                                    <input type="hidden" name="{{'notes_data['.$key.'][notes_attch]'}}" value="1">
-                                                @endif 
+                                            <div class="col-lg-3">
+                                                <div class="dropdown text-center mt-3">
+                                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Attach document
+                                                    </a>
+
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <a class="dropdown-item from_local" href="#">From Local</a>
+                                                        <input type="file" name="{{'notes_data['.$key.'][notes_attch]'}}" id="notes_attch" class="form-control-file" placeholder="Attach document">
+                                                        <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                        {{Form::hidden("notes_data[$key][notes_attach_drive]")}}
+                                                    </div>
+                                                    <div class="text-center">
+                                                        @if (!empty($row['notes_attch']))
+                                                            <a href="{{ url($row['notes_attch']) }}" target="_blank">See Attach</a>
+                                                            <input type="hidden" name="{{'notes_data['.$key.'][notes_attch]'}}" value="1">
+                                                        @endif 
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="{{'col-lg-6 notes-1 '.$ntClass}}">
+                                            
+                                            <div class="col-lg-8">
                                                 <label for="notes_link">Create a link</label>
                                                 {{Form::text('notes_data['.$key.'][notes_link]',!empty($row['notes_link']) ? $row['notes_link'] : null,['class' => 'form-control','id'=>"notes_link",'placeholder'=>"Create a link"])}}
                                             </div>
                                             {{Form::hidden('notes_count', $key,['class' => 'notes-count notes-count-'.$key, "data-id" =>$key])}}
-                                            <div class="{{'col-lg-1 notes-1 '.$ntClass}}">
+                                            <div class="col-lg-1">
                                                 @if($key == 1)
                                                     <a class="text-primary d-inline-block mt-50 ti-plus add_notes_btn plus_btn"></a>
                                                 @else
@@ -385,11 +375,21 @@
                                         <label for="notes_duration">&nbsp;&nbsp;</label>
                                         {{Form::select("notes_data[1][notes_duration]",$monthDays,[], ['id'=>'notes_duration','placeholder'=>'Duration', 'class' => 'form-control notes_duration'])}}
                                     </div>
-                                    <div class="col-lg-5">
-                                        <label for="notes_attch">Attach document</label>
-                                        <input type="file" name="notes_data[1][notes_attch]" id="notes_attch" class="form-control-file" placeholder="Attach document">
+                                    <div class="col-lg-3">
+                                        <div class="dropdown text-center mt-3">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Attach document
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item from_local" href="#">From Local</a>
+                                                <input type="file" name="notes_data[1][notes_attch]" id="notes_attch" class="form-control-file d-none" placeholder="Attach document">
+                                                <a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>
+                                                {{Form::hidden("notes_data[1][notes_attach_drive]")}}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-8">
                                         <label for="notes_link">Create a link</label>
                                         <input type="text" name="notes_data[1][notes_link]" id="notes_link" class="form-control" placeholder="Create a link">
                                     </div>
@@ -400,7 +400,6 @@
                                 </div>
                             </div>
                             @endif
-                            {{Form::hidden('vocabulary_data[1][status]',$plan['vocabulary']['vocabulary_data'][1]['status'],['class'=>'vocabulary-1-status'])}}
                             @if(!empty($plan['vocabulary']['vocabulary_data']))
                                 @foreach($plan['vocabulary']['vocabulary_data'] as $key=>$row)
                                     @php
@@ -408,31 +407,25 @@
                                         if($vCount == $key){
                                             $className = 'vocabulary-div';
                                         }
-                                        $vLabelClass = '';
-                                        $vSecondClass = '';
-                                        if($key != 1){
-                                            $vLabelClass = 'vocabulary-1' ;
-                                            $vSecondClass = $vtClass;
-                                        }
                                     @endphp
                                     <div class="{{'pl-3 pr-3 '.$className}}">
-                                        <div class="{{$vLabelClass.' row'}}">
+                                        <div class="row vocabulary-1">
                                             <div class="col-lg-10">
-                                                <label for="vocabulary" class="{{$vLabelClass.' '.$vSecondClass}}" {!! $vtContAttr !!} id="vocabularyLabel">@if (isset($plan['vocabulary']['label'])) {{$plan['vocabulary']['label']}} @else Vocabulary @endif</label>  &nbsp;&nbsp; 
+                                                <label for="vocabulary" contenteditable="true" id="vocabularyLabel">@if (isset($plan['vocabulary']['label'])) {{$plan['vocabulary']['label']}} @else Vocabulary @endif</label>  &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$vtiClass .' remove-btn-border remove-data'}}" data-id="vocabulary-1" data-status="only-minus" data-label="vocabularyLabel"></a>
+                                                    <a class="ti-minus remove-btn-border remove-data" data-id="vocabulary-1"></a>
                                                 @endif
                                                 {{-- {{Form::text('vocabulary_data['.$key.'][vocabulary]',!empty($row['vocabulary']) ? $row['vocabulary'] : null,['class' => 'form-control','id'=>"vocabulary",'placeholder'=>"Vocabulary"])}} --}}
-                                                {{Form::select('vocabulary_data['.$key.'][vocabulary]',$vocaData,!empty($row['vocabulary']) ? $row['vocabulary'] : null, ['id'=>'vocabulary','placeholder'=>'Vocabulary', 'class' => 'grade_options vocabulary vocabulary-1 '.$vtClass])}}  
+                                                {{Form::select('vocabulary_data['.$key.'][vocabulary]',$vocaData,!empty($row['vocabulary']) ? $row['vocabulary'] : null, ['id'=>'vocabulary','placeholder'=>'Vocabulary', 'class' => 'grade_options vocabulary'])}}  
                                                 @if($key == 1)
                                                     <span class="form-error d-none vocabulary-error">This field is required</span>
                                                 @endif
                                             </div>
-                                            <div class="{{'col-lg-2 vocabulary-1 '.$vtClass}}">
+                                            <div class="col-lg-2">
                                                 <label for="vocabulary_duration">&nbsp;&nbsp;</label>
                                                 {{Form::select("vocabulary_data[$key][vocabulary_duration]",$monthDays, !empty($row['vocabulary_duration']) ? $row['vocabulary_duration'] : null, ["id"=>"vocabulary_duration","placeholder"=>"Duration", "class" => "form-control vocabulary_duration"])}}
                                             </div>
-                                            <div class="{{'col-lg-5 vocabulary-1 '.$vtClass}}">
+                                            <div class="col-lg-5">
                                                 <label for="vocabulary_attch">Attach document</label>
                                                 <input type="file" name="{{'vocabulary_data['.$key.'][vocabulary_attch]'}}" id="vocabulary_attch" class="form-control-file" placeholder="Attach document">
                                                 @if (!empty($row['vocabulary_attch']))
@@ -440,12 +433,12 @@
                                                     <input type="hidden" name="{{'vocabulary_data['.$key.'][vocabulary_attch]'}}" value="1">
                                                 @endif 
                                             </div>
-                                            <div class="{{'col-lg-6 vocabulary-1 '.$vtClass}}">
+                                            <div class="col-lg-6">
                                                 <label for="vocabulary_link">Create a link</label>
                                                 {{Form::text('vocabulary_data['.$key.'][vocabulary_link]',!empty($row['vocabulary_link']) ? $row['vocabulary_link'] : null,['class' => 'form-control','id'=>"vocabulary_link",'placeholder'=>"Create a link"])}}
                                             </div>
                                             {{Form::hidden('vocabulary_count',$key,['class' => 'vocabulary-count vocabulary-count-'.$key, "data-id" =>$key])}}
-                                            <div class="{{'col-lg-1 vocabulary-1 '.$vtClass}}">
+                                            <div class="col-lg-1">
                                                 @if($key == 1)
                                                     <a class="text-primary d-inline-block mt-50 ti-plus add_vocabulary_btn plus_btn"> </a>
                                                 @else
@@ -457,7 +450,7 @@
                                 @endforeach
                             @else
                                 <div class="pl-3 pr-3 vocabulary-div">
-                                    <div class="row">
+                                    <div class="row vocabulary-1">
                                         <div class="col-lg-10">
                                             <label for="vocabulary" contenteditable="true" id="vocabularyLabel">Vocabulary</label>  &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="vocabulary-1"></a>
                                             {{-- <input type="text" name="vocabulary_data[1][vocabulary]" id="vocabulary" class="form-control" placeholder="Vocabulary"> --}}
@@ -483,7 +476,6 @@
                                     </div>
                                 </div>
                             @endif
-                            {{Form::hidden('concept_data[1][status]',$plan['concept_demonstration']['concept_data'][1]['status'],['class'=>'concept-1-status'])}}
                             @if(!empty($plan['concept_demonstration']['concept_data']))
                                 @foreach($plan['concept_demonstration']['concept_data'] as $key=>$row)
                                     @php
@@ -491,31 +483,25 @@
                                         if($conCount == $key){
                                             $className = 'concept-div';
                                         }
-                                        $conLabelClass = '';
-                                        $conSecondClass = '';
-                                        if($key != 1){
-                                            $conLabelClass = 'concept-1' ;
-                                            $conSecondClass = $countStatusClass;
-                                        }
                                     @endphp
                                     <div class="{{'pl-3 pr-3 '.$className}}">
-                                        <div class="{{$conLabelClass.' row'}}">
+                                        <div class="row concept-1">
                                             <div class="col-lg-10">
-                                                <label for="concept" class="{{$conLabelClass.' '.$conSecondClass}}" {!! $countContAttr !!} id="conceptLabel">@if (isset($plan['concept_demonstration']['label'])) {{$plan['concept_demonstration']['label']}} @else Concept Demonstration @endif </label> &nbsp;&nbsp; 
+                                                <label for="concept" contenteditable="true" id="conceptLabel">@if (isset($plan['concept_demonstration']['label'])) {{$plan['concept_demonstration']['label']}} @else Concept Demonstration @endif </label> &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$countIClass .' remove-btn-border remove-data'}}" data-id="concept-1" data-status="only-minus" data-label="conceptLabel"></a>
+                                                    <a class="ti-minus remove-btn-border remove-data" data-id="concept-1"></a>
                                                 @endif
                                                 {{-- {{Form::text('concept_data['.$key.'][concept]',!empty($row['concept']) ? $row['concept'] : null,['class' => 'form-control','id'=>"concept",'placeholder'=>"Concept Demonstration"])}} --}}
-                                                {{Form::select('concept_data['.$key.'][concept]',$conData, !empty($row['concept']) ? $row['concept'] : null, ['id'=>'concept','placeholder'=>'Concept Demonstration', 'class' => 'grade_options concept concept-1 '.$countStatusClass])}}
+                                                {{Form::select('concept_data['.$key.'][concept]',$conData, !empty($row['concept']) ? $row['concept'] : null, ['id'=>'concept','placeholder'=>'Concept Demonstration', 'class' => 'grade_options concept'])}}
                                                 @if($key == 1)
                                                     <span class="form-error d-none concept-error">This field is required</span>
                                                 @endif
                                             </div>
-                                            <div class="{{$countStatusClass. ' col-lg-2 concept-1 '}}">
+                                            <div class="col-lg-2">
                                                 <label for="concept_duration">&nbsp;&nbsp;</label>
                                                 {{Form::select("concept_data[$key][concept_duration]",$monthDays,!empty($row['concept_duration']) ? $row['concept_duration'] : null, ["id"=>"concept_duration","placeholder"=>"Duration", "class" => "form-control concept_duration"])}}
                                             </div>
-                                            <div class="{{$countStatusClass. ' col-lg-5 concept-1 '}}">
+                                            <div class="col-lg-5">
                                                 <label for="concept_attch">Attach document</label>
                                                 <input type="file" name="{{'concept_data['.$key.'][concept_attch]'}}" id="concept_attch" class="form-control-file" placeholder="Attach document">
                                                 @if (!empty($row['concept_attch']))
@@ -523,12 +509,12 @@
                                                     <input type="hidden" name="{{'concept_data['.$key.'][concept_attch]'}}" value="1">
                                                 @endif 
                                             </div>
-                                            <div class="{{$countStatusClass. ' col-lg-6 concept-1 '}}">
+                                            <div class="col-lg-6">
                                                 <label for="concept_link">Create a link</label>
                                                 {{Form::text('concept_data['.$key.'][concept_link]',!empty($row['concept_link']) ? $row['concept_link'] : null,['class' => 'form-control','id'=>"concept_link",'placeholder'=>"Create a link"])}}
                                             </div>
                                             {{Form::hidden('concept_count',$key,['class' => 'concept-count concept-count-'.$key, "data-id" =>$key])}}
-                                            <div class="{{$countStatusClass. ' col-lg-1 concept-1 '}}">
+                                            <div class="col-lg-1">
                                                 @if($key == 1)
                                                     <a class="text-primary d-inline-block mt-50 ti-plus add_concept_btn plus_btn"> </a>
                                                 @else
@@ -566,7 +552,6 @@
                                     </div>
                                 </div>
                             @endif
-                            {{Form::hidden('guided_data[1][status]',$plan['guided_practice']['guided_data'][1]['status'],['class'=>'guided-1-status'])}}
                             @if(!empty($plan['guided_practice']['guided_data']))
                                 @foreach($plan['guided_practice']['guided_data'] as $key=>$row)
                                     @php
@@ -574,31 +559,25 @@
                                         if($gCount == $key){
                                             $className = 'guided-div';
                                         }
-                                        $guidLabelClass = '';
-                                        $guidSecondClass = '';
-                                        if($key != 1){
-                                            $guidLabelClass = 'guided-1' ;
-                                            $guidSecondClass = $guidedStatusClass;
-                                        }
                                     @endphp
                                     <div class="{{'pl-3 pr-3 '.$className}}">
-                                        <div class="{{$guidLabelClass.' row'}}">
+                                        <div class="row  guided-1">
                                             <div class="col-lg-10">
-                                                <label for="guided_practice" class="{{$guidLabelClass.' '.$guidSecondClass}}" {!! $guidContAttr !!} id="guidedLabel">@if (isset($plan['guided_practice']['label'])) {{$plan['guided_practice']['label']}} @else Guided Practice @endif </label> &nbsp;&nbsp;
+                                                <label for="guided_practice" contenteditable="true" id="guidedLabel">@if (isset($plan['guided_practice']['label'])) {{$plan['guided_practice']['label']}} @else Guided Practice @endif </label> &nbsp;&nbsp;
                                                 @if($key == 1)
-                                                    <a class="{{$guidIClass. ' remove-btn-border remove-data'}}" data-id="guided-1" data-status="only-minus" data-label="guidedLabel"></a>
+                                                    <a class="ti-minus remove-btn-border remove-data" data-id="guided-1"></a>
                                                 @endif
                                                 {{-- {{Form::text('guided_data['.$key.'][guided_practice]',!empty($row['guided_practice']) ? $row['guided_practice'] : null,['class' => 'form-control','id'=>"guided_practice",'placeholder'=>"Guided Practice"])}} --}}
-                                                {{Form::select('guided_data[1][guided_practice]', $guideData, !empty($row['guided_practice']) ? $row['guided_practice'] : null, ['id'=>'guided_practice','placeholder'=>'Guided Practice', 'class' => 'grade_options guided_practice guided-1 '.$guidedStatusClass])}}
+                                                {{Form::select('guided_data[1][guided_practice]', $guideData, !empty($row['guided_practice']) ? $row['guided_practice'] : null, ['id'=>'guided_practice','placeholder'=>'Guided Practice', 'class' => 'grade_options guided_practice'])}}
                                                 @if($key == 1)
                                                     <span class="form-error d-none guided-error">This field is required</span>
                                                 @endif
                                             </div>
-                                            <div class="{{$guidedStatusClass. ' col-lg-2 guided-1'}}">
+                                            <div class="col-lg-2">
                                                 <label for="guided_duration">&nbsp;&nbsp;</label>
                                                 {{Form::select("guided_data[$key][guided_duration]",$monthDays,[], ["id"=>"guided_duration","placeholder"=>"Duration", "class" => "form-control guided_duration"])}}
                                             </div>
-                                            <div class="{{$guidedStatusClass. ' col-lg-5 guided-1'}}">
+                                            <div class="col-lg-5">
                                                 <label for="guided_attch">Attach document</label>
                                                 <input type="file" name="{{'guided_data['.$key.'][guided_attch]'}}" id="guided_attch" class="form-control-file" placeholder="Attach document">
                                                 @if (!empty($row['guided_attch']))
@@ -606,12 +585,12 @@
                                                     <input type="hidden" name="{{'guided_data['.$key.'][guided_attch]'}}" value="1">
                                                 @endif 
                                             </div>
-                                            <div class="{{$guidedStatusClass. ' col-lg-6 guided-1'}}">
+                                            <div class="col-lg-6">
                                                 <label for="guided_link">Create a link</label>
                                                 {{Form::text('guided_data['.$key.'][guided_link]',!empty($row['guided_link']) ? $row['guided_link'] : null,['class' => 'form-control','id'=>"guided_link",'placeholder'=>"Create a link"])}}
                                             </div>
                                             {{Form::hidden('guided_count',$key,['class' => 'guided-count guided-count-'.$key, "data-id"=>$key])}}
-                                            <div class="{{$guidedStatusClass. ' col-lg-1 guided-1'}}">
+                                            <div class="col-lg-1">
                                                 @if($key == 1)
                                                     <a class="text-primary d-inline-block mt-50 ti-plus add_guided_btn plus_btn"> </a>
                                                 @else
@@ -650,36 +629,14 @@
                                 </div>
                             @endif
                         </div>
-                        <div style="width:100%;margin-top: 10px;"></div>
-                        @php
-                            $informlMainStatusClass = $plan['informal_assessment']['informal_data'][1]['main_status'] == 'no' ? '' : 'd-none';
-                            // $imformalIClass = !empty($informlMainStatusClass) ? 'ti-plus' : 'ti-minus';
-                            $swStatusClass = $plan['student_work']['student_work_data'][1]['status'] == 'no' ? '' : 'd-none';
-                            $swIClass = !empty($swStatusClass) ? 'ti-plus' : 'ti-minus';
-                            $swContAttr = $swIClass == 'ti-minus' ? 'contenteditable="true"' : '';
-                            $fStatusClass = $plan['formal_assessment']['formal_assessment_data'][1]['status'] == 'no' ? '' : 'd-none';
-                            $fIClass = !empty($fStatusClass) ? 'ti-plus' : 'ti-minus';
-                            $fContAttr = $fIClass == 'ti-minus' ? 'contenteditable="true"' : '';
-                            $dStatusClass = $plan['differentiation']['method_name'][1]['status'] == 'no' ? '' : 'd-none';
-                            $dIClass = !empty($dStatusClass) ? 'ti-plus' : 'ti-minus';
-                            $dContAttr = $dIClass == 'ti-minus' ? 'contenteditable="true"' : '';
-                            $rStatusClass = $plan['rubric']['rubric'][1]['status'] == 'no' ? '' : 'd-none';
-                            $rIClass = !empty($rStatusClass) ? 'ti-plus' : 'ti-minus';
-                            $adDateStatusClass = $plan['additional_resources']['additional_data'][1]['status'] == 'no' ? '' : 'd-none';
-                            $adDateIClass = !empty($adDateStatusClass) ? 'ti-plus' : 'ti-minus';
-                        @endphp
-                        <h5>Assessments</h5> &nbsp;&nbsp;  <a class="{{'ti-plus remove-btn-border add-assessments-block'}}" data-id="assessment-1"></a>&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="assessment-1" data-status="main"> </a>
-                        <div class="{{$informlMainStatusClass .' standard-block mb-3 assessment-1'}}">
+
+                        <h5 class="assessment-1">Assessments</h5> &nbsp;&nbsp; <a class="ti-plus remove-btn-border add-assessments-block assessment-1"></a>&nbsp; <a class="ti-minus remove-btn-border remove-data assessment-1" data-id="assessment-1"> </a>
+                        <div class="standard-block mb-5 assessment-1">
                             @php
                                 $informalCount = !empty($plan['informal_assessment']['informal_data']) ? count($plan['informal_assessment']['informal_data']) : 1;
                                 $studentCount = !empty($plan['student_work']['student_work_data']) ? count($plan['student_work']['student_work_data']) : 1;
                                 $fCount = !empty($plan['formal_assessment']['formal_assessment_data']) ?count($plan['formal_assessment']['formal_assessment_data']) : 1;
-                                $informlStatusClass = $plan['informal_assessment']['informal_data'][1]['status'] == 'no' ? '' : 'd-none';
-                                $iformalIClass = !empty($informlStatusClass) ? 'ti-plus' : 'ti-minus';
-                                $iformaleContAttr = $iformalIClass == 'ti-minus' ? 'contenteditable="true"' : '';
                             @endphp
-                            {{Form::hidden('informal[1][main_status]',$plan['informal_assessment']['informal_data'][1]['main_status'],['class'=>'assessment-1-status'])}}
-                            {{Form::hidden('informal[1][status]',$plan['informal_assessment']['informal_data'][1]['status'],['class'=>'informal-1-status'])}}
                             @if(!empty($plan['informal_assessment']['informal_data']))
                                 @foreach($plan['informal_assessment']['informal_data'] as $key=>$row)
                                     @php
@@ -687,30 +644,24 @@
                                         if($informalCount == $key){
                                             $className = 'informal-div';
                                         }
-                                        $infoLabelClass = '';
-                                        $infoSecondClass = '';
-                                        if($key != 1){
-                                            $infoLabelClass = 'informal-1' ;
-                                            $infoSecondClass = $informlStatusClass;
-                                        }
                                     @endphp
                                     <div class="{{'px-3 pt-3 '.$className}}">
-                                        <div class="{{$infoLabelClass. ' row'}}">
+                                        <div class="row informal-1">
                                             <div class="col-lg-10">
-                                                <label for="informal_assessment" class="{{$infoLabelClass.' '.$infoSecondClass}}" {!! $iformaleContAttr !!} id="informalLabel">@if (isset($plan['informal_assessment']['label'])) {{$plan['informal_assessment']['label']}} @else Informal Assessment @endif </label> &nbsp;&nbsp; 
+                                                <label for="informal_assessment" contenteditable="true" id="informalLabel">@if (isset($plan['informal_assessment']['label'])) {{$plan['informal_assessment']['label']}} @else Informal Assessment @endif </label> &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$iformalIClass. ' remove-btn-border remove-data'}}" data-id="informal-1" data-status="only-minus" data-label="informalLabel"></a>
+                                                    <a class="ti-minus remove-btn-border remove-data" data-id="informal-1"></a>
                                                 @endif
-                                                {{Form::select('informal['.$key.'][informal_assessment]',$aInformal,!empty($row['informal_assessment']) ? $row['informal_assessment'] : null, ['id'=>'informal_assessment','placeholder'=>'Informal Assessmen', 'class' => 'grade_options informal_assessment informal-1 '.$informlStatusClass])}}
+                                                {{Form::select('informal['.$key.'][informal_assessment]',$aInformal,!empty($row['informal_assessment']) ? $row['informal_assessment'] : null, ['id'=>'informal_assessment','placeholder'=>'Informal Assessmen', 'class' => 'grade_options informal_assessment'])}}
                                                 @if($key == 1)
                                                     <span class="form-error d-none informal-error">This field is required</span>
                                                 @endif
                                             </div>
-                                            <div class="{{$informlStatusClass.' col-lg-2 informal-1'}}">
+                                            <div class="col-lg-2">
                                                 <label for="informal_assessment_duration">&nbsp;&nbsp;</label>
                                                 {{Form::select("informal[".$key."][informal_assessment_duration]",$monthDays,!empty($row['informal_assessment_duration']) ? $row['informal_assessment_duration'] : null, ["id"=>"informal_assessment_duration","placeholder"=>"Duration", "class" => "form-control informal_assessment_duration"])}}
                                             </div>
-                                            <div class="{{$informlStatusClass.' col-lg-5 informal-1'}}">
+                                            <div class="col-lg-5">
                                                 <label for="informal_assessment_attch">Attach document</label>
                                                 <input type="file" name="{{'informal['.$key.'][informal_assessment_attch]'}}" id="informal_assessment_attch" class="form-control-file" placeholder="Attach document">
                                                 @if (!empty($row['informal_assessment_attch']))
@@ -718,12 +669,12 @@
                                                     <input type="hidden" name="{{'informal['.$key.'][informal_assessment_attch]'}}" value="1">
                                                 @endif 
                                             </div>
-                                            <div class="{{$informlStatusClass.' col-lg-6 informal-1'}}">
+                                            <div class="col-lg-6">
                                                 <label for="informal_assessment_link">Create a link</label>
                                                 {{Form::text('informal['.$key.'][informal_assessment_link]',!empty($row['informal_assessment_link']) ? $row['informal_assessment_link'] : null,['class' => 'form-control','id'=>"informal_assessment_link",'placeholder'=>"Create a link"])}}
                                             </div>
                                             {{Form::hidden('informal_count',$key,['class'=>'informal-count informal-count-'.$key, "data-id" =>$key])}}
-                                            <div class="{{$informlStatusClass.' col-lg-1 informal-1'}}">
+                                            <div class="col-lg-1">
                                                 @if($key == 1)
                                                     <a class="text-primary d-inline-block mt-50 ti-plus add_informal_btn plus_btn"> </a>
                                                 @else
@@ -760,7 +711,6 @@
                                     </div>
                                 </div>
                             @endif
-                            {{Form::hidden('work[1][status]',$plan['student_work']['student_work_data'][1]['status'],['class'=>'work-1-status'])}}
                             @if(!empty($plan['student_work']['student_work_data']))
                                 @foreach($plan['student_work']['student_work_data'] as $key=>$row)
                                     @php
@@ -768,30 +718,24 @@
                                         if($studentCount == $key){
                                             $className = 'work-div';
                                         }
-                                        $stWorkLabelClass = '';
-                                        $stSecondLabelClass = '';
-                                        if($key != 1){
-                                            $stWorkLabelClass = 'work-1' ;
-                                            $stSecondLabelClass = $swStatusClass;
-                                        }
                                     @endphp
                                     <div class="{{'px-3 '.$className}}">
-                                        <div class="{{$stWorkLabelClass.' row'}}">
+                                        <div class="row work-1">
                                             <div class="col-lg-10">
-                                                <label for="student_work" class="{{$stSecondLabelClass.' '.$stWorkLabelClass}}" {!! $swContAttr !!} id="workLabel">@if (isset($plan['student_work']['label'])) {{$plan['student_work']['label']}} @else Student Work @endif </label> &nbsp;&nbsp; 
+                                                <label for="student_work" contenteditable="true" id="workLabel">@if (isset($plan['student_work']['label'])) {{$plan['student_work']['label']}} @else Student Work @endif </label> &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$swIClass. ' remove-btn-border remove-data'}}" data-id="work-1" data-status="only-minus" data-label="workLabel"></a>
+                                                    <a class="ti-minus remove-btn-border remove-data" data-id="work-1"></a>
                                                 @endif
-                                                {{Form::select('work['.$key.'][student_work]',$aWork,!empty($row['student_work']) ? $row['student_work'] : null, ['id'=>'student_work','placeholder'=>'Student Work', 'class' => 'grade_options student_work work-1 '.$swStatusClass])}}
+                                                {{Form::select('work['.$key.'][student_work]',$aWork,!empty($row['student_work']) ? $row['student_work'] : null, ['id'=>'student_work','placeholder'=>'Student Work', 'class' => 'grade_options student_work'])}}
                                                 @if($key == 1)
                                                     <span class="form-error d-none student-work-error">This field is required</span>
                                                 @endif
                                             </div>
-                                            <div class="{{$swStatusClass.' col-lg-2 work-1'}}">
+                                            <div class="col-lg-2">
                                                 <label for="student_work_duration">&nbsp;&nbsp;</label>
                                                 {{Form::select('work['.$key.'][student_work_duration]',$monthDays,!empty($row['student_work_duration']) ? $row['student_work_duration'] : null, ["id"=>"student_work_duration","placeholder"=>"Duration", "class" => "form-control student_work_duration"])}}
                                             </div>
-                                            <div class="{{$swStatusClass.' col-lg-5 work-1'}}">
+                                            <div class="col-lg-5">
                                                 <label for="student_work_attch">Attach document</label>
                                                 <input type="file" name="{{'work['.$key.'][student_work_attch]'}}" id="student_work_attch" class="form-control-file" placeholder="Attach document">
                                                 @if (!empty($row['student_work_attch']))
@@ -799,12 +743,12 @@
                                                     <input type="hidden" name="{{'work['.$key.'][student_work_attch]'}}" value="1">
                                                 @endif 
                                             </div>
-                                            <div class="{{$swStatusClass.' col-lg-6 work-1'}}">
+                                            <div class="col-lg-6">
                                                 <label for="student_work_link">Create a link</label>
                                                 {{Form::text('work['.$key.'][student_work_link]',!empty($row['student_work_link']) ? $row['student_work_link'] : null,['class' => 'form-control','id'=>"student_work_link",'placeholder'=>"Create a link"])}}
                                             </div>
                                             {{Form::hidden('work_count',$key,['class' => 'work-count work-count-'.$key, "data-id" =>$key])}}
-                                            <div class="{{$swStatusClass.' col-lg-1 work-1'}}">
+                                            <div class="col-lg-1">
                                                 @if($key == 1)
                                                     <a class="text-primary d-inline-block mt-50 ti-plus add_work_btn plus_btn"> </a>
                                                 @else
@@ -841,7 +785,6 @@
                                     </div>
                                 </div>
                             @endif
-                            {{Form::hidden('formal[1][status]',$plan['formal_assessment']['formal_assessment_data'][1]['status'],['class'=>'formal-1-status'])}}
                             @if(!empty($plan['formal_assessment']['formal_assessment_data']))
                                 @foreach($plan['formal_assessment']['formal_assessment_data'] as $key=>$row)  
                                     @php
@@ -849,30 +792,24 @@
                                         if($fCount == $key){
                                             $className = 'formal-div';
                                         }
-                                        $formalLabelClass = '';
-                                        $formalSecondLabelClass = '';
-                                        if($key != 1){
-                                            $formalLabelClass = 'formal-1' ;
-                                            $formalSecondLabelClass = $fStatusClass;
-                                        }
                                     @endphp
                                     <div class="{{'px-3 '.$className}}">
-                                        <div class="{{$formalLabelClass .' row'}}">
+                                        <div class="row formal-1">
                                             <div class="col-lg-10">
-                                                <label for="formal_assessment" class="{{$formalLabelClass.' '.$formalSecondLabelClass}}" {!! $fContAttr !!} id="formalLabel">@if (isset($plan['formal_assessment']['label'])) {{$plan['formal_assessment']['label']}} @else Formal Assessment @endif</label> &nbsp;&nbsp; 
+                                                <label for="formal_assessment" contenteditable="true" id="formalLabel">@if (isset($plan['formal_assessment']['label'])) {{$plan['formal_assessment']['label']}} @else Formal Assessment @endif</label> &nbsp;&nbsp; 
                                                 @if($key == 1)
-                                                    <a class="{{$fIClass.' remove-btn-border remove-data'}}" data-id="formal-1" data-status="only-minus" data-label="formalLabel"></a>
+                                                    <a class="ti-minus remove-btn-border remove-data" data-id="formal-1"></a>
                                                 @endif
-                                                {{Form::select('formal['.$key.'][formal_assessment]',$aFormal,!empty($row['formal_assessment']) ? $row['formal_assessment'] : null, ['id'=>'formal_assessment','placeholder'=>'Formal Assessmen', 'class' => 'grade_options formal_assessment formal-1 '.$fStatusClass])}}
+                                                {{Form::select('formal['.$key.'][formal_assessment]',$aFormal,!empty($row['formal_assessment']) ? $row['formal_assessment'] : null, ['id'=>'formal_assessment','placeholder'=>'Formal Assessmen', 'class' => 'grade_options formal_assessment'])}}
                                                 @if($key == 1)
                                                     <span class="form-error d-none formal-error">This field is required</span>
                                                 @endif
                                             </div>
-                                            <div class="{{$fStatusClass.' col-lg-2 formal-1'}}">
+                                            <div class="col-lg-2">
                                                 <label for="formal_assessment_duration">&nbsp;&nbsp;</label>
                                                 {{Form::select('formal['.$key.'][formal_assessment_duration]',$monthDays,!empty($row['formal_assessment_duration']) ? $row['formal_assessment_duration'] : null, ["id"=>"formal_assessment_duration","placeholder"=>"Duration", "class" => "form-control formal_assessment_duration"])}}
                                             </div>
-                                            <div class="{{$fStatusClass.' col-lg-5 formal-1'}}">
+                                            <div class="col-lg-5">
                                                 <label for="formal_assessment_attch">Attach document</label>
                                                 <input type="file" name="{{'formal['.$key.'][formal_assessment_attch]'}}" id="formal_assessment_attch" class="form-control-file" placeholder="Attach document">
                                                 @if (!empty($row['formal_assessment_attch']))
@@ -880,12 +817,12 @@
                                                     <a href="{{ url($row['formal_assessment_attch']) }}" target="_blank">See Attach</a>
                                                 @endif 
                                             </div>
-                                            <div class="{{$fStatusClass.' col-lg-6 formal-1'}}">
+                                            <div class="col-lg-6">
                                                 <label for="formal_assessment_link">Create a link</label>
                                                 {{Form::text('formal['.$key.'][formal_assessment_link]',!empty($row['formal_assessment_link']) ? $row['formal_assessment_link'] : null,['class' => 'form-control','id'=>"formal_assessment_link",'placeholder'=>"Create a link"])}}
                                             </div>
                                             {{Form::hidden('formal_count',$key,['class' => 'formal-count formal-count-'.$key, "data-id" =>$key])}}
-                                            <div class="{{$fStatusClass.' col-lg-1 formal-1'}}">
+                                            <div class="col-lg-1">
                                                 @if($key == 1)
                                                     <a class="text-primary d-inline-block mt-50 ti-plus add_formal_btn plus_btn"> </a>
                                                 @else
@@ -923,43 +860,43 @@
                                 </div>
                             @endif
                         </div>
-                        <div style="width:100%;margin-top: 10px;"></div>
-                        <h5>Rubric</h5> &nbsp;&nbsp; <a class="{{$rIClass.' remove-btn-border remove-data'}}" data-id="rubric-1" data-status="only-minus"></a>
-                        {{Form::hidden('rubric_data[1][status]',$plan['rubric']['rubric'][1]['status'],['class'=>'rubric-1-status'])}}
                         @if(!empty($plan['rubric']['rubric']))
                             <!-- Rubric -->
-                            <div class="{{'standard-block mb-3 rubric-div rubric-1 '.$rStatusClass}}">
+                            <div class="standard-block mb-5 rubric-div rubric-1">
                                 @foreach($plan['rubric']['rubric'] as $key=>$row)
-                                    <div class="row pl-3 pt-3">
-                                        <div class="col-lg-8">
-                                            <label for="rubric">&nbsp;&nbsp;</label>
-                                            {{-- {{Form::text('rubric_data['.$key.'][rubric]',!empty($row['rubric']) ? $row['rubric'] : null,['class' => 'form-control','id'=>"rubric",'placeholder'=>"Rubric"])}} --}}
-                                            {{Form::select('rubric_data['.$key.'][rubric]',$rubricData, !empty($row['rubric']) ? $row['rubric'] : null, ['id'=>'rubric','placeholder'=>'Rubric', 'class' => 'grade_options rubric'])}}
-                                            @if($key == 1)
-                                                <span class="form-error d-none rubric-error">This field is required</span>
-                                            @endif
+                                        <div class="row pl-3 pt-3">
+                                            <div class="col-lg-8">
+                                                <label for="rubric">Rubric</label> &nbsp;&nbsp; 
+                                                @if($key == 1)
+                                                    <a class="ti-minus remove-btn-border remove-data" data-id="rubric-1"></a>
+                                                @endif
+                                                {{-- {{Form::text('rubric_data['.$key.'][rubric]',!empty($row['rubric']) ? $row['rubric'] : null,['class' => 'form-control','id'=>"rubric",'placeholder'=>"Rubric"])}} --}}
+                                                {{Form::select('rubric_data['.$key.'][rubric]',$rubricData, !empty($row['rubric']) ? $row['rubric'] : null, ['id'=>'rubric','placeholder'=>'Rubric', 'class' => 'grade_options rubric'])}}
+                                                @if($key == 1)
+                                                    <span class="form-error d-none rubric-error">This field is required</span>
+                                                @endif
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <label for="rubric_attch">Attach document</label>
+                                                <input type="file" name="{{'rubric_data['.$key.'][rubric_attch]'}}" id="rubric_attch" class="form-control-file" placeholder="Attach document">
+                                                @if (!empty($row['rubric_attch']))
+                                                    <a href="{{ url($row['rubric_attch']) }}" target="_blank">See Attach</a>
+                                                    <input type="hidden" name="{{'rubric_data['.$key.'][rubric_attch]'}}" value="1">
+                                                @endif 
+                                            </div>
+                                            {{Form::hidden('rubric_count',$key,['class' => 'rubric-count rubric-count-'.$key, "data-id" =>$key])}}
+                                            <div class="col-lg-1">
+                                                @if($key == 1)
+                                                    <a class="text-primary d-inline-block mt-50 ti-plus add_rubric_btn plus_btn"> </a>
+                                                @else
+                                                    <a class="text-primary d-inline-block mt-50 ti-close remove_button plus_btn"> </a>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="col-lg-3">
-                                            <label for="rubric_attch">Attach document</label>
-                                            <input type="file" name="{{'rubric_data['.$key.'][rubric_attch]'}}" id="rubric_attch" class="form-control-file" placeholder="Attach document">
-                                            @if (!empty($row['rubric_attch']))
-                                                <a href="{{ url($row['rubric_attch']) }}" target="_blank">See Attach</a>
-                                                <input type="hidden" name="{{'rubric_data['.$key.'][rubric_attch]'}}" value="1">
-                                            @endif 
-                                        </div>
-                                        {{Form::hidden('rubric_count',$key,['class' => 'rubric-count rubric-count-'.$key, "data-id" =>$key])}}
-                                        <div class="col-lg-1">
-                                            @if($key == 1)
-                                                <a class="text-primary d-inline-block mt-50 ti-plus add_rubric_btn plus_btn"> </a>
-                                            @else
-                                                <a class="text-primary d-inline-block mt-50 ti-close remove_button plus_btn"> </a>
-                                            @endif
-                                        </div>
-                                    </div>
                                 @endforeach
                             </div>
                         @else
-                            <div class="standard-block mb-3 rubric-div rubric-1">
+                            <div class="standard-block mb-5 rubric-div rubric-1">
                                 <div class="row pl-3 pt-3">
                                     <div class="col-lg-8">
                                         <label for="rubric">Rubric</label> &nbsp;&nbsp; <a class="ti-minus remove-btn-border remove-data" data-id="rubric-1"></a>
@@ -978,13 +915,12 @@
                                 </div>
                             </div>
                         @endif
-                        <div style="width:100%;margin-top: 10px;"></div>
+
                         <!-- ------------------------------------------------------------------------------------------------------ -->
-                        <h5 {!! $dContAttr !!} id="methodLabel">@if (isset($plan['differentiation']['label'])) {{$plan['differentiation']['label']}} @else Differentiation  @endif </h5>&nbsp; <a class="{{$dIClass.' remove-btn-border remove-data'}}" data-id="diff-1" data-status="only-minus" data-label="methodLabel"> </a>
-                        {{Form::hidden('method_data[1][status]',$plan['differentiation']['method_name'][1]['status'],['class'=>'diff-1-status'])}}
+                        <h5 class="diff-1" contenteditable="true" id="methodLabel">@if (isset($plan['differentiation']['label'])) {{$plan['differentiation']['label']}} @else Differentiation  @endif </h5>&nbsp; <a class="ti-minus remove-btn-border remove-data diff-1" data-id="diff-1"> </a>
                         @if(!empty($plan['differentiation']['method_name']))
-                            <div class="{{'standard-block mb-3 diffs-div diff-1 '.$dStatusClass}}">
-                                @foreach($plan['differentiation']['method_name'] as $key=>$row)
+                            <div class="standard-block mb-5 diffs-div diff-1">
+                            @foreach($plan['differentiation']['method_name'] as $key=>$row)
                                     <div class="row pl-3 pr-3 pt-2">
                                         <div class="col-lg-2">
                                             <label for="method_name">Method name</label>
@@ -1017,10 +953,10 @@
                                         </div>
                                         {{Form::hidden('d_count',$key,['class' => 'dt-count d-count-'.$key, "data-id" =>$key])}}
                                     </div>
-                                @endforeach
+                            @endforeach
                             </div>
                         @else
-                        <div class="standard-block mb-3 diffs-div diff-1">
+                        <div class="standard-block mb-5 diffs-div diff-1">
                             <div class="row pl-3 pr-3 pt-3">
                                 <div class="col-lg-2">
                                     <label for="method_name">Method name</label>
@@ -1050,9 +986,9 @@
                         </div>
                         @endif
                         <!-- ------------------------------------------------------------------------------------------------------ -->                
-                        <div style="width:100%;margin-top: 10px;"></div>
+                        
                         <h5>Homework</h5>
-                        <div class="standard-block mb-3">
+                        <div class="standard-block mb-5">
                             <div class="row p-3">
                                 <div class="row col-lg-12 pl-3">
                                     <div class="col-lg-3">
@@ -1078,7 +1014,7 @@
                                         @foreach($plan['homework']['home_data'] as $key=>$row)
                                             <div class="col-lg-2">
                                                 <label for="homework_due_date">&nbsp;&nbsp;</label>
-                                                {{Form::text('home_data['.$key.'][homework_due_date]',!empty($plan['homework']['home_data'][$key]['homework_due_date']) ? $plan['homework']['home_data'][$key]['homework_due_date'] : null,['class'=>'form-control dateJs','id'=>'homework_due_date','placeholder'=>'Due date','autocomplete'=>'off'])}}
+                                                {{Form::text('home_data['.$key.'][homework_due_date]',!empty($plan['homework']['home_data'][$key]['homework_due_date']) ? $plan['homework']['home_data'][$key]['homework_due_date'] : null,['class'=>'form-control dateJs','id'=>'homework_due_date','placeholder'=>'Due date'])}}
                                             </div>
                                             {{Form::hidden('homework_count',$key,['class' => 'homework-count homework-count-'.$key, "data-id"=>$key])}}
                                                 @if($key == 1)
@@ -1110,13 +1046,12 @@
                                             <input type="hidden" name="additional_data[1][additional_attch]" value="1">
                                         @endisset
                                     </div>
-                                    <div class="{{$adDateStatusClass.' col-lg-2 add-due-date-1'}}">
+                                    <div class="col-lg-2 add-due-date-1">
                                         <label for="additional_duration">&nbsp;&nbsp;</label>
-                                        <input type="text" name="additional_data[1][additional_duration]" value="{{!empty($plan['additional_resources']['additional_data']['1']['additional_duration']) ? $plan['additional_resources']['additional_data']['1']['additional_duration'] : null}}" id="additional_duration" class="form-control dateJs" placeholder="Due date" autocomplete="off">
+                                        <input type="text" name="additional_data[1][additional_duration]" value="{{!empty($plan['additional_resources']['additional_data']['1']['additional_duration']) ? $plan['additional_resources']['additional_data']['1']['additional_duration'] : null}}" id="additional_duration" class="form-control dateJs" placeholder="Due date">
                                     </div>
-                                    {{Form::hidden('additional_data[1][status]',$plan['additional_resources']['additional_data'][1]['status'],['class'=>'add-due-date-1-status'])}}
-                                    <div class="col-lg-1">
-                                        <a class="{{$adDateIClass.' text-primary d-inline-block mt-50 plus_btn remove-data'}}" data-id="add-due-date-1" data-status="only-minus"> </a>
+                                    <div class="col-lg-1 add-due-date-1">
+                                        <a class="text-primary d-inline-block mt-50 ti-minus plus_btn remove-data" data-id="add-due-date-1""> </a>
                                     </div>
                                 </div>
                             </div>
@@ -1173,39 +1108,18 @@
     $('.grade_options').selectize({
         create: true,
     });
-    $('.color').selectize();
-    var isDraftStatus = "{{$plan->is_draft}}";
     var selectedGrade = $("#grade option:selected").val();
     $(document).ready(function(){
         $('.dateJs').datepicker();
-        $(document).on('change','select.grade_options',function(){
-            if(isDraftStatus == 1){
-                storeForm(0,0,1);
-            }
+
+        //Google drive button click initialize google picker..
+        $(document).on('click', '#upd_entry_attach_drive', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            driveFileIndex = $(this).next('input').attr('name');
+            onApiLoad();
         });
-        $(document).on('keyup','.create_link',function(){
-            if(isDraftStatus == 1){
-                storeForm(0,0,1);
-            }
-        });
-        $(document).on('change','.dateJs',function(){
-            if(isDraftStatus == 1){
-                storeForm(0,0,1);
-            }
-        });
-        $(document).on('change','select.duration',function(){
-            if(isDraftStatus == 1){
-                storeForm(0,0,1);
-            }
-        });
-        $(document).on('change','select.color',function(){
-            var colorCode = $(this).val();
-            if(colorCode != '' && typeof colorCode != 'undefined'){
-                $('.color-box').css({"background":colorCode,'border-color':colorCode});
-            }else{
-                $('.color-box').css({"background":"white",'border-color':"#e5e5e5"});
-            }
-        });
+
         $("select#grade").change(function(){
             // $('.standard-data').remove();
             // $('.entry-data').remove();
@@ -1365,19 +1279,28 @@
             var finalData = lastEntryData + 1;
             var duration_name = 'entry_data['+finalData+'][entry_duration]';
             var duration_id = 'entry_duration'+finalData;
-            var entryHTML = '<div class="row pl-3 pr-3 m0">'+
+            var entryHTML = '<div class="row pl-3 pr-3 m0 entry-data">'+
                 '<div class="col-lg-10">'+
                     '<label for="entry_activity">&nbsp;&nbsp;</label>'+
-                    '<select name="entry_data['+finalData+'][entry_activity]" id="entry-'+finalData+'" class= "e-activity-'+finalData+' entry_activity entry-'+finalData+'"  placeholder="Entry Activity" required></select>'+
+                    '<select name="entry_data['+finalData+'][entry_activity]" id="entry-'+finalData+'" class= "e-activity-'+finalData+' entry-'+finalData+' entry_activity"  placeholder="Entry Activity" required></select>'+
                 '</div>'+
                 '<div class="col-lg-2">'+
                     '<label for="entry_duration">&nbsp;&nbsp;</label>' + getMonthData(duration_name, duration_id) +
                 '</div>'+
-                '<div class="col-lg-5">'+
-                    '<label for="entry_attch">Attach document</label>'+
-                    '<input type="file" name="entry_data['+finalData+'][entry_attch]" id="entry_attch" class="form-control-file" placeholder="Attach document" required>'+
+                '<div class="col-lg-3">'+
+                    '<div class="dropdown text-center mt-3">'+
+                        '<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
+                            'Attach document'+
+                        '</a>'+
+                        '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(25px, 53px, 0px);">'+
+                            '<a class="dropdown-item from_local" href="#">From Local</a>'+
+                            `<input type="file" name="entry_data[${finalData}][entry_attch]" id="entry_attch" class="form-control-file d-none" placeholder="Attach document">`+
+                            '<a class="dropdown-item upd_entry_attach_drive"  href="#">From Drive</a>'+
+                            `<input name="entry_data[${finalData}][entry_attach_drive]" type="hidden">`+
+                        '</div>'+
+                    '</div>'+
                 '</div>'+
-                '<div class="col-lg-6">'+
+                '<div class="col-lg-8">'+
                     '<label for="entry_link">Create a link</label>'+
                     '<input type="text" name="entry_data['+finalData+'][entry_link]" id="entry_link" class="form-control" placeholder="Create a link" required>'+
                 '</div>'+
@@ -1612,12 +1535,6 @@
         });
 
         $('.add-assessments-block').click(function(){
-            var dataId = $(this).data('id');
-            if($('.'+dataId).hasClass('d-none')){
-                $('.'+dataId+'-status').val('no');
-                $('.'+dataId).removeClass('d-none');
-                return true;
-            }
             var lastInformalCount = $('.informal-count').last().data('id');
             var finalData1 = lastInformalCount + 1;
             var durationData1 = getMonthData('informal['+finalData1+'][informal_assessment_duration]', 'informal_assessment_duration'+finalData1);
@@ -1673,7 +1590,7 @@
             var homeDueDateHTML =
             '<div class="col-lg-2">'+
                 '<label for="homework_due_date">&nbsp;&nbsp;</label>'+
-                '<input type="text" name="home_data['+finalData+'][homework_due_date]" id="homework_due_date'+finalData+'" class="form-control dateJs" placeholder="Due date" autocomplete="off" required>'+
+                '<input type="text" name="home_data['+finalData+'][homework_due_date]" id="homework_due_date'+finalData+'" class="form-control dateJs" placeholder="Due date" required>'+
                 '<input type="hidden" name="homework_count" class= "homework-count-'+finalData+' homework-count" data-id = '+finalData+'>'+
             '</div>';
             $(wrapperHomeDue).append(homeDueDateHTML);
@@ -1684,33 +1601,7 @@
 
         //Remove section
         $(document).on('click', '.remove-data', function(e){
-            var status = $(this).data('status');
-            var dStatus = $(this).data('id');
-            var attr = $('#'+$(this).data('label')).attr('contenteditable');
-            if($('.'+$(this).data('id')).hasClass('d-none')){
-                $('.'+dStatus+'-status').val('no');
-                if(status != 'main'){
-                    $('.'+$(this).data('id')).removeClass('d-none');
-                }
-                if(status == 'only-minus' && typeof status != 'undefined'){
-                    $(this).addClass('ti-minus');
-                    $(this).removeClass('ti-plus');
-                }
-                var checkAttr = $('#'+$(this).data('label'));
-                if (typeof checkAttr !== typeof undefined && checkAttr !== false) {
-                    $('#'+$(this).data('label')).attr('contenteditable','true');
-                }
-            }else{
-                $('.'+dStatus+'-status').val('yes');
-                $('.'+$(this).data('id')).addClass('d-none');
-                if(status == 'only-minus' && typeof status != 'undefined'){
-                    $(this).removeClass('ti-minus');
-                    $(this).addClass('ti-plus');
-                }
-                if (typeof attr !== typeof undefined && attr !== false) {
-                    $('#'+$(this).data('label')).removeAttr('contenteditable');
-                }
-            }
+            $('.'+$(this).data('id')).remove();
         });
 
         //Once remove button is clicked
@@ -1782,70 +1673,58 @@
 
 
             var standard_name = $('#standard_name').val();
-            var standard_status = $('.standard-1-status').val();
-            if(standard_name == '' && standard_status == 'no'){
+            if(standard_name == ''){
                 $('.standard-error').removeClass('d-none');
                 status = 1;
             }
             var entry_activity = $('#entry_activity').val();
-            var entry_activity_status = $('.entry-1-status').val();
-            if(entry_activity == '' && entry_activity_status == 'no'){
+            if(entry_activity == ''){
                 $('.entry-error').removeClass('d-none');
                 status = 1;
             }
 
             var notes = $('#notes').val();
-            var notes_status = $('.notes-1-status').val();
-            if(notes == '' && notes_status == 'no'){
+            if(notes == ''){
                 $('.notes-error').removeClass('d-none');
                 status = 1;
             }
             var vocabulary = $('#vocabulary').val();
-            var vocabulary_status = $('.vocabulary-1-status').val();
-            if(vocabulary == '' && vocabulary_status == 'no'){
+            if(vocabulary == ''){
                 $('.vocabulary-error').removeClass('d-none');
                 status = 1;
             }
             var concept = $('#concept').val();
-            var concept_status = $('.concept-1-status').val();
-            if(concept == '' && concept_status == 'no'){
+            if(concept == ''){
                 $('.concept-error').removeClass('d-none');
                 status = 1;
             }
             var guided = $('#guided_practice').val();
-            var guided_status = $('.guided-1-status').val();
-            if(guided == '' && guided_status == 'no'){
+            if(guided == ''){
                 $('.guided-error').removeClass('d-none');
                 status = 1;
             }
             var informal = $('#informal_assessment').val();
-            var main_informal = $('.assessment-1-status').val();
-            var informal_status = $('.informal-1-status').val();
-            if(informal == '' && informal_status == 'no' && main_informal == 'no'){
+            if(informal == ''){
                 $('.informal-error').removeClass('d-none');
                 status = 1;
             }
             var std_work = $('#student_work').val();
-            var student_status = $('.work-1-status').val();
-            if(std_work == '' && student_status == 'no' && main_informal == 'no'){
+            if(std_work == ''){
                 $('.student-work-error').removeClass('d-none');
                 status = 1;
             }
             var formal = $('#formal_assessment').val();
-            var formal_status = $('.formal-1-status').val();
-            if(formal == '' && formal_status == 'no' && main_informal == 'no'){
+            if(formal == ''){
                 $('.formal-error').removeClass('d-none');
                 status = 1;
             }
             var rubric = $('#rubric').val();
-            var rubric_status = $('.rubric-1-status').val();
-            if(rubric == '' && rubric_status == 'no'){
+            if(rubric == ''){
                 $('.rubric-error').removeClass('d-none');
                 status = 1;
             }
             var method_name = $('#method_value').val();
-            var method_status = $('.diff-1-status').val();
-            if(method_name == '' && method_status == 'no'){
+            if(method_name == ''){
                 $('.method-name-error').removeClass('d-none');
                 status = 1;
             }
@@ -1859,6 +1738,8 @@
                 $('.additional-error').removeClass('d-none');
                 status = 1;
             }
+
+
             if(status == 1){
                 $('html, body').animate({
                     scrollTop: ($('.grade-error').offset().top - 150)
@@ -1881,7 +1762,43 @@
                 }
             }
             var typeSubmit = $(this).val();
-            storeForm(dId,typeSubmit,0);
+            var formData = new FormData($(".lession-form")[0]);
+
+            var objectiveLabel = $('#objectiveLabel').text();
+            var standardsLabel = $('#standardsLabel').text();
+            var entryLabel = $('#entryLabel').text();
+            var notesLabel = $('#notesLabel').text();
+            var vocabularyLabel = $('#vocabularyLabel').text();
+            var conceptLabel = $('#conceptLabel').text();
+            var guidedLabel = $('#guidedLabel').text();
+            var informalLabel = $('#informalLabel').text();
+            var workLabel = $('#workLabel').text();
+            var formalLabel = $('#formalLabel').text();
+            var methodLabel = $('#methodLabel').text();
+            var mail = $('.send-email').val();
+
+            formData.append('objectiveLabel', objectiveLabel);
+            formData.append('standardsLabel', standardsLabel);
+            formData.append('objectiveLabel', objectiveLabel);
+            formData.append('entryLabel', entryLabel);
+            formData.append('notesLabel', notesLabel);
+            formData.append('vocabularyLabel', vocabularyLabel);
+            formData.append('conceptLabel', conceptLabel);
+            formData.append('guidedLabel', guidedLabel);
+            formData.append('informalLabel', informalLabel);
+            formData.append('workLabel', workLabel);
+            formData.append('formalLabel', formalLabel);
+            formData.append('methodLabel', methodLabel);
+            formData.append('email',mail);
+            if (dId == 5) {
+                formData.append('print_document', 1);
+            }
+            if (typeSubmit == 2) {
+                formData.append('print', 1);
+            } else {
+                formData.append('print', 0);
+            }
+            storeForm(formData);
         });
     });
 
@@ -2042,44 +1959,7 @@
     }
 
 
-    function storeForm(dId,typeSubmit,isDraft) {
-        var formData = new FormData($(".lession-form")[0]);
-
-        var objectiveLabel = $('#objectiveLabel').text();
-        var standardsLabel = $('#standardsLabel').text();
-        var entryLabel = $('#entryLabel').text();
-        var notesLabel = $('#notesLabel').text();
-        var vocabularyLabel = $('#vocabularyLabel').text();
-        var conceptLabel = $('#conceptLabel').text();
-        var guidedLabel = $('#guidedLabel').text();
-        var informalLabel = $('#informalLabel').text();
-        var workLabel = $('#workLabel').text();
-        var formalLabel = $('#formalLabel').text();
-        var methodLabel = $('#methodLabel').text();
-        var mail = $('.send-email').val();
-
-        formData.append('objectiveLabel', objectiveLabel);
-        formData.append('standardsLabel', standardsLabel);
-        formData.append('objectiveLabel', objectiveLabel);
-        formData.append('entryLabel', entryLabel);
-        formData.append('notesLabel', notesLabel);
-        formData.append('vocabularyLabel', vocabularyLabel);
-        formData.append('conceptLabel', conceptLabel);
-        formData.append('guidedLabel', guidedLabel);
-        formData.append('informalLabel', informalLabel);
-        formData.append('workLabel', workLabel);
-        formData.append('formalLabel', formalLabel);
-        formData.append('methodLabel', methodLabel);
-        formData.append('email',mail);
-        formData.append('is_draft',isDraft);
-        if(dId == 5) {
-            formData.append('print_document', 1);
-        }
-        if(typeSubmit == 2) {
-            formData.append('print', 1);
-        }else {
-            formData.append('print', 0);
-        }
+    function storeForm(data) {
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -2088,7 +1968,7 @@
             type:'POST',
             enctype: 'multipart/form-data',
             dataType:'json',
-            data:formData,
+            data:data,
             cache: false,
             contentType: false,
             processData: false,
@@ -2100,8 +1980,6 @@
                     newWin= window.open('', "_blank");
                     newWin.document.write(data.plan);
                     setTimeout(function(){ newWin.print(); }, 3000);
-                }else if(data.isDraft){
-                    return true;
                 } else {
                     window.location.href = '{{URL::to("plan")}}';
                     // window.open('{{URL::to("plan")}}', '_blank');
@@ -2116,5 +1994,8 @@
 
     
 </script>
+{{-- Google drive scripts --}}
+<script type="text/javascript" src="{{asset('public/js/google-file-upload.js')}}"></script>
+<script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
 @endsection
 
